@@ -1,0 +1,1223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>DS_CE</title>
+  <style>
+    body {
+      font-family: system-ui, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f6f6f6;
+    }
+
+    header {
+      background: #222;
+      color: #fff;
+      padding: 1rem;
+      font-size: 1.2rem;
+    }
+
+    .tabs {
+      display: flex;
+      background: #ddd;
+      border-bottom: 1px solid #bbb;
+    }
+
+    .tabs button {
+      flex: 1;
+      padding: 0.75rem;
+      border: none;
+      background: #ddd;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+
+    .tabs button.active {
+      background: #fff;
+      border-bottom: 2px solid #222;
+      font-weight: bold;
+    }
+
+    .content {
+      padding: 1rem;
+      background: #fff;
+    }
+
+    .page {
+      display: none;
+    }
+
+    .page.active {
+      display: block;
+    }
+
+    .container {
+      display: flex;
+      /* justify-content: space-between; /* space between the two paragraphs */
+      gap: 20px; /* optional spacing */
+      padding: 20px;
+    }
+    .half{
+      flex: 1;
+      width: 48%; /* roughly half of the container width */
+      margin: 0;
+    }
+  </style>
+  <!-- KaTeX CSS -->
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+
+  <!-- KaTeX JS -->
+  <script defer
+          src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+
+  <!-- Auto-render extension -->
+  <script defer
+          src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+          onload="renderMathInElement(document.body);"></script>
+
+</head>
+<body>
+
+<header>
+  DS_CE student notes; anything short of solved exercises.
+</header>
+
+<div class="tabs">
+  <button class="tab active" data-target="page1">Statistics</button>
+  <button class="tab" data-target="page2">Permutation</button>
+  <button class="tab" data-target="page3">Set Theory</button>
+  <button class="tab" data-target="page4">Functions</button>
+  <button class="tab" data-target="page5">Distributions</button>
+</div>
+
+<div class="content">
+  <div id="page1" class="page active">
+    <h2>Stastistics✨</h2>
+    <h6>just say <a href="https://youtube.com/shorts/5Md8d9QBRZI?si=tF8aOKp7T7XeP2mk">data </a> </h6>
+    <p>Here you can find formulas for: Mean, Median, Mode, 
+      Standard Deviation, Skewness coefficient, Amplitude,
+      Quartile, etc.
+    </p>
+    <br>
+    <p>
+      <h3>Mean:</h3>
+    </p>
+    <div class="container">
+      <div class="half">
+      <p>
+        Ungrouped data: <br>
+        \[ \bar{x} = \frac{1}{n} \sum_{i=1}^{n} x_i \]
+      </p>
+      </div>
+      <div class="half">
+      <p>
+        Grouped data: <br>
+        \[ \bar{x} = \frac{\sum f_i x_i}{\sum f_i} \]
+        <table>
+          <tr>
+            <td>\( f_i \)</td>
+            <td>=> frequency of the interval</td>
+          </tr>
+          <tr>
+            <td>\( x_i \)</td>
+            <td>=> median value of the interval</td>
+          </tr>
+        </table>
+        </p>
+      </div>
+    </div>
+    <p>
+      <h3>Median:</h3>
+    </p>
+    <div class="container">
+      <div class="half">
+      <p>
+        Ungrouped data: <br>
+        \[ Me(X) =
+            \begin{cases}
+            x_{\frac{n+1}{2}} & n \text{ odd} \\
+            \frac{x_{\frac{n}{2}} + x_{\frac{n}{2}+1}}{2} & n \text{ even}
+            \end{cases}
+          \]
+      </p>
+      <p>the value that stands in the middle of the sorted X;
+        otherwise the mean of the 2 values sharing the midfield.
+      </p>
+      </div>
+      <div class="half">
+      <p>
+        Grouped data: <br>
+        \[ Me(X) = l + \frac{\frac{n}{2} - f_0}{f_1} \, h \]
+        <table>
+          <tr>
+            <td>\( l \)
+            </td>
+            <td>=> minimum of median class/interval
+            </td>
+          </tr>
+          <tr>
+            <td>\( f_0 \) 
+            </td>
+            <td>=> cumulative frequency of the class
+            </td>
+          </tr>
+          <tr>
+            <td>\( f_1 \)
+            </td>
+            <td>=> frequency of the class
+            </td>
+          </tr>
+          <tr>
+            <td>\( h \)</td>
+            <td>-> interval's width</td>
+          </tr>
+        </table>
+      </p>
+      </div>
+    </div>
+    <p>
+      <h3>Mode:</h3>
+    </p>
+    <div class="container">
+      <div class="half">
+      <p>
+        Ungrouped data: <br>
+        \[ Mo(X) = \arg\max_x \; \text{freq}(x) \]
+      </p>
+      <p>the value of X that repeats most often; 
+        there could be 1, 2, or at most 3 modal values. </p>
+      </div>
+      <div class="half">
+      <p>
+        Grouped data: <br>
+        \[ Mo(X) = l + \frac{f_1 - f_0}{2 f_1 - f_0 - f_2} \, h \]
+        <table>
+          <tr>
+            <td>\( l \)
+            </td>
+            <td>=> minimum of the modal class/interval
+            </td>
+          </tr>
+          <tr>
+            <td>\( f_0 \) 
+            </td>
+            <td>=> frequency of the preceeding class
+            </td>
+          </tr>
+          <tr>
+            <td>\( f_1 \)
+            </td>
+            <td>=> frequency of the modal class
+            </td>
+          </tr>
+          <tr>
+            <td>\( f_2 \)
+            </td>
+            <td>=> frequency of the succeding class
+            </td>
+          </tr>
+          <tr>
+            <td>\( h \)</td>
+            <td>-> interval's width</td>
+          </tr>
+        </table>
+      </p>
+      </div>
+    </div>
+    <p>
+      <h3>Standard Deviation:</h3>
+    </p>
+    <div class="container">
+      <div class="half">
+        <p>
+          Ungrouped data: <br>
+          Variance<br>
+          \[ \sigma^2 = \frac{1}{n} \sum_{i=1}^{n} (x_i - \mu)^2 \]
+          <br> Standard Deviation <br>
+          \[ \sigma = \sqrt{\frac{1}{n} \sum_{i=1}^{n} (x_i - \mu)^2} \]
+        </p>
+        <table>
+          <tr>
+            <td>\( \mu \)</td>
+            <td>=> mean value of X</td>
+          </tr>
+        </table>
+        <p>standard deviation is the square root of variance; 
+          telling you how far values typically lie from the mean
+          (since variance is obtained by squared distances from the mean).</p>
+        </div>
+        <div class="half">
+          <p>
+            Grouped data: <br>
+            Variance <br>
+            \[ \sigma^2 = \frac{\sum f_i (x_i - \bar{x})^2}{\sum f_i} \]
+            <br>Standard Deviation<br>
+            \[ \sigma = \sqrt{\frac{\sum f_i (x_i - \bar{x})^2}{\sum f_i}} \]
+            <table>
+              <tr>
+                <td>\( x_i \)
+                </td>
+                <td>=> median value of the \( i^{th}\) class/interval
+                </td>
+              </tr>
+              <tr>
+                <td>\( \bar{x} \) 
+                </td>
+                <td>=> mean value of the sample
+                </td>
+              </tr>
+              <tr>
+                <td>\( f_i \)
+                </td>
+                <td>=> frequency of the \( i^{th}\) class
+                </td>
+              </tr>
+            </table>
+          </p>
+        </div>
+    </div>
+    <p>
+      <h3>Skewness coefficient:</h3>
+    </p>
+    <div class="container">
+        <div class="half">
+          <p>
+            Ungrouped data: <br>
+            \[ \text{Sk} = \frac{3\bigl(\mu - Me(X)\bigr)}{\sigma} \]
+          </p>
+          <table>
+            <tr>
+              <td>\( \mu \)</td>
+              <td>=> mean value of X</td>
+            </tr>
+          </table>
+          <p>positive value indicates skewness from the right.</p>
+          </div>
+          <div class="half">
+            <p>
+              Grouped data: <br>
+              \[ \text{Sk} = \frac{3\bigl(\bar{x} - Me(X)\bigr)}{\sigma} \]
+              <table>
+                <tr>
+                  <td>\( \bar{x} \) 
+                  </td>
+                  <td>=> mean value of the sample
+                  </td>
+                </tr>
+              </table>
+            </p>
+          </div>
+    </div>
+    <p>
+      <h3>Amplitude:</h3>
+    </p>
+    <div class="container">
+      <div class="half">
+        <p>
+          Ungrouped data: <br>
+          \[ \text{Amp} = x_{max} - x_{min} \]
+        </p>
+        <p>too sensitive</p>
+      </div>
+      <div class="half">
+        <p>
+          Grouped data: <br>
+          \[ \text{Amp} = l_{max} - l_{min} \]
+          <table>
+            <tr>
+              <td>\( l_{max} \) 
+              </td>
+              <td>=> highest value of the highest class
+              </td>
+            </tr>
+            <tr>
+              <td>\( l_{min} \)</td>
+              <td>=> lowest value of the lowest class</td>
+            </tr>
+          </table>
+        </p>
+      </div>
+    </div>
+    <p>
+      <h3>Quartiles:</h3>
+    </p>
+    <div class="container">
+      <div class="half">
+        <p>
+          Ungrouped data: <br>
+          \( Q_1 = x_{\frac{n+1}{4}} \) <br>
+          \( Q_2 = Me(X)  \) <br>
+          \( Q_3 = x_{\frac{3(n+1)}{4}} \)
+        </p>
+        <p>
+          \( IQR = Q_3 - Q_1 \)
+        </p>
+      </div>
+      <div class="half">
+        <p>
+          Grouped data: <br>
+          \[ Q_k = l + \frac{k\frac{n}{4} - f_0}{f_1} \, h \quad (k=1,2,3) \]
+          <table>
+            <tr>
+              <td>\( l \) 
+              </td>
+              <td>=></td>
+              <td>lowest value of the class containing the \(Q_k\) value
+              </td>
+            </tr>
+            <tr>
+              <td>\( f_0 \)</td>
+              <td>=></td>
+              <td>cumulative frequency of the class</td>
+            </tr>
+            <tr>
+              <td>\( f_1 \)</td>
+              <td>=></td>
+              <td>frequency of the class</td>
+            </tr>
+          </table>
+        </p>
+      </div>
+    </div>  
+  </div>
+  <div id="page2" class="page">
+    <h2>Permutation && Combinatorics</h2>
+    <p>Here you can find formulas for: Permutation with repetition, 
+      permutation without repetition, combinations, etc.
+    </p>
+    <br>
+    <p>
+      <h3>Permutation with repetition:</h3>
+    </p>
+    <div class="container">
+      <div class="half">
+      <p>
+        All data: <br>
+        \[ P(n,n) = n^{n} \]
+      </p>
+      <p>Order matters, elements can be repeated.</p>
+      </div>
+      <div class="half">
+      <p>
+        Selection r: <br>
+        \[ P(n,r) = n^{r} \]
+        <table>
+          <tr>
+            <td>\( n \)</td>
+            <td>=> all available choices</td>
+          </tr>
+          <tr>
+            <td>\( r \)</td>
+            <td>=> selection size (e.g. places to fill)</td>
+          </tr>
+        </table>
+        </p>
+      </div>
+    </div>
+    <p>
+      <h3>Permutation without repetition:</h3>
+    </p>
+    <div class="container">
+      <div class="half">
+      <p>
+        All data: <br>
+        \[ P(n,n) = n! \]
+      </p>
+      <p>Order matters, elements can be chosen 1 time.</p>
+      </div>
+      <div class="half">
+      <p>
+        Selection r: <br>
+        \[ P(n,r) = \frac{n!}{(n-r)!} \]
+        <table>
+          <tr>
+            <td>\( n \)</td>
+            <td>=> all available choices</td>
+          </tr>
+          <tr>
+            <td>\( r \)</td>
+            <td>=> selection size (e.g. places to fill)</td>
+          </tr>
+        </table>
+        </p>
+      </div>
+    </div>
+    <p>
+      <h3>Permutation with certain identical items:</h3>
+    </p>
+    <div class="container">
+      <div class="half">
+      <p>
+        All data: <br>
+        \[ P(n,n) = \frac{n!}{p_1!p_2!...p_k!} \]
+      </p>
+      <p>Order matters, identical items are counted only once.</p>
+      </div>
+      <div class="half">
+      <p>
+        Selection r: <br>
+        \[ P(n,r) = \frac{n!}{(n-r)!p_1!p_2!...p_k!} \]
+        <table>
+          <tr>
+            <td>\( n \)</td>
+            <td>=></td>
+            <td> all available choices</td>
+          </tr>
+          <tr>
+            <td>\( r \)</td>
+            <td>=></td>
+            <td> selection size (e.g. places to fill)</td>
+          </tr>
+          <tr>
+            <td>\( p_k \)</td>
+            <td>=></td>
+            <td> identical items</td>
+          </tr>
+        </table>
+        </p>
+      </div>
+    </div>
+    <p>
+      <h3>Combination:</h3>
+    </p>
+    <div class="container">
+      <div class="half">
+      <p>
+        All data: <br>
+        \[ C(n,n) = \binom{n}{n} = 1 \]
+      </p>
+      <p>Order doesn't matter.</p>
+      </div>
+      <div class="half">
+      <p>
+        Selection r: <br>
+        \[ C(n,r) = \binom{n}{r} = \frac{n!}{(r!)(n-r)!} \]
+        <table>
+          <tr>
+            <td>\( n \)</td>
+            <td>=></td>
+            <td> all available choices</td>
+          </tr>
+          <tr>
+            <td>\( r \)</td>
+            <td>=></td>
+            <td> selection size (e.g. places to fill)</td>
+          </tr>
+        </table>
+        </p>
+      </div>
+    </div>
+    <p>
+      <h3>Properties:</h3>
+    </p>
+    <div class="container">
+      <div class="half">
+      <p>
+        \[ P(n,r) = C(n,r)*r! \] <br>
+        \[ C(n,0) = \binom{n}{0} = 1 \]
+      </p>
+      <p></p>
+      </div>
+      <div class="half">
+      <p>
+        <table>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+        </table>
+        </p>
+      </div>
+    </div>
+  </div>
+  <div id="page3" class="page">
+    <h2>Probability axioms</h2>
+    <p>This page took this project beyond the thousand line barrier.</p>
+    <p>Below you can see definitions/theorems for Set Theory, Probability Axioms and
+      anything in between, including Bayes', chain rule, etc.
+    </p>
+    <br>
+    <p>
+      <h3>Set Theory:</h3>
+    </p>
+    <div class="container">
+      <div class="half">
+      <p>
+        <table>
+          <tr>
+            <td>Union:</td>
+            <td>(OR) \( A \cup B \)</td>
+          </tr>
+          <tr>
+            <td colspan="2">Either A or B happens, or both.</td>
+          </tr>
+          <tr>
+            <td>Intersection:</td>
+            <td>(AND) \( A \cap B \)</td>
+          </tr>
+          <tr>
+            <td colspan="2">Both A and B happen at the same time.</td>
+          </tr>
+          <tr>
+            <td>Complement:</td>
+            <td>(NOT) \( A^C \) or \( \overline A \)</td>
+          </tr>
+          <tr>
+            <td colspan="2">Event A doesn't happen.</td>
+          </tr>
+          <tr>
+            <td>Difference:</td>
+            <td>(A but not B) \( A - B \)</td>
+          </tr>
+          <tr>
+            <td colspan="2">A happens, B doesn't.</td>
+          </tr>
+        </table>
+        <h4>Properties:</h4>
+        Union:
+        \[ A \cup (B \cup C) = (A \cup B) \cup C \]
+        \[ A \cup B = B \cup A \]
+        \[ A \cup A = A \]
+        \[ A \cup \Omega = \Omega \]
+        Intersection:
+        \[ A \cap (B \cap C)=(A \cap B) \cap C \]
+        \[ A \cap B = B \cap A \]
+        \[ A \cap A = A \]
+        \[ A \cap \Omega = A \]
+        Complement:
+        \[ \overline{A}= \Omega - A \]
+        Disjoint events (Mutually Exclusive):
+        \[ A \cap B = \empty \]
+        Symmetric difference:
+        \[ A \Delta B = (A-B) \cup (B-A) \]
+      </p>
+      </div>
+      <div class="half">
+      <p>
+        <table>
+          <tr>
+            <td>\( \Omega \)</td>
+            <td>=></td>
+            <td>Sample Space</td>
+          </tr>
+          <tr>
+            <td>\( \omega \)</td>
+            <td>=></td>
+            <td>Sample Outcome</td>
+          </tr>
+        </table>
+        <h4>De morgan's law:</h4>
+        \[ \overline{A \cup B}= \overline{A} \cap \overline{B} \]
+        \[ \overline{A \cap B}= \overline{A} \cup \overline{B} \]
+        <h4>Number of Elements:</h4>
+        \[ n(A \cup B)= n(A) + n(B) - n(A \cap B) \]
+        Disjoint sets:
+        \[ n(A \cup B)=n(A) + n(B) \]
+        Three sets:
+        \[ n(A \cup B \cup C) = n(A) + n(B) + n(C) \\ 
+        - n(A \cap B) - n(A \cap C) - n(B \cap C) \\
+        + n(A \cap B \cap C) \]
+        Complemets:
+        \[ n(\overline{A})=n( \Omega) - n(A) \]
+        \[ n(\overline{A} \cap \overline{B})=n(\Omega) - n(A \cup B) \]
+        <h4>Partition:</h4>
+        If sets \(A_1, A_2, ...,A_n\) are a partition of \(\Omega\):
+        \( A_1 \cup A_2 \cup ... \cup A_n = \Omega \) <br>
+        \( A_i \cap A_j = \empty \) for all \(i \ne j\)
+        </p>
+      </div>
+    </div>
+    <p>
+      <h3>Probability Axioms:</h3>
+    </p>
+    <div class="container">
+      <div class="half">
+      <p>
+        1. \(P(A) \ge 0 \) for all \( A \subset \Omega\)<br>
+        2. \(P(\Omega)=1\)<br>
+        3. For \( A_1,A_2,... \) disjoint events:
+        \[ P(A_1 \cup A_2 \cup ...)=P(A_1)+P(A_2)+... \]
+        <h4>Properties:</h4>
+        \(P(\empty)=0\) <br>
+        \(P(\overline{A})=1-P(A)\) for all \(A\subset \Omega \) <br>
+        \( 0 \le P(A) \le 1 \) for all \(A\subset \Omega \) <br>
+        For \(B\subseteq A\) we have \(P(B) \le P(A) \) <br>
+        <table>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+        </table>
+      </p>
+      </div>
+      <div class="half">
+        <p>
+          <table>
+            <tr>
+              <td>\( \Omega \)</td>
+              <td>=></td>
+              <td>Probability Space</td>
+            </tr>
+            <tr>
+              <td>\( P(\Omega) \)</td>
+              <td>=></td>
+              <td>Probability Measure</td>
+            </tr>
+          </table>
+          <br><br>
+          <h4>Addition rules:</h4>
+          Events \(A,B \subset \Omega\):
+          \[ P(A\cup B)=P(A)+P(B)-P(A \cap B) \]
+          Disjoint events, \(A,B \subset \Omega\):
+          \[ P(A\cup B)=P(A)+P(B) \]
+        </p>
+      </div>
+    </div>
+    <p>
+      <h3>Classical Probability I:</h3>
+    </p>
+    <div class="container">
+      <div class="half">
+      <p>
+        For a Sample Space \(\Omega\), the classical probability measure is:
+        \[ P(A)= \frac{\lvert A \rvert}{\lvert \Omega \rvert} \]
+        <table>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+        </table>
+      </p>
+      </div>
+      <div class="half">
+      <p>
+        <table>
+          <tr>
+            <td>\( \lvert A \rvert \)</td>
+            <td>=></td>
+            <td>Cardinality of event A</td>
+          </tr>
+          <tr>
+            <td>\( \lvert \Omega \rvert \)</td>
+            <td>=></td>
+            <td>Cardinality of Sample Space</td>
+          </tr>
+        </table>
+      </p>
+      </div>
+    </div>
+    <p>
+      <h3>Conditional Probability:</h3>
+    </p>
+    <div class="container">
+      <div class="half">
+      <p>
+        <h4>Independence:</h4>
+        Two events are independent if:
+        \[ P(A \cap B)=P(A)P(B) \]
+        <table>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+        </table>
+      </p>
+      </div>
+      <div class="half">
+      <p>
+        <h4>Conditional probability:</h4>
+        \[ P(A \mid B)=\frac{P(A \cap B)}{P(B)} \]
+        For two independent events:
+        \[ P(A \mid B)=\frac{P(A)P(B)}{P(B)}=P(B) \]
+        <table>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+        </table>
+      </p>
+      </div>
+    </div>
+    <p>
+      <h3>Chain rule:</h3>
+    </p>
+    <div>
+      <p>
+        For events \( A_1,A_2,...,A_n \) we have:
+        \[ P(A_1 \cap A_2 \cap ... \cap A_n)= \\
+        P(A_1)P(A_2 \mid A_1)P(A_3 \mid A_1 \cap A_2)
+        ...P(A_n \mid A_1 \cap A_2 \cap ... \cap A_{n-1})  \]
+        <h4>Law of total probability:</h4>
+        If \( A_1,A_2,...,A_n \) are a partition of \(\Omega\) and B is another event:
+        \[ P(B) = \sum_{i=1}^{n}P(A_i)P(B \mid A_i) \]
+        <table>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+        </table>
+      </p>
+    </div>
+    <p>
+      <h3>Bayes' theorem:</h3>
+    </p>
+    <div>
+      <p>
+        For events \(A\) and \(B\) with \( P(A), P(B) > 0 \) we have:
+        \[ P(A \mid B)=\frac{P(A)P(B \mid A)}{P(B)} \]
+        <h4>Law of total probability mixed with Bayes':</h4>
+        If \( A_1,A_2,...,A_n \) are a partition of \(\Omega\) and B is another event:
+        \[ P(A_i \mid B) = \frac{P(A_i)P(B \mid A_i)}{\sum_{j=1}^{n}P(A_j)P(B \mid A_j)} \]
+        <table>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+        </table>
+      </p>
+    </div>
+  </div>
+  <div id="page4" class="page">
+    <h2>CDF, Expectation, Variance</h2>
+    <p>Below you can see definitions for: Discrete Random Variable, Cumulative 
+      Distribution Function, Expected Value, Variance, etc.
+    </p>
+    <br>
+    <p>
+      <h3>Discrete Random Variable:</h3>
+    </p>
+    <div class="container">
+      <div class="half">
+      <p>
+        Definition: <br>
+        A random variable is a function \(X\) from \(\Omega\) to \(\real\), where
+        every \(\omega\) is assigned a real number \(X(\omega)\).
+        \[ P({\omega:X(\omega)=x}) \]
+      <table>
+        <tr>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+      </table>
+      </p>
+      </div>
+      <div class="half">
+      <p>
+        <br>The set of values \(X\) can take is its range: <br>
+        \[ Range(X) = {X(\omega): \omega \in \Omega} \]
+        <table>
+          <tr>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+          </tr>
+        </table>
+        </p>
+      </div>
+    </div>
+    <p>
+      <h3>Probability Mass Function:</h3>
+    </p>
+    <div class="container">
+      <div class="half">
+      <p>
+        Definition: <br>
+        For a random variable \(X\) the probability mass function, PMF
+        or \(p_X\) of \(X\) is:
+        \[ p_X(X)=P(X=x), x \in Range(X) \]
+      <table>
+        <tr>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+      </table>
+      </p>
+      </div>
+      <div class="half">
+      <p>
+        <br>For any set A, we have: <br>
+        \[ P(X \in A) = \sum_{x \in A} P(X=x) = \sum_{x \in A} p(x) \]
+        <table>
+          <tr>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+          </tr>
+        </table>
+        </p>
+      </div>
+    </div>
+    <p>
+      <h3>Cumulative Distribution Function:</h3>
+    </p>
+    <div class="container">
+      <div class="half">
+      <p>
+        Definition: <br>
+        For a random variable \(X\) the cumulative distribution function, CDF
+        or \(F_X\) of \(X\) is:
+        \[ F_X(X)=P(X \le x), x \in \real \]
+        <h4>Properties:</h4>
+        \[ \lim_{x \to -\infty}F_X(x)=0 \]
+        \[ \lim_{x \to +\infty}F_X(x)=1 \]
+        \[ 0 \le F_X(x) \le 1 \]
+        <table>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+        </table>
+      </p>
+    </div>
+    <div class="half">
+      <p>
+        <br>For any discrete random variable X, we have: <br>
+        \[ F_X(x) = \sum_{y \le x} P(X=y) = \sum_{y \le x} p_X(y) \]
+        \[ P(a \le X \le b)=F_X(b)-F_X(a) \]
+        <h4>Continuous random variable:</h4>
+        \[ (F_X(x))'_x=P_X(X=x) \]
+        <table>
+          <tr>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+          </tr>
+        </table>
+        </p>
+      </div>
+    </div>
+    <p>
+      <h3>Expectation:</h3>
+    </p>
+    <div class="container">
+      <div class="half">
+        <p>
+          Definition: <br>
+          For a random variable \(X\), the expected value or the "average" is:
+          \[ E(X)=\sum_{\omega \in \Omega}X(\omega) \cdot P(\omega) \]
+          <h4>Law of the unconscious statistician:</h4>
+          For a random variable \(X\), and another random variable \(Y=g(X)\):
+          \[ E(Y)=Eg(X)=\sum_xg(x)p_X(x) \]
+        </p>
+      </div>
+      <div class="half">
+        <p>
+          <br>For \(p_X\) as PMF of \(X\), we have: <br>
+          \[ E(X)=\sum_{\omega \in Range(X)}x \cdot p_X(x) \]
+          <h4>Linearity of expectation:</h4>
+          \[ E(aX) = a\cdot E(X) \]
+          \[ E(X+b) = E(X)+b \]
+          <h4>Continuous random variable:</h4>
+          \[ E(X)= \int_{E(X)} x \cdot p(x)dx \]
+          <table>
+            <tr>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td></td>
+              <td></td>
+            </tr>
+          </table>
+        </p>
+      </div>
+    </div>
+    <p>
+      <h3>Variance:</h3>
+    </p>
+    <div class="container">
+      <div class="half">
+      <p>
+        Definition: <br>
+        For a random variable \(X\), and expected value \(E(X)=\mu \):
+        \[ Var(X)=E[(X- \mu)^2] \]
+      <table>
+        <tr>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+      </table>
+      </p>
+      </div>
+      <div class="half">
+      <p>
+        <br>\(Var(X)\) can also be calculated as: <br>
+        \[ Var(X)=E(X^2) - \mu^2 \]
+        <table>
+          <tr>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+          </tr>
+        </table>
+        </p>
+      </div>
+    </div>
+  </div>
+  <div id="page5" class="page">
+    <h2>Classic Distributions</h2>
+    <p>Here you can find formulas for: Uniform, Bernoulli, Binomial, Poisson
+      and Geometric Distributions. PDF/PMF, Expectation and Std for each.
+    </p>
+    <br>
+    <p>
+      <h3>Discrete Uniform Distribution:</h3>
+    </p>
+    <div class="container">
+      <div class="half">
+      <p>
+        Probability Density Function: <br>
+        \[ P(X=x) = \frac{1}{n} \]
+      <table>
+        <tr>
+          <td>\( n \)</td>
+          <td>=></td>
+          <td>number of equally likely outcomes</td>
+        </tr>
+      </table>
+      </p>
+      </div>
+      <div class="half">
+      <p>
+        Expectation: <br>
+        \[ E(X) = \frac{n+1}{2} \]
+        <table>
+          <tr>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+          </tr>
+        </table>
+        Variance: <br>
+        \[ Var(X) = \frac{n^2-1}{12} \]
+        </p>
+      </div>
+    </div>
+    <p>
+      <h3>Bernoulli Distribution: \( X \sim B(p) \)</h3>
+    </p>
+    <div class="container">
+      <div class="half">
+      <p>
+        Probability Density Function: <br>
+        \[ P(X=x) = \begin{cases} p & x=1 \\ 1-p & x=0 \end{cases}\]
+      <table>
+        <tr>
+          <td>\( p \)</td>
+          <td>=></td>
+          <td>parameter determining the probability of success</td>
+        </tr>
+      </table>
+      </p>
+      </div>
+      <div class="half">
+      <p>
+        Expectation: <br>
+        \[ E(X) = p \]
+        <table>
+          <tr>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+          </tr>
+        </table>
+        Variance: <br>
+        \[ Var(X) = p(1-p) \]
+        </p>
+      </div>
+    </div>
+    <p>
+      <h3>Binomial Distribution: \( X \sim B(n,p) \)</h3>
+    </p>
+    <div class="container">
+      <div class="half">
+      <p>
+        Probability Density Function: <br>
+        \[ P(X=k) = \binom{n}{k} p^k(1-p)^{n-k} \]
+      <table>
+        <tr>
+          <td>\( p \)</td>
+          <td>=></td>
+          <td>parameter determining the probability of success</td>
+        </tr>
+        <tr>
+          <td>\( n \)</td>
+          <td>=></td>
+          <td>number of trials</td>
+        </tr>
+        <tr>
+          <td>\( k \)</td>
+          <td>=></td>
+          <td>number of trials in study</td>
+        </tr>
+      </table>
+      </p>
+      </div>
+      <div class="half">
+      <p>
+        Expectation: <br>
+        \[ E(X) = n \cdot p \]
+        <table>
+          <tr>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+          </tr>
+        </table>
+        Variance: <br>
+        \[ Var(X) = n \cdot p(1-p) \]
+        </p>
+      </div>
+    </div>
+    <p>
+      <h3>Poisson Distribution: \( X \sim P(\lambda) \)</h3>
+    </p>
+    <div class="container">
+      <div class="half">
+      <p>
+        Probability Density Function: <br>
+        \[ P(X=k) = \frac{e^{-\lambda}\lambda^k}{k!}  \]
+      <table>
+        <tr>
+          <td>\( \lambda \)</td>
+          <td>=></td>
+          <td>parameter determining the intensity</td>
+        </tr>
+        <tr>
+          <td>\( k \)</td>
+          <td>=></td>
+          <td>intensity in study</td>
+        </tr>
+      </table>
+      <h4>-> Poissonial Approximation</h4>
+      <p>When a binomial distribution has a large number of trials,
+        we can use the Poisson Distribution formula, substituting
+        \(\lambda\) with binomial parameters, \(n\) and \(p\).
+        <br> \(X \sim P(n,p) \) <br>
+      </p>
+      </p>
+      </div>
+      <div class="half">
+      <p>
+        Expectation: <br>
+        \[ E(X) = \lambda \]
+        <table>
+          <tr>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+          </tr>
+        </table>
+        Variance: <br>
+        \[ Var(X) = \lambda \]
+        </p>
+      </div>
+    </div>
+    <p>
+      <h3>Geometric Distribution: \( X \sim G(p) \)</h3>
+    </p>
+    <div class="container">
+      <div class="half">
+      <p>
+        Probability Density Function: <br>
+        \[ P(X=k) = (1-p)^{k-1} \cdot p  \]
+      <table>
+        <tr>
+          <td>\( p \)</td>
+          <td>=></td>
+          <td>parameter determining the probability of success</td>
+        </tr>
+        <tr>
+          <td>k</td>
+          <td>=></td>
+          <td>order of the first successful trial in study</td>
+        </tr>
+      </table>
+      </p>
+      </div>
+      <div class="half">
+      <p>
+        Expectation: <br>
+        \[ E(X) = \frac{1}{p} \]
+        <table>
+          <tr>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+          </tr>
+        </table>
+        Variance: <br>
+        \[ Var(X) = \frac{(1-p)}{p^2} \]
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const tabs = document.querySelectorAll('.tab');
+  const pages = document.querySelectorAll('.page');
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      tabs.forEach(t => t.classList.remove('active'));
+      pages.forEach(p => p.classList.remove('active'));
+
+      tab.classList.add('active');
+      document.getElementById(tab.dataset.target).classList.add('active');
+    });
+  });
+</script>
+
+</body>
+<footer style="background-color:#f2f2f2; text-align:center; padding:20px 0; font-family:sans-serif; color:#333;">
+  <p>Erald Hysenbelli &copy; <br> 24.12.2025 <br> 11:23 am -- 11:52 pm <br>
+  25.12.2025 <br>11:05 am -- 4:34 pm </p>
+</footer>
+
+</html>
