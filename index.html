@@ -2,46 +2,48 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>DS_CE</title>
   <style>
     body {
       font-family: system-ui, sans-serif;
       margin: 0;
       padding: 0;
-      background: #f6f6f6;
+      background: #bdbaba;
     }
 
     header {
       background: #222;
-      color: #fff;
-      padding: 1rem;
+      color: #e3e4b6;
+      padding: 0.7rem;
       font-size: 1.2rem;
+      text-align: left;
     }
 
     .tabs {
       display: flex;
       background: #ddd;
-      border-bottom: 1px solid #bbb;
+      border-bottom: 0px solid #bbb;
     }
 
     .tabs button {
       flex: 1;
-      padding: 0.75rem;
+      padding: 0.65rem;
       border: none;
-      background: #ddd;
+      background: #bbbaba;
       cursor: pointer;
-      font-size: 1rem;
+      font-size: 1.25rem;
     }
 
     .tabs button.active {
-      background: #fff;
-      border-bottom: 2px solid #222;
+      background: #f7f7f7;
+      border-bottom: 4px solid #380e0e;
       font-weight: bold;
     }
 
     .content {
-      padding: 1rem;
-      background: #fff;
+      padding: 2rem;
+      background: #fae4e4;
     }
 
     .page {
@@ -55,13 +57,35 @@
     .container {
       display: flex;
       /* justify-content: space-between; /* space between the two paragraphs */
-      gap: 20px; /* optional spacing */
-      padding: 20px;
+      gap: 10px; /* optional spacing */
+      padding: 0px;
     }
     .half{
       flex: 1;
-      width: 48%; /* roughly half of the container width */
+      width: 50%; /* roughly half of the container width */
       margin: 0;
+    }
+
+    p {
+      font-size: 1.15rem;
+    }
+    h4 {
+      margin-left: -5px;
+      font-size: 1.2rem;
+    }
+
+    h3 {
+      margin-left: -10px;
+      font-size: 1.5rem;
+    }
+    h2 {
+      margin-left: -15px;
+      margin-top: -1rem;
+      font-size: 2.1rem;
+    }
+    #professional {
+      margin-top: -35px;
+      margin-left: 125px;
     }
   </style>
   <!-- KaTeX CSS -->
@@ -95,12 +119,11 @@
 <div class="content">
   <div id="page1" class="page active">
     <h2>Stastistics✨</h2>
-    <h6>just say <a href="https://youtube.com/shorts/5Md8d9QBRZI?si=tF8aOKp7T7XeP2mk" target="_blank">data </a> </h6>
+    <h6 id="professional">just say <a style="text-decoration:none" href="https://youtube.com/shorts/5Md8d9QBRZI?si=tF8aOKp7T7XeP2mk" target="_blank">data </a> </h6>
     <p>Here you can find formulas for: Mean, Median, Mode, 
       Standard Deviation, Skewness coefficient, Amplitude,
       Quartile, etc.
     </p>
-    <br>
     <p>
       <h3>Mean:</h3>
     </p>
@@ -215,7 +238,7 @@
           <tr>
             <td>\( f_2 \)
             </td>
-            <td>=> frequency of the succeding class
+            <td>=> frequency of the succeeding class
             </td>
           </tr>
           <tr>
@@ -290,7 +313,7 @@
           <table>
             <tr>
               <td>\( \mu \)</td>
-              <td>=> mean value of X</td>
+              <td>=> mean value of \(X\)</td>
             </tr>
           </table>
           <p>positive value indicates skewness from the right.</p>
@@ -317,14 +340,14 @@
       <div class="half">
         <p>
           Ungrouped data: <br>
-          \[ \text{Amp} = x_{max} - x_{min} \]
+          \[ Amp = x_{max} - x_{min} \]
         </p>
         <p>too sensitive</p>
       </div>
       <div class="half">
         <p>
           Grouped data: <br>
-          \[ \text{Amp} = l_{max} - l_{min} \]
+          \[ Amp = l_{max} - l_{min} \]
           <table>
             <tr>
               <td>\( l_{max} \) 
@@ -347,6 +370,7 @@
       <div class="half">
         <p>
           Ungrouped data: <br>
+          <br>
           \( Q_1 = x_{\frac{n+1}{4}} \) <br>
           \( Q_2 = Me(X)  \) <br>
           \( Q_3 = x_{\frac{3(n+1)}{4}} \)
@@ -387,7 +411,6 @@
     <p>Here you can find formulas for: Permutation with repetition, 
       permutation without repetition, combinations, etc.
     </p>
-    <br>
     <p>
       <h3>Permutation with repetition:</h3>
     </p>
@@ -539,7 +562,6 @@
     <p>Below you can see definitions/theorems for Set Theory, Probability Axioms and
       anything in between, including Bayes', chain rule, etc.
     </p>
-    <br>
     <p>
       <h3>Set Theory:</h3>
     </p>
@@ -668,7 +690,7 @@
               <td>Probability Measure</td>
             </tr>
           </table>
-          <br><br>
+          <br><br><br><br>
           <h4>Addition rules:</h4>
           Events \(A,B \subset \Omega\):
           \[ P(A\cup B)=P(A)+P(B)-P(A \cap B) \]
@@ -796,14 +818,12 @@
     <p>Below you can see definitions for: Discrete Random Variable, Cumulative 
       Distribution Function, Expected Value, Variance, etc.
     </p>
-    <br>
     <p>
       <h3>Discrete Random Variable:</h3>
     </p>
     <div class="container">
       <div class="half">
       <p>
-        Definition: <br>
         A random variable is a function \(X\) from \(\Omega\) to \(\real\), where
         every \(\omega\) is assigned a real number \(X(\omega)\).
         \[ P({\omega:X(\omega)=x}) \]
@@ -818,7 +838,7 @@
       </div>
       <div class="half">
       <p>
-        <br>The set of values \(X\) can take is its range: <br>
+        The set of values \(X\) can take is its range: <br>
         \[ Range(X) = {X(\omega): \omega \in \Omega} \]
         <table>
           <tr>
@@ -837,25 +857,17 @@
       <h3>Probability Mass Function:</h3>
     </p>
     <div class="container">
-      <div class="half">
+      <div class="">
       <p>
-        Definition: <br>
         For a random variable \(X\) the probability mass function, PMF
         or \(p_X\) of \(X\) is:
         \[ p_X(X)=P(X=x), x \in Range(X) \]
-      <table>
-        <tr>
-          <td></td>
-          <td></td>
-          <td></td>
-        </tr>
-      </table>
+        For any set A, we have: <br>
+        \[ P(X \in A) = \sum_{x \in A} P(X=x) = \sum_{x \in A} p(x) \]
       </p>
       </div>
       <div class="half">
       <p>
-        <br>For any set A, we have: <br>
-        \[ P(X \in A) = \sum_{x \in A} P(X=x) = \sum_{x \in A} p(x) \]
         <table>
           <tr>
             <td></td>
@@ -875,7 +887,6 @@
     <div class="container">
       <div class="half">
       <p>
-        Definition: <br>
         For a random variable \(X\) the cumulative distribution function, CDF
         or \(F_X\) of \(X\) is:
         \[ F_X(X)=P(X \le x), x \in \real \]
@@ -894,7 +905,7 @@
     </div>
     <div class="half">
       <p>
-        <br>For any discrete random variable X, we have: <br>
+        For any discrete random variable X, we have: <br>
         \[ F_X(x) = \sum_{y \le x} P(X=y) = \sum_{y \le x} p_X(y) \]
         \[ P(a \le X \le b)=F_X(b)-F_X(a) \]
         <h4>Continuous random variable:</h4>
@@ -918,33 +929,22 @@
     <div class="container">
       <div class="half">
         <p>
-          Definition: <br>
           For a random variable \(X\), the expected value or the "average" is:
           \[ E(X)=\sum_{\omega \in \Omega}X(\omega) \cdot P(\omega) \]
-          <h4>Law of the unconscious statistician:</h4>
-          For a random variable \(X\), and another random variable \(Y=g(X)\):
-          \[ E(Y)=Eg(X)=\sum_xg(x)p_X(x) \]
+          <br>For \(p_X\) as PMF of \(X\), we have: <br>
+          \[ E(X)=\sum_{\omega \in Range(X)}x \cdot p_X(x) \]
+          <h4>Continuous random variable:</h4>
+          \[ E(X)= \int_{E(X)} x \cdot p(x)dx \]
         </p>
       </div>
       <div class="half">
         <p>
-          <br>For \(p_X\) as PMF of \(X\), we have: <br>
-          \[ E(X)=\sum_{\omega \in Range(X)}x \cdot p_X(x) \]
+          <h4>Law of the unconscious statistician:</h4>
+          For a random variable \(X\), and another random variable \(Y=g(X)\):
+          \[ E(Y)=Eg(X)=\sum_xg(x)p_X(x) \]
           <h4>Linearity of expectation:</h4>
           \[ E(aX) = a\cdot E(X) \]
           \[ E(X+b) = E(X)+b \]
-          <h4>Continuous random variable:</h4>
-          \[ E(X)= \int_{E(X)} x \cdot p(x)dx \]
-          <table>
-            <tr>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td></td>
-              <td></td>
-            </tr>
-          </table>
         </p>
       </div>
     </div>
@@ -954,7 +954,6 @@
     <div class="container">
       <div class="half">
       <p>
-        Definition: <br>
         For a random variable \(X\), and expected value \(E(X)=\mu \):
         \[ Var(X)=E[(X- \mu)^2] \]
       <table>
@@ -989,7 +988,6 @@
     <p>Here you can find formulas for: Uniform, Bernoulli, Binomial, Poisson
       and Geometric Distributions. PDF/PMF, Expectation and Std for each.
     </p>
-    <br>
     <p>
       <h3>Discrete Uniform Distribution:</h3>
     </p>
@@ -1132,7 +1130,7 @@
       <p>When a binomial distribution has a large number of trials,
         we can use the Poisson Distribution formula, substituting
         \(\lambda\) with binomial parameters, \(n\) and \(p\).
-        <br> \(X \sim P(n,p) \) <br>
+        <br> \[X \sim P(n,p) \] <br>
       </p>
       </p>
       </div>
@@ -1215,8 +1213,8 @@
 </script>
 
 </body>
-<footer style="background-color:#f2f2f2; text-align:center; padding:20px 0; font-family:sans-serif; color:#333;">
-  <p>Erald Hysenbelli &copy; <br> 24.12.2025 <br> 11:23 am -- 11:52 pm <br>
+<footer style="background-color:#c1c294; text-align:center; padding:10px 0; font-family:sans-serif; color:#000000;">
+  <p>Erald Hysenbelli &copy;</p> <p> 24.12.2025 <br> 11:23 am -- 11:52 pm <br>
   25.12.2025 <br>11:05 am -- 4:34 pm </p>
 </footer>
 
