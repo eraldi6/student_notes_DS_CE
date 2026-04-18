@@ -1,0 +1,1377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>DS_CE</title>
+  <style>
+    body {
+      font-family: system-ui, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #d79191;
+    }
+
+    header {
+      background: #222;
+      color: #fff;
+      padding: 1rem;
+      font-size: 1.2rem;
+    }
+
+    .tabs {
+      display: flex;
+      background: #ddd;
+      border-bottom: 1px solid #bbb;
+    }
+
+    .tabs button {
+      flex: 1;
+      padding: 0.75rem;
+      border: none;
+      background: #ddd;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+
+    .tabs button.active {
+      background: #fff;
+      border-bottom: 2px solid #222;
+      font-weight: bold;
+    }
+
+    .content {
+      padding: 1rem;
+      background: #e5d9b1;
+    }
+
+    .page {
+      display: none;
+    }
+
+    .page.active {
+      display: block;
+    }
+
+    .container {
+      display: flex;
+      /* justify-content: space-between; /* space between the two paragraphs */
+      gap: 20px; /* optional spacing */
+      padding: 20px;
+    }
+    .halfl{
+      flex: 4;
+      width: 56%; /* roughly half of the container width */
+      margin: 0;
+    }
+    .halfr{
+      flex: 1;
+      width: 40%; /* roughly half of the container width */
+      margin: 0;
+    }
+    .half{
+      flex: 1;
+      width: 48%; /* roughly half of the container width */
+      margin: 0;
+    }
+  </style>
+  
+
+  <!-- KaTeX CSS -->
+  <link rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+
+  <!-- KaTeX JS -->
+  <script defer
+          src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js">
+    </script>
+
+  <!-- Auto-render extension -->
+  <script defer
+          src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+          onload="renderMathInElement(document.body);">
+        </script>
+
+
+</head>
+<body>
+
+<header>
+  DS_CE student notes; anything short of solved exercises.
+</header>
+
+<div class="tabs">
+  <button class="tab active" data-target="page1">Functions</button>
+  <button class="tab" data-target="page2">Limits</button>
+  <button class="tab" data-target="page3">Derivatives</button>
+  <button class="tab" data-target="page4">Differentiation</button>
+  <button class="tab" data-target="page5">Integration</button>
+</div>
+
+<div class="content">
+  <div id="page1" class="page active">
+    <h2>Functions and Models</h2>
+    <p>Main concepts around functions attributes and properties.
+    </p>
+    <br>
+    <p>
+      <h3>Function</h3>
+    </p>
+    <div class="container">
+      <div class="halfl">
+      <p>
+        A function \(f\) is a rule that assigns to each element \(x\) 
+        in a set \(D\) exactly one element, called \(f(x)\), in a set E.
+        <br>
+        \[ f: x \to f(x) \]
+        <h4>The vertical line test:</h4>
+        A curve on the \(xy\)-plane is the graph of a function of \(x\)
+        if and only if no vertical line intersects the curve more than once.
+        <h4>Domain convention:</h4>
+        Unless stated explicitly, the domain of the function is the set of 
+        all inputs for which the formula
+        makes sense and gives a real-number output.
+      </p>
+      </div>
+      <div class="halfr">
+      <p>
+        <table>
+          <tr>
+            <td>\( D \)</td>
+            <td>=> domain </td>
+          </tr>
+          <tr>
+            <td>\( E \)</td>
+            <td>=> range </td>
+          </tr>
+        </table>
+        </p>
+      </div>
+    </div>
+    <p>
+      <h3>Even and Odd functions</h3>
+    </p>
+    <div class="container">
+        <div class="halfl">
+        <p>
+        <h4>Even function:</h4>
+        \[ f(-x)=f(x) \]
+        <h4>Odd function:</h4>
+        \[ f(-x)=-f(x) \]
+        </p>
+        </div>
+        <div class="halfr">
+        <p>
+      </p>
+      </div>
+    </div>
+    <p>
+      <h3>Increasing and Decreasing functions</h3>
+    </p>
+    <div class="container">
+      <div class="halfl">
+        <p>
+        whenever \(x_1 < x_2\) in an interval \(l\):
+        <h4>increasing:</h4>
+        \[ f(x_1) < f(x_2) \]
+        <h4>decreasing:</h4>
+        \[ f(x_1) > f(x_2) \]
+      </p>
+      </div>
+      <div class="halfr">
+      <p>
+      </p>
+      </div>
+    </div>
+    <p>
+      <h3>Mathematical Models</h3>
+    </p>
+    <div class="container">
+      <div class="halfl">
+        <p>
+            <h4>Linear models:</h4>
+            \[ y=f(x)=mx+b \]
+            <h4>Polynomials:</h4>
+            \[ P(x)=a_nx^n+a_{n-1}x^{n-1}+...+a_2x^2+a_1x+a_0 \]
+            <h4>Power functions:</h4>
+            \[ f(x)=x^a \]
+            <h4>Root functions:</h4>
+            \[ f(x)=\sqrt[n]{x} \]
+            <h4>Reciprocal functions:</h4>
+            \[ f(x)=\frac{1}{x^n} \]
+            <h4>Rational Functions:</h4>
+            \[ f(x)=\frac{P(x)}{Q(x)} \]
+            <h4>Algebraic Functions</h4>
+            addition, subtraction, multiplication, division, roots.<br>
+            What is not algebraic, is transcendental.
+            <h4>Trigonometric</h4>
+            \[ f(x)=\sin x \]
+            \[ f(x)=\cos x \]
+            \[ f(x)=\tan x \]
+            <h4>Exponential:</h4>
+            \[ f(x)=b^x \]
+            \(b\) is a positive constant
+            <h4>Logarithmic</h4>
+            \[ f(x)=log_bx \]
+            \(b\) is a positive constant
+        </p>
+        </div>
+        <div class="halfr">
+          <p>
+            <h4>Algebraic:</h4>
+            <ul>
+              
+                <li>Linear </li>
+                <li>Polynomials</li>
+                <li>Power </li>
+                <li>Root </li>
+                <li>Reciprocal </li>
+                <li>Rational </li>
+            </ul>
+            <h4>Transcendental:</h4>
+            <ul>
+                <li>Trigonometric</li>
+                <li>Exponential</li>
+                <li>Logarithmic</li>
+            </ul>
+          </p>
+        </div>
+    </div>
+    <p>
+      <h3>Combination of functions:</h3>
+    </p>
+    <div class="container">
+        <div class="halfl">
+          <p>
+            <h4>sum</h4>
+            \[ (f+g)(x)=f(x)+g(x) \]
+            <h4>difference</h4>
+            \[ (f-g)(x)=f(x)-g(x) \]
+            <h4>product</h4>
+            \[ (fg)(x)=f(x)g(x) \]
+            <h4>quotient</h4>
+            \[ (\frac{f}{g})(x)=\frac{f(x)}{g(x)} \]
+            <h4>composition</h4>
+            \[ (f \circ g)(x)=f(g(x)) \]
+          </p>
+          </div>
+          <div class="halfr">
+            <p></p>
+          </div>
+    </div>
+    <p>
+      <h3>Exponential Functions</h3>
+    </p>
+    <div class="container">
+      <div class="halfl">
+        <p>
+            <h4>Laws of Exponents</h4>
+            for \(a,b\) any positive numbers and \(x,y\) any real numbers:
+            \[ b^{x+y}=b^xb^y \]
+            \[ b^{x-y}=\frac{b^x}{b^y} \]
+            \[ (b^x)^y=b^{xy} \]
+            \[ (ab)^x=a^xb^x \]
+            <h4>The number e:</h4>
+            The slope of the tangent line to \(y=b^x\)
+            at \((0,1)\) is exactly \(1\) for \( b=e \approx 2.71828 \). 
+            Therefore, the natural exponential function is:
+            \[f(x)=e^x\]
+        </p>
+      </div>
+      <div class="halfr">
+        <p></p>
+      </div>
+    </div>
+    <p>
+      <h3>Inverse Functions and Logarithms</h3>
+    </p>
+    <div class="container">
+      <div class="halfl">
+        <p>
+            <h4>one-to-one:</h4> 
+            it never takes on the same value twice. whenever \(x_1 \ne x_2\):
+            \[ f(x_1) \ne f(x_2) \]
+            <h4>Horizontal Line Test:</h4>
+            A function is one-to-one if and only if no horizontal line
+            intersects its graph more than once.
+            <h4>inverse function:</h4>
+            when \(f\) is a one-to-one function with domain \(A\) and range \(B\),
+            then its inverse, \(f^{-1}\) has domain \(B\) and range \(A\):
+            \[ f^{-1}(y)=x \iff f(x)=y \]
+            <h4>How to find the Inverse of a One-to-One:</h4>
+            <ol>
+                <li>Write \( y=(fx) \).</li>
+                <li>Solve for \(x\) in terms of \(y\).</li>
+                <li>Interchange \(x\) and \(y\). <br> 
+                Result is: \(y=f^{-1}(x)\)</li>
+            </ol>
+            The graph of \(f^{-1}\) is a reflection of 
+            \(f\) about the line \(y=x\).
+            <h4>logarithmic functions:</h4>
+            \[ \log_{b}x=y \iff b^y=x \]
+            <h4>Laws of Logarithms:</h4>
+            For \(x,y>0\):
+            <ol>
+                <li>
+                    \[ \log_{b}(xy)=\log_{b}x+\log_{b}y \]
+                </li>
+                <li>
+                    \[ \log_{b}(\frac{x}{y})=\log_{b}x-\log_{b}y \]
+                </li>
+                <li>
+                    \[ \log_{b}(x^r)=r \log_{b}x \]
+                </li>
+            </ol>
+            <h4>natural logarithm:</h4>
+            \[ \log_{e}x=\ln x \]
+            <h4>Inverse of Natural log:</h4>
+            \[ \ln x =y \iff e^y = x \]
+            <h4>properties of ln:</h4>
+            \[ \ln e=1 \]
+            \[ x^r=e^{r \ln x} \]
+            <h4>Change of Base</h4>
+            \[ \log_{b} x=\frac{\ln x}{\ln b} \]
+            <h4>Inverse of Trigonometric functions:</h4>
+            arcsine:
+            \[ \sin^{-1}x=y \iff \sin y=x \quad -\frac{\pi}{2}\le y\le \frac{\pi}{2} \]
+            arccos:
+            \[ \cos^{-1}x=y \iff \cos y=x \quad 0 \le y \le \pi \]
+            arctan:
+            \[ \tan^{-1}x=y \iff \tan y=x \quad -\frac{\pi}{2} < y < \frac{\pi}{2} \]
+        </p>
+      </div>
+      <div class="halfr">
+        <p>
+          Do not mistake \(-1\) in \(f^{-1}\) for an exponent.<br>
+          \[f^{-1}(x) \ne \frac{1}{f(x)} \]
+          <h4>cancellation equations:</h4>
+            \[ f^{-1}(f(x))=x \]
+            \[ f(f^{-1}(x))=x \]
+            <h4>cancellation of log:</h4>
+            \[ \log_{b}(b^x)=x, \quad \forall x \in \real \]
+            \[ b^{\log_{b}x}=x, \quad \forall x>0 \]
+            <h4>cancellation of ln:</h4>
+            \[ \ln(e^x) = x, \quad \forall x \in \real \]
+            \[ e^{\ln x}=x, \quad \forall x>0 \]
+            <h4>cancellation of sine:</h4>
+            \[ \sin^{-1}(\sin x)=x \quad -\frac{\pi}{2}\le x\le \frac{\pi}{2} \]
+            \[ \sin(\sin^{-1} x)=x \quad -1 \le x\le 1 \]
+            <h4>cancellation of cosine:</h4>
+            \[ \cos^{-1}(\cos x)=x \quad 0 \le x\le \frac{\pi}{2} \]
+            \[ \cos(\cos^{-1} x)=x \quad -1 \le x\le 1 \]
+            <h4>cancellation of tan:</h4>
+            \[ \tan^{-1}(\tan x)=x \quad -\frac{\pi}{2}\le x\le \frac{\pi}{2} \]
+            \[ \tan(\tan^{-1} x)=x \quad \forall x \in \real \]
+        </p>
+      </div>
+    </div>
+    <p>
+      <h3>Bonus point: Principle of Mathematical Induction: </h3>
+      Let \(S_n\) be a statement about the positive integer \(n\). Suppose that:
+      <ol>
+        <li>
+            \(S_1\) is true.
+        </li>
+        <li>
+            \(S_{k+1}\) is true whenever \(S_k\) is true.
+        </li>
+      </ol>
+      Then \(S_n\) is true for all positive integers \(n\).
+    </p>
+    <div class="container">
+      <div class="halfl">
+        <p>
+        </p>
+      </div>
+      <div class="halfr">
+        <p></p>
+      </div>
+    </div>  
+  </div>
+  <div id="page2" class="page">
+    <h2>Limits</h2>
+    <p>Intro to Calculus through concepts of Limits. <br>
+        Intuitive definition of limits, one-sided limits, infinity limits. <br>
+        Precise definition of limits, one-sided limits, infinity limits, and their laws.
+    </p>
+    <br>
+    <p>
+      <h3>Intuitive Definition of Limits</h3>
+    </p>
+    <div class="container">
+      <div class="halfl">
+      <p>
+        When \(f\) is defined on an interval containing \(a\), except possibly at \(a\) itself.
+        <h4>1. limits:</h4>
+        Suppose \(f(x)\) is defined when \(x\) is near the number \(a\).
+        \[ \lim_{x \to a}f(x)=L \]
+        "the limit of \(f(x)\), as \(x\) approaches \(a\), equals \(L\)."
+        <h4>2. one-sided limits:</h4>
+        <b>left-hand limit</b>
+        \[ \lim_{x \to a^-}f(x)=L \]
+        <b>right-handed limit</b>
+        \[ \lim_{x \to a^+}f(x)=L \]
+        <h4>3.</h4>
+        \[ \lim_{x \to a}f(x)=L \iff\ \lim_{x \to a^-}f(x)=L \land \lim_{x \to a^+}f(x)=L \]
+        <h4>infinite limit:</h4>
+        \[ \lim_{x \to a^+}f(x)= \infty \]
+        \[ \lim_{x \to a^+}f(x)= -\infty \]
+        <h4>vertical asymptotes:</h4>
+        \( x=a\) is a vertical asymptote of \(y=f(x)\) if at least one of:
+        \[ \lim_{x \to a}f(x)= \infty \quad \lim_{x \to a^-}f(x)= \infty
+        \quad \lim_{x \to a^+}f(x)= \infty \]
+        \[ \lim_{x \to a}f(x)= +\infty \quad \lim_{x \to a^-}f(x)= +\infty
+        \quad \lim_{x \to a^+}f(x)= +\infty \]
+        \[ \lim_{x \to a}f(x)= -\infty \quad \lim_{x \to a^-}f(x)= -\infty
+        \quad \lim_{x \to a^+}f(x)= -\infty \]
+        is true. <br>
+        Similarly:
+        \[ \lim_{x \to 0^+}\ln x= -\infty \]
+      </p>
+      </div>
+      <div class="halfr">
+      </div>
+    </div>
+    <p>
+      <h3>Limit Laws</h3>
+    </p>
+    <div class="container">
+      <div class="halfl">
+      <p>
+      <h4>sum law:</h4>
+      The limit of a sum is the sum of the limits.
+      \[ \lim_{x \to a}[f(x)+g(x)]=\lim_{x \to a}f(x)+\lim_{x \to a}g(x) \]
+      <h4>Difference law:</h4>
+      The limit of a difference is the difference of the limits.
+      \[ \lim_{x \to a}[f(x)-g(x)]=\lim_{x \to a}f(x)-\lim_{x \to a}g(x) \]
+      <h4>Constant Multiple law:</h4>
+      The limit of a constant times a function is the constant times the limit 
+      of the function.
+      \[ \lim_{x \to a}[cf(x)]=c\lim_{x \to a}f(x) \]
+      <h4>Product law:</h4>
+      The limit of a product is the product of the limits.
+      \[ \lim_{x \to a}[f(x)\cdot g(x)]=\lim_{x \to a}f(x)\cdot\lim_{x \to a}g(x) \]
+      <h4>Quotient law:</h4>
+      The limit of a quotient is the quotient of the limits 
+      (provided that the limits of the denominator is not \(0\)).
+      \[ \lim_{x \to a}\frac{f(x)}{g(x)}=\frac{\lim_{x \to a}f(x)}{\lim_{x \to a}g(x)} 
+      \quad \text{if} \quad \lim_{x \to a}g(x) \ne 0\]
+      <h4>Power law:</h4>
+      \[ \lim_{x \to a}[f(x)]^{n}=[\lim_{x \to a}f(x)]^n \]
+      <h4>Root law:</h4>
+      \[ \lim_{x \to a}\sqrt[n]{f(x)}=\sqrt[n]{\lim_{x \to a}f(x)} \]
+      <h4>Special limits:</h4>
+      <ul>
+          <li>
+              \[ \lim_{x \to a}c=c \]
+          </li>
+          <li>
+              \[ \lim_{x \to a}x=a \]
+          </li>
+          <li>
+              \[ \lim_{x \to a}x^{n}=a^{n} \]
+              where \(n\) is a positive integer
+          </li>
+          <li>
+              \[ \lim_{x \to a}\sqrt[n]{x}=\sqrt[n]{a} \]
+              where \(n\) is a positive integer<br>
+              (if \(n\) is even, we assume that \(a>0\).)
+          </li>
+      </ul>
+      </p>
+      </div>
+      <div class="halfr">
+      <p>
+      </p>
+    </div>
+  </div>
+    <p>
+      <h3>Properties</h3>
+    </p>
+    <div class="container">
+      <div class="halfl">
+        <p>
+        <h4>Direct Substitution Property</h4>
+        if \(f\) is a polynomial or a rational function and \(a\) is in the domain
+        of \(f\), then
+        \[ \lim_{x \to a}f(x)=f(a) \]
+        If \(f(x)=g(x)\) when \(x \ne a\), then 
+        \[\lim_{x \to a}f(x)=\lim_{x \to a}g(x)\] provided the limits exist.
+        <h4>1. Theorem:</h4>
+        \[ \lim_{x \to a}f(x)=L \iff \lim_{x \to a^{-}}f(x)=L=\lim_{x \to a^{+}}f(x) \]
+        <h4>2. Theorem:</h4>
+        If \(f(x) \le g(x)\) when \(x\) is near \(a\) (except possibly at \(a\)) and
+        the limits of \(f\) and \(g\) both exist as \(x\) approaches \(a\), then
+        \[ \lim_{x \to a}f(x) \le \lim_{x \to a}g(x) \]
+        <h4>The Squeeze Theorem</h4>
+        If \( f(x) \le g(x) \le h(x) \) when \(x\) is near \(a\) (except possibly at \(a\)) and
+        \[ \lim_{x \to a}f(x) = \lim_{x \to a}h(x)=L \]
+        then \[ \lim_{x \to a}g(x)=L \]
+      </p>
+    </div>
+    <div class="halfr">
+      <p>
+      </p>
+      </div>
+    </div>
+  <p>
+    <h3>The Precise Definition of a Limit</h3>
+  </p>
+  <div class="container">
+    <div class="halfl">
+      <p>
+        <h4>Precise Definition of a Limit</h4>
+        Let \(f\) be a function defined on some open interval that contains
+        the number \(a\), except possibly at \(a\) itself. Then we say that
+        the <b>limit of \(f(x)\) as \(x\) approaches \(a\) is \(L\)</b>,
+        and we write:
+        \[ \lim_{x \to a}f(x)=L \]
+        if for every number \(\epsilon >0\) there is a number \(\delta >0\)
+        such that <br>
+        if \( 0< |x-a|< \delta \) then \( |f(x) - L| < \epsilon \)
+        <h4>Precise Definition of a Left-Hand Limit</h4>
+        \[ \lim_{x \to a^{-}}f(x)=L \]
+        if for every number \(\epsilon >0\) there is a number \(\delta >0\)
+        such that <br>
+        if \( |a-\delta|< x < a \) then \( |f(x) - L| < \epsilon \)
+        <h4>Precise Definition of a Right-Hand Limit</h4>
+        \[ \lim_{x \to a^{+}}f(x)=L \]
+        if for every number \(\epsilon >0\) there is a number \(\delta >0\)
+        such that <br>
+        if \( 0 < x < a + \delta \) then \( |f(x) - L| < \epsilon \)
+        <h4>Precise Definition of an Infinite Limit</h4>
+        Let \(f\) be a function defined on some open interval that contains
+        the number \(a\), except possibly at \(a\) itself. Then 
+        \[ \lim_{x \to a}f(x)= \infty \]
+        means that for every positive number \(M\) there is a number 
+        \(\delta >0\) such that <br>
+        if \( 0< |x-a|< \delta \) then \( f(x) > M \)
+        <h4></h4>
+        Similarly:<br>
+        Let \(f\) be a function defined on some open interval that contains
+        the number \(a\), except possibly at \(a\) itself. Then 
+        \[ \lim_{x \to a}f(x)= -\infty \]
+        means that for every negative number \(N\) there is a number 
+        \(\delta >0\) such that <br>
+        if \( 0< |x-a|< \delta \) then \( f(x) < N \)
+      </p>
+    </div>
+    <div class="halfr">
+    </div>
+  </div>
+    <p>
+      <h3>Continuity of a functions:</h3>
+    </p>
+    <div class="container">
+      <div class="halfl">
+        <p>
+          <h4>Definition:</h4>
+          A function \(f\) is <b>continuous at a number \(a\)</b> if:
+          \[ \lim_{x \to a}f(x)=f(a) \]
+          <h4>Definition:</h4>
+          A function \(f\) is <b>continuous from the right at a number \(a\)</b> if:
+          \[ \lim_{x \to a^{+}}f(x)=f(a) \]
+          and \(f\) is <b>continuous from the left at \(a\)</b> if:
+          \[ \lim_{x \to a^{-}}f(x)=f(a) \]
+          <h4>Definition:</h4>
+          A function \(f\) is <b>continuous on an interval</b> if it is 
+          continuous at every number in the interval. (If \(f\) is defined
+          only on one side of an endpoin of the interval, we understand <i>continuous</i>
+          at the endpoint to mean <i>continuous from the right</i> or
+          <i>continuous from the left</i>.)
+          <h4>Theorem:</h4>
+          If \(f\) and \(g\) are continuous at \(a\) and \(c\) is a constant, 
+          then the following functions are also continuous at \(a\):
+          <ol>
+            <li>
+              \[f+g\]
+            </li>
+            <li>
+              \[f-g\]
+            </li>
+            <li>
+              \[cf\]
+            </li>
+            <li>
+              \[fg\]
+            </li>
+            <li>
+              \[\frac{f}{g} \quad\text{if}\quad g(a) \ne 0\]
+            </li>
+          </ol>
+          <h4>Theorem:</h4>
+          (a) Any polynomial is continuous everywhere; that is, it is continuous on
+          \(\real=(-\infty,\infty)\)
+          (b) Any rational function is continuous wherever it is defined;
+          that is, it is continuous on its domain.
+          <h4>Theorem:</h4>
+          If \(f\) is continuous at \(b\) and \(\lim_{x \to a}g(x)=b\), then
+          \(\lim_{x\to a}f(g(x))=f(b)\). In other words:
+          \[ \lim_{x\to a}f(g(x))=f(\lim_{x \to a}g(x)) \]
+          <h4>Theorem:</h4>
+          If \(g\) is continuous at \(a\) and \(f\) is continuous at \(g(a)\), then
+          the composite function \( f \circ g \) given by 
+          \( (f \circ g)(x)=f(g(x)) \) is continuous at \(a\).
+          <h4>The Intermediate Value Theorem:</h4>
+          Suppose that \(f\) is continuous on the closed interval \([a,b]\) and
+          let \(N\) be any number between \(f(a)\) and \(f(b)\), where
+          \(f(a) \ne f(b)\). Then there exists a number \(c\) in \((a,b)\) such
+          that \(f(c)=N\).
+        </p>
+      </div>
+      <div class="halfr">
+        <p>
+          <h4>Theorem:</h4>
+          The following types of functions are continuous at every 
+          number is their domains:
+          <ul>
+            <li>polynomials</li>
+            <li>rational functions</li>
+            <li>root functions</li>
+            <li>trigonometric functions</li>
+            <li>inverse trigonometric functions</li>
+            <li>exponential functions</li>
+            <li>logarithmic functions</li>
+          </ul>
+        </p>
+      </div>
+    </div>
+    <p>
+      <h3>Limits at Infinity</h3>
+    </p>
+    <div class="container">
+      <div class="halfl">
+        <p>
+          <h4>Intuitive Definition of a Limit at Infinity</h4>
+          Let \(f\) be a function defined on some interval \((a,\infty)\).
+          Then
+          \[ \lim_{x\to\infty}f(x)=L \]
+          means that the values of \(f(x)\) can be made arbitrarily close to
+          \(L\) by requiring \(x\) to be sufficiently large.
+          <h4>Definition:</h4>
+          Let \(f\) be a function defined on some interval \((-\infty,a)\).
+          Then
+          \[ \lim_{x\to -\infty}f(x)=L \]
+          means that the values of \(f(x)\) can be made arbitrarily close to
+          \(L\) by requiring \(x\) to be sufficiently large negatve.
+          <h4>Definition</h4>
+          The line \(y=L\) is called a <b>horizontal asymptote</b>
+          of the curve \( y=f(x) \) if either
+          \[ \lim_{x\to \infty}f(x)=L \quad \text{or} \quad
+          \lim_{x\to -\infty}f(x)=L \]
+          <h4>Theorem:</h4>
+          If \(r>0\) is a rational number, then
+          \[ \lim_{x\to \infty}\frac{1}{x^{r}}=0 \]
+          If \(r>0\) is a rational number such that \(x^{r}\) is 
+          defined for all \(x\), then
+          \[ \lim_{x\to -\infty}\frac{1}{x^{r}}=0 \]
+          Similarly:
+          \[ \lim_{x\to -\infty}e^{x}=0 \]
+          <h4>Precise definition of a Limitsat Infinity</h4>
+          Let \(f\) be a function defined on some interval \((a,\infty)\).
+          Then
+          \[ \lim_{x\to \infty}f(x)=L \]
+          means that for every \(\epsilon >0\) there is a corresponding number 
+          \(N\) such that <br>
+          if \( x>N \) then \(|f(x)-L|<\epsilon\)<br>
+          <h4>Definition:</h4>
+          Let \(f\) be a function defined on some interval \((-\infty,a)\).
+          Then
+          \[ \lim_{x\to -\infty}f(x)=L \]
+          means that for every \(\epsilon >0\) there is a corresponding number 
+          \(N\) such that <br>
+          if \( x< N \) then \(|f(x)-L|<\epsilon\)<br>
+          <h4>Precise Definition of an Infinite Limit at Infinity</h4>
+          Let \(f\) be a function defined on some interval \((a,\infty)\).
+          Then
+          \[ \lim_{x\to \infty}f(x)=\infty \]
+          means that for every positive number \(M\) there is a corresponding 
+          positive number \(N\) such that <br>
+          if \( x> N \) then \(f(x)>M\)<br>            
+        </p>
+      </div>
+      <div class="halfr">
+        <p>
+          the Limit Laws can't be applied to infinite limits
+          because \(\infty\) is not a number (\(\infty - infty\) can't be defined).
+        </p>
+      </div>
+    </div>  
+  </div>
+  <div id="page3" class="page">
+    <h2>Derivatives</h2>
+    <p>Derivatives and Rate of Change<br>
+        Not Wind of Change, hehe
+    </p>
+    <br>
+    <p>
+      <h3>Tangents</h3>
+    </p>
+    <div class="container">
+      <div class="halfl">
+      <p>
+        <h4>Definition:</h4>
+        The <b>tangent line</b> to the curve \(y=f(x)\) at the point \(P(a,f(a))\)
+        is the line through \(P\) with slope
+        \[ m=\lim_{x\to a}\frac{f(x)-f(a)}{x-a} \]
+        provided that this limit exists.
+        Similarly:
+        \[ m=\lim_{h\to 0}\frac{f(a+h)-f(a)}{h} \]
+        <h4>Definition:</h4>
+        The <b>instantaneous velocity</b> of an object with position function
+        \(f(t)\) at time \(t=a\) is
+        \[ v(a)=\lim_{h\to0}\frac{f(a+h)-f(a)}{h} \]
+        provided that this limit exists.
+        <h4>Definition:</h4>
+        The <b>derivative of a function \(f\) at a number \(a\)</b>, denoted
+        by \(f'(a)\), is 
+        \[ f'(a)=\lim_{h\to0}\frac{f(a+h)-f(a)}{h} \]
+        Similarly:
+        \[ f'(a)=\lim_{h\to a}\frac{f(x)-f(a)}{x-a} \]
+      </p>
+      </div>
+      <div class="halfr">
+        <p>
+          The tangent line to \( y=f(x) \) at \( (a,f(a)) \) is the line
+          through \((a,f(a))\) whose slope is equal to \(f'(a)\), 
+          the derivative of \(f\) at \(a\).
+        </p>
+      </div>
+    </div>
+    <p>
+      <h3>Rate of Change</h3>
+      wind
+    </p>
+    <div class="container">
+      <div class="halfl">
+        <p>
+          The difference quotient
+          \[ \frac{\Delta y}{\Delta x}=\frac{f(x_2)-f(x_1)}{x_2-x_1} \]
+          is called the <b>average rate of change of \(y\) with respect to \(x\)</b>
+          over the interval \([x_1,x_2]\)
+          <h4>instantaneous rate of change:</h4>
+          \[ \lim_{\Delta x\to0}\frac{\Delta y}{\Delta x}=
+          \lim_{x_2\to x_1}\frac{f(x_2)-f(x_1)}{x_2-x_1} \]
+        </p>
+      </div>
+      <div class="halfr">
+        <p>
+          The derivative \(f'(a)\) is the instantaneous rate of change of
+          \(y=f(x)\) with respect to \(x\) when \(x=a\).
+        </p>
+    </div>
+  </div>
+    <p>
+      <h3>The Derivative as a Function</h3>
+    </p>
+    <div class="container">
+      <div class="halfl">
+        <p>
+          the derivative at a fixed number \(a\):
+          \[ f'(a)=\lim_{h\to0}\frac{f(a+h)-f(a)}{h} \]
+          the derivative at a variable \(x\):
+          \[ f'(x)=\lim_{h\to0}\frac{f(x+h)-f(x)}{h} \]
+          <h4>Definition:</h4>
+          A function \(f\) is <b>differentiable at \(a\)</b> if 
+          \(f'(a)\) exists. It is <b>differentiable on an open interval</b>
+           \((a,b)\) [or\((a,\infty)\) or \((-\infty,a)\) or\((-\infty,\infty)\)]
+          if it is differentiable at every number in the interval.
+          <h4>Theorem:</h4>
+          If \(f\) is differentiable at \(a\), then \(f\) is continuous at \(a\).
+          <h4>Higher Derivatives</h4>
+          The derivative of a derivative, or a <b>second derivative</b> is 
+          \[ f''(x)=\frac{d}{dx}(\frac{dy}{dx})=\frac{d^2y}{dx^2} \]
+          <b>third derivative:</b>
+          \[ f'''(x)=\frac{d}{dx}(\frac{d^2y}{dx^2})=\frac{d^3y}{dx^3} \]
+        </p>
+      </div>
+      <div class="halfr">
+        <p>
+          The converse of <b>Theorem</b> is false: that is, there are functions
+          that are continuous but not differentiable.
+        </p>
+      </div>
+    </div>
+  </div>
+  <div id="page4" class="page">
+    <h2>Differentiation</h2>
+    <p>
+      Rules of Differentiation<br>
+      And maybe applications
+    </p>
+    <br>
+    <p>
+      <h3>Derivatives of Polynomials and Exponential Functions</h3>
+    </p>
+    <div class="container">
+      <div class="halfl">
+      <p>
+        <h4>constant function:</h4>
+        \[ \frac{d}{dx}(c)=0 \]
+        <h4>power functions:</h4>
+        \[ \frac{d}{dx}(x)=1 \]
+        <h4>The Power Rule</h4>
+        \[ \frac{d}{dx}(x^n)=nx^{n-1} \]
+        <h4>The Constant Multiple Rule</h4>
+        \[ \frac{d}{dx}{cf(x)}=c\frac{d}{dx}f(x) \]
+        <h4>The Sum Rule</h4>
+        \[ \frac{d}{dx}[f(x)+g(x)]=\frac{d}{dx}f(x)+\frac{d}{dx}g(x) \]
+        <h4>The Difference Rule</h4>
+        \[ \frac{d}{dx}[f(x)-g(x)]=\frac{d}{dx}f(x)-\frac{d}{dx}g(x) \]
+        <h4>Definition of the number \(e\)</h4>
+        \(e\) is the number such that
+        \[ \lim_{h\to0}\frac{e^h-1}{h}=1 \]
+        <h4>natural exponential function:</h4>
+        \[ \frac{d}{dx}(e^x)=e^x \]
+        <h4>The Product Rule</h4>
+        If \(f\) and \(g\) are both differentiable, then
+        \[ \frac{d}{dx}[f(x)g(x)]=f(x)\frac{d}{dx}[g(x)]-g(x)\frac{d}{dx}[f(x)] \]
+        <h4>The Quotient Rule</h4>
+        If \(f\) and \(g\) are both differentiable, then
+        \[ \frac{d}{dx}[\frac{f(x)}{g(x)}]=
+        \frac{g(x)\frac{d}{dx}[f(x)]-f(x)\frac{d}{dx}[g(x)]}{[g(x)]^2} \]
+      </p>
+      </div>
+      <div class="halfr">
+        <p>
+        </p>
+      </div>
+    </div>
+    <p>
+      <h3>Table of Differentiation Formulas</h3>
+    </p>
+    <div class="container">
+      <div class="halfl">
+      <p>
+        \[ \frac{d}{dx}(c)=0 \qquad \frac{d}{dx}(x^n)=nx^{n-1} 
+        \qquad \frac{d}{dx}(e^x)=e^x \]
+        <br>\[ (cf)'=cf' \qquad (f+g)'=f'+g' \qquad (f-g)'=f'-g' \]
+        <br>\[ (fg)'=fg'+gf' \qquad (\frac{f}{g})'=\frac{gf'-fg'}{g^2} \]
+      </p>
+      </div>
+      <div class="halfr">
+        <p>
+        </p>
+      </div>
+    </div>
+    <p>
+      <h3>Derivatives of Trigonometric Functions</h3>
+    </p>
+    <div class="container">
+      <div class="halfl">
+      <p>
+        \[ \frac{d}{dx}(\sin x)=\cos x \qquad \frac{d}{dx}(\csc x)=\csc x \cot x \]
+        <br>\[ \frac{d}{dx}(\cos x)=-\sin x \qquad \frac{d}{dx}(\sec x)=\sec x \tan x \]
+        <br>\[ \frac{d}{dx}(\tan x)=\sec^{2} x \qquad \frac{d}{dx}(\cot x)=-\csc^2 \]
+        <br>
+        <h4>Two Special Trigonometric Limits</h4>
+        \[ \lim_{\Theta\to0}\frac{\sin\Theta}{\Theta}=1 \]
+        <br> \[ \lim_{\Theta\to0}\frac{\cos\Theta-1}{\Theta}=0 \]
+      </p>
+      </div>
+      <div class="halfr">
+        <p>
+        </p>
+      </div>
+    </div>
+    <p>
+      <h3>The chain rule</h3>
+    </p>
+    <div class="container">
+      <div class="halfl">
+      <p>
+        If \(g\) is differentiable at \(x\) and \(f\) is differentiable at \(g(x)\), 
+        then the composite function \(F=f\circ g\) defined by \(F(x)=f(g(x))\) 
+        is differentiable at \(x\) and \(F'\) is given by the product
+        \[ F'(x)=f'(g(x))\cdot g'(x) \]
+        In Leibniz notation, if \(y=f(u)\) and \(u=g(x)\) are both differentiable 
+        functions, then
+        \[ \frac{dy}{dx}=\frac{dy}{du}\frac{du}{dx} \]
+        <h4>The Power Rule combined with the Chain Rule</h4>
+        If \(n\) is any real number and \(u=g(x)\) is differentiable, then
+        \[ \frac{d}{dx}(u^{n})=nu^{n-1}\frac{du}{dx} \]
+        Alternatively,
+        \[ \frac{d}{dx}[g(x)]^{n}=n[g(x)]^{n-1}\cdot g'(x) \]
+      </p>
+      </div>
+      <div class="halfr">
+        <p>
+        </p>
+      </div>
+    </div>
+    <p>
+      <h3>Derivatives of Exponential and Logarithmic Functions</h3>
+    </p>
+    <div class="container">
+      <div class="halfl">
+      <p>
+        <h4>Derivatives of General Exponential Functions</h4>
+        \[ \frac{d}{dx}(b^x)=b^n \ln b \]
+        <h4>Derivatives of Logarithmic Functions</h4>
+        \[ \frac{d}{dx}(\log_bx)=\frac{1}{x \ln b} \]
+        <br>\[ \frac{d}{dx}(\ln x)=\frac{1}{x} \]
+        <br>\[ \frac{d}{dx}(\ln u)=\frac{1}{u}\frac{du}{dx} \qquad 
+        \frac{d}{dx}[\ln g(x)]=\frac{g'(x)}{g(x)} \]
+        <br>\[ \frac{d}{dx}\ln |x|=\frac{1}{x} \]
+        <h4>Steps in Logarithmic Differentiation</h4>
+        <ol>
+          <li>Take natural logarithms of both sides of an equation
+            \(y=f(x)\) and use the Laws of Logarithms to expand the expression
+          </li>
+          <li>Differentiate implicitly with respect to \(x\).</li>
+          <li>Solve the resulting equation for \(y'\) and replace \(y\) 
+            by \(f(x)\).
+          </li>
+        </ol>
+        <h4>The number \(e\) as a Limit</h4>
+        \[ e=\lim_{x\to0}(1+x)^{1/x} \]
+        <br> \[ e=\lim_{n\to\infty}(1+\frac{1}{n})^n \]
+        <h4>Derivatives of Inverse Trigonometric Functions</h4>
+        \[ \frac{d}{dx}(\sin^{-1}x)=\frac{1}{\sqrt{1-x^{2}}}
+        \qquad \frac{d}{dx}(\csc^{-1}x)=-\frac{1}{x\sqrt{x^{2}-1}} \]
+        <br> \[ \frac{d}{dx}(\cos^{-1}x)=-\frac{1}{\sqrt{1-x^{2}}}
+        \qquad \frac{d}{dx}(\sec^{-1}x)=\frac{1}{x\sqrt{x^{2}-1}} \]
+        <br> \[ \frac{d}{dx}(\tan^{-1}x)=-\frac{1}{{1+x^{2}}}
+        \qquad \frac{d}{dx}(\cot^{-1}x)=-\frac{1}{1+{x^{2}}} \]
+      </p>
+      </div>
+      <div class="halfr">
+        <p>
+          <h4>WARNING</h4> 
+          A common error is to substitute the given numerical
+          information (for quantities that vary with time) 
+          too early. This should be done only after the differentiation.
+        </p>
+      </div>
+    </div>
+    <p>
+      <h3>Linear Approximations and Differentials</h3>
+    </p>
+    <div class="container">
+      <div class="halfl">
+      <p>
+        <h4>linearization of \(f\) at \(a\)</h4>
+        \[ L(x)=f(a)+f'(a)(x-a) \]
+        <h4>linear approximation or tangent line approximation</h4>
+        of of \(f\) at \(a\)
+        \[ f(x)\approx f(a)+f'(a)(x-a) \]
+        <h4>Differentials</h4>
+        If \(y=f(x)\), where \(f\) is a differentiable function,
+        then the differential \(dx\) is an independent variable;
+        that is, \(dx\) can be given the value of any real number.
+        The differential \(dy\) is then defined in terms of \(dx\) by
+        \[ dy=f'(x)dx \]
+        So \(dy\) is a dependent variable, it depends on the values 
+        of \(x\) and \(dx\).
+      </p>
+      </div>
+      <div class="halfr">
+        <p></p>
+      </div>
+    </div>
+    <p>
+      <h3>Applications of Differentiation</h3>
+    </p>
+    <div class="container">
+      <div class="halfl">
+      <p>
+        <h4>Absolute Extreme Values</h4>
+        Let \(c\) be a number in the domain \(D\) of a function \(f\).
+        Then \(f(c)\) is the
+        <ul>
+          <li>
+            <b>absolute maximum</b> value of \(f\) on \(D\) 
+            if \(f(c) \ge f(x)\) for all \(x\) in \(D\).
+          </li>
+          <li>
+            <b>absolute minimum</b> value of \(f\) on \(D\) 
+            if \(f(c) \le f(x)\) for all \(x\) in \(D\).
+          </li>
+        </ul>
+        <h4>Local Extreme Values</h4>
+        The number \(f(c)\) is a 
+        <ul>
+          <li>
+            <b>local maximum</b> value of \(f\)  
+            if \(f(c) \ge f(x)\) when \(x\) is near \(c\).
+          </li>
+          <li>
+            <b>local minimum</b> value of \(f\)  
+            if \(f(c) \le f(x)\) when \(x\) is near \(c\).
+          </li>
+        </ul>
+        <h4>The Extreme Value Theorem</h4>
+        If \(f\) is continuous on a closed interval \([a,b]\),
+        then \(f\) attains an absolute maximum value \(f(c)\) and
+        an absolute minimum value \(f(d)\)
+        at some numbers \(c\) and \(d\) in \([a,b]\).
+        <h4>Fermat's Theorem</h4>
+        If \(f\) has a local maximum or minimum at \(c\), and if \(f'(c)\)
+        exists, then \(f'(c)=0\).
+        <h4>critical number</h4>
+        A critical number of a function \(f\) is a number \(c\) in the domain of 
+        \(f\) such that either \(f'(c)=0\) of \(f'(c)\) does not exist.
+        If \(f\) has a local maximumor minimum at \(c\), then \(c\) is a 
+        critical number of \(f\).
+        <h4>The Closed Interval Method</h4>
+        To find <i>absolute</i> maximum and minimum values
+        of a continuous function \(f\) on a closed interval \([a,b]\):
+        <ol>
+          <li>
+            Find the values of \(f\) at the critical numbers of \(f\) in \((a,b)\).
+          </li>
+          <li>
+            Find the values of \(f\) at the endpoints of the interval.
+          </li>
+          <li>
+            The largest of the values from Steps 1 and 2 is the absolute
+            maximum value; the smallest of these values is the 
+            absolute minimum value.
+          </li>
+        </ol>
+        <h4>Rolle's Theorem</h4>
+        Let \(f\) be a function that satisfies the followind three 
+        hypotheses:
+        <ol>
+          <li>
+            \(f\) is continuous on the closed interval \([a,b]\).
+          </li>
+          <li>
+            \(f\) is differentiable on the open interval \((a,b)\).
+          </li>
+          <li>\(f(a)=f(b)\)</li>
+        </ol>
+        Then there is number \(c\) in \((a,b)\) such that \(f'(c)=0\).
+        <h4>The Mean Value Theorem</h4>
+        Let \(f\) be a function that satisfies the following 
+        hypotheses:
+        <ol>
+          <li>
+            \(f\) is continuous on the closed interval \([a,b]\).
+          </li>
+          <li>
+            \(f\) is differentiable on the open interval \((a,b)\).
+          </li>
+        </ol>
+        Then there is a number \(c\) in \((a,b)\) such that
+        \[ f'(c)=\frac{f(b)-f(a)}{b-a} \]
+        or equivalently,
+        \[ f(b)-f(a)=f'(c)(b-a) \]
+        <h4>Theorem</h4>
+        If \(f'(x)=0\) for all \(x\) in an interval \((a,b)\),
+        then \(f\) is constant on \((a,b)\).
+        <h4>Corollary</h4>
+        If \(f'(x)=g'(x)\) for all \(x\) in an interval \((a,b)\),
+        then \(f-g\) is constant on \((a,b)\); that is, \(f(x)=g(x)+c\)
+        where \(c\) is a constant.
+        <h4>Increasing/Decreasing Test</h4>
+        (a) If \(f'(x)>0\) on an interval, then \(f\) is increasing on that 
+        interval. <br>
+        (b) If \(f'(x)< 0\) on an interval, then \(f\) is decreasing on that interval.
+        <h4>The First Derivative Test</h4>
+        Suppose that \(c\) is a critical number of a continuous function \(f\). <br>
+        (a) If \(f'\) changes from positive to negative at \(c\), then \(f\) has 
+        a local maximum at \(c\).
+        <br> (b) If \(f'\) changes from negative to positive at \(c\), then \(f\) 
+        has a local minimum at \(c\).
+        <br> (c) If \(f'\) is positive to the left and right of \(c\), or negative to
+        the left and right of \(c\), then \(f\) has no local maximum or minimum at \(c\).
+        <h4>Concavity Test</h4>
+        If the graph of \(f\) lies above all of its tangents on an interval \(I\),
+        then \(f\) is called concave upward on \(I\). If the graph \(f\) lies below
+        all of its tangents on \(I\), then \(f\) is called concave downward on \(I\).
+        <br>(a) If \(f''(x)>0\) on an interval \(I\), then the graph of \(f\) is concave
+        upward on \(I\).
+        <br>(b) If \(f''(x)< 0\) on an interval \(I\), then the graph of \(f\) is concave
+        downward on \(I\).
+        <h4>Definition</h4>
+        A point \(P\) on a curve \(y=f(x)\) is called an inflection point if 
+        \(f\) is continuous there and the curve changes from concave upward
+        to concave downward or from concave downward to concave upward at \(P\).
+        <h4>The Second Derivative Test</h4>
+        Suppose \(f''\) is continuous near \(c\). <br>
+        (a) If \(f'(c)=0\) and \(f''(c)>0\), then \(f\) has a local minimum at \(c\).
+        <br> (b) If \(f'(c)=0\) and \(f''(c)< 0\), then \(f\) has a local maximum at \(c\).
+        <h4>L'Hospital's Rule</h4>
+        Suppose \(f\) and \(g\) are differentiable and \(g'(x)\ne 0\) on an open interval \(I\)
+        that contains \(a\) (except possibly at \(a\)). Suppose that
+        \[ \lim_{x\to a}f(x)=0 \qquad \text{and} \qquad \lim_{x\to a}g(x)=0 \]
+        or that
+        \[ \lim_{x\to a}f(x)= \pm\infty \qquad \text{and} \qquad 
+        \lim_{x\to a}g(x)=\pm\infty \]
+        (In other words, we have an indeterminate form of type \(\frac{0}{0}\) or
+        \(\frac{\infty}{\infty}\).)
+        Then
+        \[ \lim_{x\to a}\frac{f(x)}{g(x)}=\lim_{x\to a}\frac{f'(x)}{g'(x)} \]
+        if the limit on the right side exists (or is \(\infty\) or \(-\infty\)).
+
+      </p>
+      </div>
+      <div class="halfr">
+        <p></p>
+      </div>
+    </div>
+  </div>
+  <div id="page5" class="page">
+    <h2>Integrals</h2>
+    <p>AntiDerivatives, Integrals<br>
+        And possibly applications.
+    </p>
+    <br>
+    <p>
+      <h3>Antiderivatives</h3>
+    </p>
+    <div class="container">
+      <div class="halfl">
+      <p>
+        <h4>Definition:</h4>
+        A function \(F\) is called an antiderivative of \(f\) on an 
+        interval \(I\) if \(F'(x)=f(x)\) for all \(x\) in \(I\).
+        <h4>Theorem</h4>
+        If \(F\) is an antiderivative of \(f\) on an interval \(I\),
+        then the most general antiderivative of \(f\) on \(I\) is
+        \[F(x)+C\]
+        where \(C\) is an arbitrary constant.
+        <h4>Table of Antidifferentiation Formulas</h4>
+        <table>
+          <tr>
+            <td>Function</td>
+            <td>Particular antiderivative</td>
+          </tr>
+          <tr>
+            <td>
+              \[cf(x)\]
+            </td>
+            <td>
+              \[cF(x)\]
+            </td>
+          </tr>
+          <tr>
+            <td>
+              \[f(x)+g(x)\]
+            </td>
+            <td>
+              \[F(x)+G(x)\]              
+            </td>
+          </tr>
+          <tr>
+            <td>
+              \[x^n (n\ne-1)\]
+            </td>
+            <td>
+              \[ \frac{x^{n+1}}{n+1} \]
+            </td>
+          </tr>
+          <tr>
+            <td>
+              \[\frac{1}{x}\]
+            </td>
+            <td>
+              \[\ln |x|\]
+            </td>
+          </tr>
+          <tr>
+            <td>
+              \[e^x\]
+            </td>
+            <td>
+              \[e^x\]
+            </td>
+          </tr>
+          <tr>
+            <td>
+              \[b^x\]
+            </td>
+            <td>
+              \[\frac{b^x}{\ln b}\]
+            </td>
+          </tr>
+          <tr>
+            <td>
+              \[\cos x\]
+            </td>
+            <td>
+              \[\sin x\]
+            </td>
+          </tr>
+          <tr>
+            <td>
+              \[\sin x\]
+            </td>
+            <td>
+              \[-\cos x\]
+            </td>
+          </tr>
+          <tr>
+            <td>
+              \[\sec^2 x\]
+            </td>
+            <td>
+              \[\tan x\]
+            </td>
+          </tr>
+          <tr>
+            <td>
+              \[\sec x \tan x\]
+            </td>
+            <td>
+              \[\sec x\]
+            </td>
+          </tr>
+          <tr>
+            <td>
+              \[\frac{1}{\sqrt{1-x^2}}\]
+            </td>
+            <td>
+              \[\sin^{-1}x\]
+            </td>
+          </tr>
+          <tr>
+            <td>
+              \[\frac{1}{1+x^2}\]
+            </td>
+            <td>
+              \[\tan^{-1}x\]
+            </td>
+          </tr>
+          <tr>
+            <td>
+              \[\cosh x\]
+            </td>
+            <td>
+              \[\sinh x\]
+            </td>
+          </tr>
+          <tr>
+            <td>
+              \[\sinh x\]
+            </td>
+            <td>
+              \[\cosh x\]
+            </td>
+          </tr>
+        </table>
+      </p>
+      </div>
+      <div class="halfr">
+        <p>
+        </p>
+      </div>
+    </div>
+    <p>
+      <h3>The Definite Integral</h3>
+      
+    </p>
+    <div class="container">
+      <div class="halfl">
+        <p>
+          <h4>Definition of a Definite Integral</h4>
+          If \(f\) is a function defined for \(a\le x\le b\),
+          we divide the interval \([a,b]\) into \(n\) subintervals of equal width
+          \(\Delta x=\frac{(b-a)}{n}\). We let \(x_0(=a),x_1,x_2,...,x_n(=b)\) be 
+          the endpoints of these subintervals and we let \(x_{1}^*,x_{2}^*,...,x_{n}^*\)
+          be any <b>sample points</b> in these subintervals, so \(x_{i}^*\) lies in the \(i\)th
+          subinterval \([x_{1-i},x_i]\). Then the 
+          <b>definite integral of \(f\) from \(a\) to \(b\)</b> is
+          \[ \int_a^b\,f(x)\,dx=\lim_{n\to\infty}\sum_{i=1}^n\,f(x_i^*)\,\Delta x\]
+          provided that this limit exists and gives the same value for all possible 
+          choices of sample points. If it does exist, we say that \(f\) is 
+          <b>integrable</b> on \([a,b]\).
+          <h4>Theorem</h4>
+          If \(f\) is continuous on \([a,b]\), or if \(f\) has only a finite number
+          of jump  discontinuities, then \(f\) is integrable on \([a,b]\); that is, 
+          the definite integral \(\int_a^bf(x)dx\) exists.
+          <h4>Theorem</h4>
+          If \(f\) is integrable on \([a,b]\), then
+          \[ \int_a^b\,f(x)\,dx=\lim_{n\to\infty}\sum_{i=1}^nf(x_i)\Delta x \]
+          \[ \text{where} \qquad \Delta x=\frac{b-a}{n} \quad \text{and}
+          \quad x_i=a+i\Delta x \]
+          <h4>Sums of Powers</h4>
+          \[ \sum_{i=1}^n 1=n \]
+          \[ \sum_{i=1}^n i=\frac{n(n+1)}{n} \]
+          \[ \sum_{i=1}^n i^2=\frac{n(n+1)(2n+1)}{2} \]
+          \[ \sum_{i=1}^n i^3=[\frac{n(n+1)}{2}]^2 \]
+          <h4>Properties of Sums</h4>
+          \[\sum_{i=1}^n c\,a_i=c\sum_{i=1}^n a_i\]
+          \[\sum_{i=1}^n(a_i+b_i)=\sum_{i=1}^na_i+\sum_{i=1}^nb_i\]
+          \[\sum_{i=1}^n(a_i-b_i)=\sum_{i=1}^na_i-\sum_{i=1}^nb_i\]
+          <h4>Midpoint Ruele</h4>
+          \[\int_a^bf(x)dx\approx\sum_{i=1}^nf(\bar x_i)\Delta x=\Delta x[f(\bar x_1)+...+f(\bar x_n)]\]
+          where
+          \[\Delta x=\frac{b-a}{n}\]
+          and
+          \[ \bar x_i=\frac{1}{2}(x_{i-1}+x_i)=\text{midpoint of}[x_{i-1},x_i] \]
+          <h4>Properties of the Definite Integral</h4>
+          \[\int_a^bc\,dx=c(b-a), \text{where}\: c \:\text{is any constant}\]
+          \[ \int_a^b[f(x)+g(x)]dx=\int_a^bf(x)dx+\int_a^bg(x)dx \]
+          \[ \int_a^bcf(x)dx=c\int_a^bf(x)dx, \:\text{where} \: c \: \text{is any constant} \]
+          <br>
+          <br>
+          \[ \int_b^af(x)dx=-\int_a^bf(x)dx \]
+          \[\int_a^af(x)dx=0\]
+          \[ \int_a^cf(x)dx+\int_c^bf(x)dx=\int_a^bf(x)dx \]
+          <h4>Comparison Properties of the Integral</h4>
+          \[  \]
+        </p>
+      </div>
+      <div class="halfr">
+        <p>
+        </p>
+    </div>
+  </div>
+    <p>
+      <h3>The Derivative as a Function</h3>
+    </p>
+    <div class="container">
+      <div class="halfl">
+        <p>
+          the derivative at a fixed number \(a\):
+          \[ f'(a)=\lim_{h\to0}\frac{f(a+h)-f(a)}{h} \]
+          the derivative at a variable \(x\):
+          \[ f'(x)=\lim_{h\to0}\frac{f(x+h)-f(x)}{h} \]
+          <h4>Definition:</h4>
+          A function \(f\) is <b>differentiable at \(a\)</b> if 
+          \(f'(a)\) exists. It is <b>differentiable on an open interval</b>
+           \((a,b)\) [or\((a,\infty)\) or \((-\infty,a)\) or\((-\infty,\infty)\)]
+          if it is differentiable at every number in the interval.
+          <h4>Theorem:</h4>
+          If \(f\) is differentiable at \(a\), then \(f\) is continuous at \(a\).
+          <h4>Higher Derivatives</h4>
+          The derivative of a derivative, or a <b>second derivative</b> is 
+          \[ f''(x)=\frac{d}{dx}(\frac{dy}{dx})=\frac{d^2y}{dx^2} \]
+          <b>third derivative:</b>
+          \[ f'''(x)=\frac{d}{dx}(\frac{d^2y}{dx^2})=\frac{d^3y}{dx^3} \]
+        </p>
+      </div>
+      <div class="halfr">
+        <p>
+          The converse of <b>Theorem</b> is false: that is, there are functions
+          that are continuous but not differentiable.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const tabs = document.querySelectorAll('.tab');
+  const pages = document.querySelectorAll('.page');
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      tabs.forEach(t => t.classList.remove('active'));
+      pages.forEach(p => p.classList.remove('active'));
+
+      tab.classList.add('active');
+      document.getElementById(tab.dataset.target).classList.add('active');
+    });
+  });
+</script>
+
+
+<footer style="background-color:#86a969; text-align:center; 
+padding:20px 0; font-family:sans-serif; color:#333;">
+  <p>Erald Hysenbelli &copy; <br> 25.12.2025 <br> 11:11 pm -- 12:48 am @ 26th 
+    3:04pm -- 9:00 pm something. 27th 3:33 pm -- 2:13 am @ 28th
+    2pm @ 30th -- 
+    
+</html>
