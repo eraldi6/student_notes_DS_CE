@@ -822,7 +822,7 @@
       Distribution Function, Expected Value, Variance, etc.
     </p>
     <p>
-      <h3>Discrete Random Variable:</h3>
+      <h3>Random Variable:</h3>
     </p>
     <div class="container">
       <div class="half">
@@ -858,15 +858,47 @@
     </div>
     <p>
       <h3>Probability Mass Function:</h3>
+      The probability of landing exactly x.
     </p>
     <div class="container">
       <div class="">
       <p>
-        For a random variable \(X\) the probability mass function, PMF
+        For a <b> discrete random variable \(X\)</b>, the probability mass function, PMF
         or \(p_X\) of \(X\) is:
         \[ p_X(X)=P(X=x), x \in Range(X) \]
         For any set A, we have: <br>
         \[ P(X \in A) = \sum_{x \in A} P(X=x) = \sum_{x \in A} p(x) \]
+      </p>
+      </div>
+      <div class="half">
+      <p>
+        <table>
+          <tr>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+          </tr>
+        </table>
+        </p>
+      </div>
+    </div>
+    <p>
+      <h3>Probability Density Function:</h3>
+      The intensity of probability around x.
+    </p>
+    <div class="container">
+      <div class="">
+      <p>
+        A random variable is called a <b> continuous random variable \(X\)</b>  
+        if the probability of landing in any interval between \(a\) and \(b\),
+        for \(a \le b\), can be written as:
+        \[ P(a \le X \le b) = \int_{a}^{b} f_{X} (x)dx \]
+        for some non-negative function \(f_{X}\). <br>
+        \(f_{X}\) is called the <b>Probability Density Function.</b>
+        
       </p>
       </div>
       <div class="half">
@@ -913,6 +945,7 @@
         \[ P(a \le X \le b)=F_X(b)-F_X(a) \]
         <h4>Continuous random variable:</h4>
         \[ (F_X(x))'_x=P_X(X=x) \]
+        \[ F_{X} = \int_{-\infty}^{x}f(x)dx \]
         <table>
           <tr>
             <td></td>
@@ -937,7 +970,7 @@
           <br>For \(p_X\) as PMF of \(X\), we have: <br>
           \[ E(X)=\sum_{\omega \in Range(X)}x \cdot p_X(x) \]
           <h4>Continuous random variable:</h4>
-          \[ E(X)= \int_{E(X)} x \cdot p(x)dx \]
+          \[ E(X)= \int_{-\infty}^{+\infty} x \cdot f(x)dx \]
         </p>
       </div>
       <div class="half">
@@ -945,9 +978,11 @@
           <h4>Law of the unconscious statistician:</h4>
           For a random variable \(X\), and another random variable \(Y=g(X)\):
           \[ E(Y)=Eg(X)=\sum_xg(x)p_X(x) \]
+          \[ Eg(X)= \int_{-\infty}^{+\infty} g(x)f(x)dx \]
           <h4>Linearity of expectation:</h4>
-          \[ E(aX) = a\cdot E(X) \]
+          \[ E(aX) = aE(X) \]
           \[ E(X+b) = E(X)+b \]
+          \[ E(aX+b) = aE(X)+b \]
         </p>
       </div>
     </div>
@@ -972,6 +1007,8 @@
       <p>
         <br>\(Var(X)\) can also be calculated as: <br>
         \[ Var(X)=E(X^2) - \mu^2 \]
+        <h4>Theorem:<h4>
+          <p> \[ Var(aX) = a^{2}Var(X) \]
         <table>
           <tr>
             <td></td>
@@ -1158,6 +1195,47 @@
     </div>
     <p>
       <h3>Geometric Distribution: \( X \sim G(p) \)</h3>
+    </p>
+    <div class="container">
+      <div class="half">
+      <p>
+        Probability Density Function: <br>
+        \[ P(X=k) = (1-p)^{k-1} \cdot p  \]
+      <table>
+        <tr>
+          <td>\( p \)</td>
+          <td>=></td>
+          <td>parameter determining the probability of success</td>
+        </tr>
+        <tr>
+          <td>k</td>
+          <td>=></td>
+          <td>order of the first successful trial in study</td>
+        </tr>
+      </table>
+      </p>
+      </div>
+      <div class="half">
+      <p>
+        Expectation: <br>
+        \[ E(X) = \frac{1}{p} \]
+        <table>
+          <tr>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+          </tr>
+        </table>
+        Variance: <br>
+        \[ Var(X) = \frac{(1-p)}{p^2} \]
+        </p>
+      </div>
+    </div>
+    <p>
+      <h3>Normal Distribution: \( X \sim N(\mu,\sigma) \)</h3>
     </p>
     <div class="container">
       <div class="half">
