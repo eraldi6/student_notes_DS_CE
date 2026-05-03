@@ -108,10 +108,12 @@
   <button class="tab" data-target="page3">Derivatives</button>
   <button class="tab" data-target="page4">Differentiation</button>
   <button class="tab" data-target="page5">Integration</button>
+  <button class="tab" data-target="page6">Calc II topics</button>
+  <button class="tab" data-target="page7">Calc II formulae</button>
 </div>
 
 <div class="content">
-  <div id="page1" class="page active">
+  <div id="page1" class="page">
     <h2>Functions and Models</h2>
     <p>Main concepts around functions attributes and properties.
     </p>
@@ -1353,6 +1355,191 @@
       </div>
     </div>
   </div>
+  <div id="page6" class="page active">
+    <h2>Calculus II</h2>
+    <p>Series, Taylor's, Multi-variable differentiation.<br>
+        And everything in between.
+    </p>
+    <br>
+    <p>
+      <h3>Sequences</h3>
+    </p>
+    <div class="container">
+      <div class="halfl">
+      <p>
+        <h4>Intuitive Definition of a Limit of a Sequence:</h4>
+        A sequence \({a_{n}}\) has the <b>limit</b> \(L\) and we write 
+        \[ \lim_{n\to\infty} a_{n} = L \quad \text{or} \quad a_{n} \to L \quad 
+        \text{as} \quad n \to \infty \]
+        if we can make the terms \( a_{n}\) as close to \(L\) as we like by taking \(n\) sufficiently
+        large. If \(\lim_{n\to\infty} a_{n}\) exists, we say the sequence <b>converges</b>. </br>
+        Otherwise, we say the sequence <b>diverges</b>.
+        <h4>Precise Definition of a Limit of a Sequence:</h4>
+        A sequence \({a_{n}}\) has the <b>limit</b> \(L\) and we write 
+        \[ \lim_{n\to\infty} a_{n} = L \quad \text{or} \quad a_{n} \to L \quad 
+        \text{as} \quad n \to \infty \]
+        if for every \( \epsilon > 0 \) there is a corresponding integer \(N\) such that
+        \[ \text{if} \quad n > N \quad \text{then} \quad |a_{n} - L| < \epsilon \]
+        <h4>Precise Definition of an Infinite Limit:</h4>
+        The notation \(\lim_{n\to\infty} a_{n} = \infty \) means that for every 
+        positive number \(M\) there is an integer \(N\) such that
+        if for every \( \epsilon > 0 \) there is a corresponding integer \(N\) such that
+        \[ \text{if} \quad n > N \quad \text{then} \quad a_{n} > M \]
+        <h4>Theorem:</h4>
+        If \(\lim_{x\to\infty} f(x) = L \) and \(f(n) = a_{n} \) when \(n\) is an integer,
+        then \(\lim_{n\to\infty} a_{n} = L \).
+        <h4>Limit Laws for Sequences:</h4>
+        Suppose that \( {a_{n}}\) and \({b_{n}}\) are convergent sequences and \(c\) is a constant.
+        Then:
+        <table>
+          <tr>
+            <td>Sum Law</td>
+            <td>1.</td>
+            <td> \[ \lim_{n\to\infty} (a_{n} + b_{n}) = \lim_{n\to\infty} a_{n} + \lim_{n\to\infty} b_{n} \] </td>
+          </tr>
+          <tr>
+            <td>Difference Law</td>
+            <td>2.</td>
+            <td> \[ \lim_{n\to\infty} (a_{n} - b_{n}) = \lim_{n\to\infty} a_{n} - \lim_{n\to\infty} b_{n} \] </td>
+          </tr>
+          <tr>
+            <td>Constant Multiple Law</td>
+            <td>3.</td>
+            <td> \[ \lim_{n\to\infty} c a_{n} = c \lim_{n\to\infty} a_{n} \] </td>
+          </tr>
+          <tr>
+            <td>Product Law</td>
+            <td>4.</td>
+            <td> \[ \lim_{n\to\infty} (a_{n}  b_{n}) = \lim_{n\to\infty} a_{n} \cdot \lim_{n\to\infty} b_{n} \] </td>
+          </tr>
+          <tr>
+            <td>Quotient Law</td>
+            <td>5.</td>
+            <td> \[ \lim_{n\to\infty} \frac{a_{n}}{b_{n}} = \frac{\lim_{n\to\infty} a_{n}}{\lim_{n\to\infty} b_{n}} 
+              \quad \text{if} \quad \lim_{n\to\infty} b_{n} \ne 0\] </td>
+          </tr>
+          <tr>
+            <td>Power Law</td>
+            <td></td>
+            <td>\[ \lim_{n\to\infty} a_{n}^p = [\lim_{n\to\infty} a_{n}]^p \quad \text{if} 
+              \quad p>0 \quad \text{and} \quad a_n>0 \]</td>
+          </tr>
+          <tr>
+            <td>Squeeze Theorem for Sequences</td>
+            <td></td>
+            <td> \[ \text{If} \quad a_n\le b_n \le c_n \quad \text{for} \quad n \ge n_0 \quad \\
+              \quad \\
+              \text{and} \quad \lim_{n\to\infty} a_{n} = \lim_{n\to\infty} c_{n} = L, \quad \\
+              \quad \\ \text{then} \quad \lim_{n\to\infty} b_{n} = L.  \] </td>
+          </tr>
+        </table>
+        <h4>Theorem:</h4>
+        \[ \text{If} \lim_{n\to\infty} |a_{n}| = 0 \quad
+        \text{then} \quad \lim_{n\to\infty} a_{n} = 0.  \]
+        <h4>Theorem:</h4>
+        If \(\lim_{n\to\infty} a_{n} = L \) and the function \(f\) is continuous at \(L\), then
+        \[ \lim_{n\to\infty} f(a_{n}) = f(L) \]
+        
+      </p>
+      </div>
+      <div class="halfr">
+        <p>
+        </p>
+      </div>
+    </div>
+    <p>
+      <h3>The Definite Integral</h3>
+      
+    </p>
+    <div class="container">
+      <div class="halfl">
+        <p>
+          <h4>Definition of a Definite Integral</h4>
+          If \(f\) is a function defined for \(a\le x\le b\),
+          we divide the interval \([a,b]\) into \(n\) subintervals of equal width
+          \(\Delta x=\frac{(b-a)}{n}\). We let \(x_0(=a),x_1,x_2,...,x_n(=b)\) be 
+          the endpoints of these subintervals and we let \(x_{1}^*,x_{2}^*,...,x_{n}^*\)
+          be any <b>sample points</b> in these subintervals, so \(x_{i}^*\) lies in the \(i\)th
+          subinterval \([x_{1-i},x_i]\). Then the 
+          <b>definite integral of \(f\) from \(a\) to \(b\)</b> is
+          \[ \int_a^b\,f(x)\,dx=\lim_{n\to\infty}\sum_{i=1}^n\,f(x_i^*)\,\Delta x\]
+          provided that this limit exists and gives the same value for all possible 
+          choices of sample points. If it does exist, we say that \(f\) is 
+          <b>integrable</b> on \([a,b]\).
+          <h4>Theorem</h4>
+          If \(f\) is continuous on \([a,b]\), or if \(f\) has only a finite number
+          of jump  discontinuities, then \(f\) is integrable on \([a,b]\); that is, 
+          the definite integral \(\int_a^bf(x)dx\) exists.
+          <h4>Theorem</h4>
+          If \(f\) is integrable on \([a,b]\), then
+          \[ \int_a^b\,f(x)\,dx=\lim_{n\to\infty}\sum_{i=1}^nf(x_i)\Delta x \]
+          \[ \text{where} \qquad \Delta x=\frac{b-a}{n} \quad \text{and}
+          \quad x_i=a+i\Delta x \]
+          <h4>Sums of Powers</h4>
+          \[ \sum_{i=1}^n 1=n \]
+          \[ \sum_{i=1}^n i=\frac{n(n+1)}{n} \]
+          \[ \sum_{i=1}^n i^2=\frac{n(n+1)(2n+1)}{2} \]
+          \[ \sum_{i=1}^n i^3=[\frac{n(n+1)}{2}]^2 \]
+          <h4>Properties of Sums</h4>
+          \[\sum_{i=1}^n c\,a_i=c\sum_{i=1}^n a_i\]
+          \[\sum_{i=1}^n(a_i+b_i)=\sum_{i=1}^na_i+\sum_{i=1}^nb_i\]
+          \[\sum_{i=1}^n(a_i-b_i)=\sum_{i=1}^na_i-\sum_{i=1}^nb_i\]
+          <h4>Midpoint Ruele</h4>
+          \[\int_a^bf(x)dx\approx\sum_{i=1}^nf(\bar x_i)\Delta x=\Delta x[f(\bar x_1)+...+f(\bar x_n)]\]
+          where
+          \[\Delta x=\frac{b-a}{n}\]
+          and
+          \[ \bar x_i=\frac{1}{2}(x_{i-1}+x_i)=\text{midpoint of}[x_{i-1},x_i] \]
+          <h4>Properties of the Definite Integral</h4>
+          \[\int_a^bc\,dx=c(b-a), \text{where}\: c \:\text{is any constant}\]
+          \[ \int_a^b[f(x)+g(x)]dx=\int_a^bf(x)dx+\int_a^bg(x)dx \]
+          \[ \int_a^bcf(x)dx=c\int_a^bf(x)dx, \:\text{where} \: c \: \text{is any constant} \]
+          <br>
+          <br>
+          \[ \int_b^af(x)dx=-\int_a^bf(x)dx \]
+          \[\int_a^af(x)dx=0\]
+          \[ \int_a^cf(x)dx+\int_c^bf(x)dx=\int_a^bf(x)dx \]
+          <h4>Comparison Properties of the Integral</h4>
+          \[  \]
+        </p>
+      </div>
+      <div class="halfr">
+        <p>
+        </p>
+    </div>
+  </div>
+    <p>
+      <h3>The Derivative as a Function</h3>
+    </p>
+    <div class="container">
+      <div class="halfl">
+        <p>
+          the derivative at a fixed number \(a\):
+          \[ f'(a)=\lim_{h\to0}\frac{f(a+h)-f(a)}{h} \]
+          the derivative at a variable \(x\):
+          \[ f'(x)=\lim_{h\to0}\frac{f(x+h)-f(x)}{h} \]
+          <h4>Definition:</h4>
+          A function \(f\) is <b>differentiable at \(a\)</b> if 
+          \(f'(a)\) exists. It is <b>differentiable on an open interval</b>
+           \((a,b)\) [or\((a,\infty)\) or \((-\infty,a)\) or\((-\infty,\infty)\)]
+          if it is differentiable at every number in the interval.
+          <h4>Theorem:</h4>
+          If \(f\) is differentiable at \(a\), then \(f\) is continuous at \(a\).
+          <h4>Higher Derivatives</h4>
+          The derivative of a derivative, or a <b>second derivative</b> is 
+          \[ f''(x)=\frac{d}{dx}(\frac{dy}{dx})=\frac{d^2y}{dx^2} \]
+          <b>third derivative:</b>
+          \[ f'''(x)=\frac{d}{dx}(\frac{d^2y}{dx^2})=\frac{d^3y}{dx^3} \]
+        </p>
+      </div>
+      <div class="halfr">
+        <p>
+          The converse of <b>Theorem</b> is false: that is, there are functions
+          that are continuous but not differentiable.
+        </p>
+      </div>
+    </div>
+  </div>
 </div>
 
 <script>
@@ -1360,14 +1547,20 @@
   const pages = document.querySelectorAll('.page');
 
   tabs.forEach(tab => {
-    tab.addEventListener('click', () => {
-      tabs.forEach(t => t.classList.remove('active'));
-      pages.forEach(p => p.classList.remove('active'));
+  tab.addEventListener('click', () => {
+    tabs.forEach(t => t.classList.remove('active'));
+    pages.forEach(p => p.classList.remove('active'));
 
-      tab.classList.add('active');
-      document.getElementById(tab.dataset.target).classList.add('active');
-    });
+    tab.classList.add('active');
+    document.getElementById(tab.dataset.target).classList.add('active');
+
+    // ✅ SAVE TAB
+    localStorage.setItem('activeTab', tab.dataset.target);
+
+    // optional: update URL
+    location.hash = tab.dataset.target;
   });
+});
 </script>
 
 
