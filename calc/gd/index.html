@@ -270,6 +270,9 @@ button:hover:not(:disabled) { filter: brightness(1.1); }
 <header class="masthead">
   <h1>Regression &mdash; <span class="accent">3D</span></h1>
   <span class="eq">ŷ = w₁·x₁ + w₂·x₂ + b &nbsp;|&nbsp; L = (1/n)·Σ(ŷᵢ − yᵢ)²</span>
+  <a href="../">
+  <button>Calculus</button>
+</a>
 </header>
 
 <div class="layout">
@@ -377,12 +380,21 @@ const N = X1_RAW.length;
 function mean(a) { return a.reduce((s,v) => s+v, 0) / a.length; }
 const MU1 = mean(X1_RAW), MU2 = mean(X2_RAW), MU_Y = mean(Y_RAW);
 
+// replace the centered arrays with:
+for (let i = 0; i < N; i++) {
+  X1[i] = X1_RAW[i];
+  X2[i] = X2_RAW[i];
+  YS[i] = Y_RAW[i];
+}
+
+```
 const X1 = new Float64Array(N), X2 = new Float64Array(N), YS = new Float64Array(N);
 for (let i = 0; i < N; i++) {
   X1[i] = X1_RAW[i] - MU1;
   X2[i] = X2_RAW[i] - MU2;
   YS[i] = Y_RAW[i]  - MU_Y;  // center Y too so bias ≈ 0
 }
+```
 
 // SS_tot for R²
 let SS_TOT = 0;
