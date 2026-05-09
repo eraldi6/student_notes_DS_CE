@@ -1,0 +1,988 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Data Pre-proc & Visualization — Study Notes</title>
+  <style>
+    body {
+      font-family: system-ui, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #bdbaba;
+    }
+
+    header {
+      background: #222;
+      color: #e3e4b6;
+      padding: 0.7rem;
+      font-size: 1.2rem;
+      text-align: left;
+    }
+
+    .tabs {
+      display: flex;
+      background: #ddd;
+      border-bottom: 0px solid #bbb;
+      flex-wrap: wrap;
+    }
+
+    .tabs button {
+      flex: 1;
+      padding: 0.65rem;
+      border: none;
+      background: #bbbaba;
+      cursor: pointer;
+      font-size: 1.1rem;
+      min-width: 120px;
+    }
+
+    .tabs button.active {
+      background: #f7f7f7;
+      border-bottom: 4px solid #380e0e;
+      font-weight: bold;
+    }
+
+    .content {
+      padding: 2rem;
+      background: #fae4e4;
+    }
+
+    .page {
+      display: none;
+    }
+
+    .page.active {
+      display: block;
+    }
+
+    .container {
+      display: flex;
+      gap: 10px;
+      padding: 0px;
+    }
+
+    .half {
+      flex: 1;
+      width: 50%;
+      margin: 0;
+    }
+
+    p { font-size: 1.15rem; }
+    h4 { margin-left: -5px; font-size: 1.2rem; }
+    h3 { margin-left: -10px; font-size: 1.5rem; }
+    h2 { margin-left: -15px; margin-top: -1rem; font-size: 2.1rem; }
+
+    table {
+      border-collapse: collapse;
+      font-size: 1rem;
+    }
+    table td {
+      padding: 2px 8px 2px 0;
+      vertical-align: top;
+    }
+
+    /* comparison tables (wider, bordered) */
+    .ctable {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 1rem;
+      margin: 0.5rem 0 1rem 0;
+    }
+    .ctable th {
+      background: #380e0e;
+      color: #e3e4b6;
+      padding: 6px 10px;
+      text-align: left;
+    }
+    .ctable td {
+      padding: 5px 10px;
+      border-bottom: 1px solid #d8c0c0;
+    }
+    .ctable tr:nth-child(even) td { background: #f3d8d8; }
+
+    .note {
+      background: #f3e8c0;
+      border-left: 4px solid #b89020;
+      padding: 0.5rem 1rem;
+      margin: 0.5rem 0 1rem 0;
+      font-size: 1rem;
+    }
+    .warn {
+      background: #f9d8d8;
+      border-left: 4px solid #a02020;
+      padding: 0.5rem 1rem;
+      margin: 0.5rem 0 1rem 0;
+      font-size: 1rem;
+    }
+    .good {
+      background: #d8f3e0;
+      border-left: 4px solid #208040;
+      padding: 0.5rem 1rem;
+      margin: 0.5rem 0 1rem 0;
+      font-size: 1rem;
+    }
+
+    hr { border: none; border-top: 1px solid #c8a8a8; margin: 1.5rem 0; }
+
+    /* chart grid */
+    .chart-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-bottom: 1rem;
+    }
+    .chart-card {
+      background: #f7eeee;
+      border: 1px solid #c8a8a8;
+      border-radius: 6px;
+      padding: 14px 16px;
+      flex: 1 1 280px;
+      max-width: 360px;
+    }
+    .chart-card h4 { margin: 0 0 4px 0; font-size: 1.15rem; color: #380e0e; }
+    .chart-card .use { font-size: 0.88rem; color: #606060; margin-bottom: 6px; font-style: italic; }
+    .chart-card p { font-size: 0.95rem; margin: 4px 0; }
+
+    /* svg sketch inside chart card */
+    .sketch {
+      display: block;
+      margin: 6px auto 10px auto;
+    }
+  </style>
+
+  <!-- KaTeX CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <!-- KaTeX JS -->
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <!-- Auto-render -->
+  <script defer
+    src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body);"></script>
+</head>
+<body>
+
+<header>
+  Data Pre-processing &amp; Visualization — Exam Notes
+</header>
+
+<div class="tabs">
+  <button class="tab active" data-target="page1">📐 Descriptive Stats</button>
+  <button class="tab" data-target="page2">📊 Charts &amp; Graphs</button>
+  <button class="tab" data-target="page3">🗂 Data &amp; Sampling</button>
+  <button class="tab" data-target="page4">⚙️ Transformation</button>
+  <button class="tab" data-target="page5">⚡ Quick Reference</button>
+</div>
+
+<div class="content">
+
+<!-- ════════════════════════════════════════
+     PAGE 1 — DESCRIPTIVE STATISTICS
+════════════════════════════════════════ -->
+<div id="page1" class="page active">
+  <h2>Descriptive Statistics ✨</h2>
+  <p>Measures of central tendency, spread, shape, correlation, and outlier detection.</p>
+
+  <!-- MEAN -->
+  <h3>Mean:</h3>
+  <div class="container">
+    <div class="half">
+      <p>Ungrouped data:<br>
+        \[ \bar{x} = \frac{1}{n} \sum_{i=1}^{n} x_i \]
+      </p>
+    </div>
+    <div class="half">
+      <p>Grouped data:<br>
+        \[ \bar{x} = \frac{\sum f_i x_i}{\sum f_i} \]
+        <table>
+          <tr><td>\(f_i\)</td><td>=> frequency of the interval</td></tr>
+          <tr><td>\(x_i\)</td><td>=> midpoint value of the interval</td></tr>
+        </table>
+      </p>
+    </div>
+  </div>
+  <div class="warn">⚠ The mean is sensitive to outliers — one extreme value shifts it significantly. Prefer the median for skewed data.</div>
+
+  <!-- MEDIAN -->
+  <h3>Median:</h3>
+  <div class="container">
+    <div class="half">
+      <p>Ungrouped data:<br>
+        \[ Me(X) = \begin{cases} x_{\frac{n+1}{2}} & n \text{ odd} \\ \frac{x_{\frac{n}{2}} + x_{\frac{n}{2}+1}}{2} & n \text{ even} \end{cases} \]
+      </p>
+      <p>Middle value of the sorted dataset; resistant to outliers.</p>
+    </div>
+    <div class="half">
+      <p>Grouped data:<br>
+        \[ Me(X) = l + \frac{\frac{n}{2} - f_0}{f_1} \, h \]
+        <table>
+          <tr><td>\(l\)</td><td>=> lower boundary of median class</td></tr>
+          <tr><td>\(f_0\)</td><td>=> cumulative frequency before median class</td></tr>
+          <tr><td>\(f_1\)</td><td>=> frequency of the median class</td></tr>
+          <tr><td>\(h\)</td><td>=> class width</td></tr>
+        </table>
+      </p>
+    </div>
+  </div>
+
+  <!-- MODE -->
+  <h3>Mode:</h3>
+  <div class="container">
+    <div class="half">
+      <p>Ungrouped data:<br>
+        \[ Mo(X) = \arg\max_x \; \text{freq}(x) \]
+      </p>
+      <p>Most frequent value. Can be unimodal, bimodal, or multimodal. Only measure applicable to nominal categorical data.</p>
+    </div>
+    <div class="half">
+      <p>Grouped data:<br>
+        \[ Mo(X) = l + \frac{f_1 - f_0}{2f_1 - f_0 - f_2} \, h \]
+        <table>
+          <tr><td>\(l\)</td><td>=> lower boundary of modal class</td></tr>
+          <tr><td>\(f_0\)</td><td>=> frequency of preceding class</td></tr>
+          <tr><td>\(f_1\)</td><td>=> frequency of modal class</td></tr>
+          <tr><td>\(f_2\)</td><td>=> frequency of succeeding class</td></tr>
+          <tr><td>\(h\)</td><td>=> class width</td></tr>
+        </table>
+      </p>
+    </div>
+  </div>
+
+  <hr>
+
+  <!-- VARIANCE & STD DEV -->
+  <h3>Variance &amp; Standard Deviation:</h3>
+  <div class="container">
+    <div class="half">
+      <p>Ungrouped — Population:<br>
+        \[ \sigma^2 = \frac{1}{N} \sum_{i=1}^{N} (x_i - \mu)^2 \]
+        \[ \sigma = \sqrt{\sigma^2} \]
+      </p>
+      <p>Ungrouped — Sample (Bessel's correction):<br>
+        \[ s^2 = \frac{1}{n-1} \sum_{i=1}^{n} (x_i - \bar{x})^2 \]
+        <table>
+          <tr><td>\(\mu\)</td><td>=> population mean</td></tr>
+          <tr><td>\(\bar{x}\)</td><td>=> sample mean</td></tr>
+          <tr><td>\(n-1\)</td><td>=> Bessel's correction (unbiased sample estimate)</td></tr>
+        </table>
+      </p>
+    </div>
+    <div class="half">
+      <p>Grouped data:<br>
+        \[ \sigma^2 = \frac{\sum f_i (x_i - \bar{x})^2}{\sum f_i} \]
+        \[ \sigma = \sqrt{\frac{\sum f_i (x_i - \bar{x})^2}{\sum f_i}} \]
+        <table>
+          <tr><td>\(x_i\)</td><td>=> midpoint of the \(i\)-th class</td></tr>
+          <tr><td>\(f_i\)</td><td>=> frequency of the \(i\)-th class</td></tr>
+        </table>
+      </p>
+      <div class="note">Standard deviation is in the same units as the data. The 68–95–99.7 rule (for normal distributions):<br>
+        \(\mu \pm 1\sigma\) → 68% &nbsp;|&nbsp; \(\mu \pm 2\sigma\) → 95% &nbsp;|&nbsp; \(\mu \pm 3\sigma\) → 99.7%
+      </div>
+    </div>
+  </div>
+
+  <hr>
+
+  <!-- IQR & QUARTILES -->
+  <h3>Quartiles &amp; IQR:</h3>
+  <div class="container">
+    <div class="half">
+      <p>
+        \[ Q_1 = 25\text{th percentile} \]
+        \[ Q_2 = 50\text{th percentile} = \text{Median} \]
+        \[ Q_3 = 75\text{th percentile} \]
+        \[ IQR = Q_3 - Q_1 \]
+      </p>
+      <p>IQR contains the middle 50% of the data. Resistant to outliers.</p>
+    </div>
+    <div class="half">
+      <p>Outlier detection — IQR fence method:<br>
+        \[ \text{Lower fence} = Q_1 - 1.5 \times IQR \]
+        \[ \text{Upper fence} = Q_3 + 1.5 \times IQR \]
+      </p>
+      <p>Any value beyond these fences is considered an outlier. This is what box plots use. Works for skewed data (non-parametric).</p>
+    </div>
+  </div>
+
+  <hr>
+
+  <!-- SKEWNESS -->
+  <h3>Skewness:</h3>
+  <div class="container">
+    <div class="half">
+      <p>Pearson's skewness coefficient:<br>
+        \[ Sk = \frac{3(\bar{x} - Me(X))}{\sigma} \]
+      </p>
+      <table>
+        <tr><td>\(Sk > 0\)</td><td>=> positive skew: tail on the right, mean &gt; median</td></tr>
+        <tr><td>\(Sk < 0\)</td><td>=> negative skew: tail on the left, mean &lt; median</td></tr>
+        <tr><td>\(Sk = 0\)</td><td>=> symmetric: mean ≈ median ≈ mode</td></tr>
+      </table>
+    </div>
+    <div class="half">
+      <p>Moment-based skewness:<br>
+        \[ g_1 = \frac{\frac{1}{n}\sum(x_i-\bar{x})^3}{\sigma^3} \]
+      </p>
+      <div class="note">Positive skew is common in income/salary data. Log transformation reduces positive skew.</div>
+    </div>
+  </div>
+
+  <hr>
+
+  <!-- OUTLIER DETECTION -->
+  <h3>Outlier Detection — Z-score method:</h3>
+  <div class="container">
+    <div class="half">
+      <p>
+        \[ Z = \frac{x - \mu}{\sigma} \]
+      </p>
+      <p>An observation is an outlier if \(|Z| > 3\) (sometimes \(|Z| > 2.5\)).</p>
+    </div>
+    <div class="half">
+      <div class="warn">⚠ Z-score method assumes approximately normal distribution. For skewed data, use the IQR fence method instead.</div>
+    </div>
+  </div>
+
+  <hr>
+
+  <!-- CORRELATION -->
+  <h3>Correlation:</h3>
+  <div class="container">
+    <div class="half">
+      <p><b>Pearson's r</b> — linear relationship between two continuous variables:<br>
+        \[ r = \frac{\sum_{i=1}^{n}(x_i - \bar{x})(y_i - \bar{y})}{n \cdot \sigma_x \cdot \sigma_y} \]
+        \[ r \in [-1, +1] \]
+        <table>
+          <tr><td>\(r = +1\)</td><td>=> perfect positive linear relationship</td></tr>
+          <tr><td>\(r = -1\)</td><td>=> perfect negative linear relationship</td></tr>
+          <tr><td>\(r = 0\)</td><td>=> no linear relationship</td></tr>
+        </table>
+      </p>
+      <div class="warn">⚠ Sensitive to outliers. Assumes normality.</div>
+    </div>
+    <div class="half">
+      <p><b>Spearman's ρ</b> — rank-based, for ordinal or non-normal data:<br>
+        \[ \rho = 1 - \frac{6\sum d_i^2}{n(n^2-1)} \]
+        <table>
+          <tr><td>\(d_i\)</td><td>=> rank(\(x_i\)) − rank(\(y_i\))</td></tr>
+        </table>
+      </p>
+      <p>Works for <b>monotonic</b> (not just linear) relationships. Robust to outliers.</p>
+      <div class="note">Use Pearson for normal continuous data. Use Spearman for ordinal, skewed, or outlier-heavy data.</div>
+    </div>
+  </div>
+  <div class="warn">⚠ Correlation ≠ Causation. A high r does not mean one variable causes the other.</div>
+
+</div><!-- /page1 -->
+
+
+<!-- ════════════════════════════════════════
+     PAGE 2 — CHARTS & GRAPHS
+════════════════════════════════════════ -->
+<div id="page2" class="page">
+  <h2>Charts &amp; Graphs ✨</h2>
+  <p>For each chart: what it shows, when to use it, what the axes represent, and what to remember.</p>
+
+  <h3>Univariate Charts — one variable:</h3>
+  <div class="chart-grid">
+
+    <div class="chart-card">
+      <svg class="sketch" width="200" height="90" viewBox="0 0 200 90">
+        <rect x="10" y="58" width="24" height="25" fill="#a03030" rx="1"/>
+        <rect x="38" y="38" width="24" height="45" fill="#a03030" rx="1"/>
+        <rect x="66" y="22" width="24" height="61" fill="#c04040" rx="1"/>
+        <rect x="94" y="32" width="24" height="51" fill="#a03030" rx="1"/>
+        <rect x="122" y="48" width="24" height="35" fill="#a03030" rx="1"/>
+        <rect x="150" y="62" width="24" height="21" fill="#a03030" rx="1"/>
+        <line x1="5" y1="85" x2="195" y2="85" stroke="#666" stroke-width="1"/>
+        <line x1="5" y1="85" x2="5" y2="5" stroke="#666" stroke-width="1"/>
+      </svg>
+      <h4>Histogram</h4>
+      <div class="use">Use when: distribution of one continuous variable</div>
+      <p><b>X-axis:</b> value ranges (bins) &nbsp; <b>Y-axis:</b> frequency (count)</p>
+      <p>Reveals shape: skew, modality, spread. Bars are <b>adjacent</b> (no gaps) because X is continuous.</p>
+      <div class="note">⚠ Bar chart ≠ Histogram. Histograms have no gaps; bars do.</div>
+    </div>
+
+    <div class="chart-card">
+      <svg class="sketch" width="200" height="90" viewBox="0 0 200 90">
+        <rect x="15" y="30" width="150" height="14" fill="#ccc" stroke="#999" rx="1"/>
+        <rect x="15" y="30" width="100" height="14" fill="#a03030" rx="1"/>
+        <rect x="15" y="50" width="150" height="14" fill="#ccc" stroke="#999" rx="1"/>
+        <rect x="15" y="50" width="130" height="14" fill="#c06040" rx="1"/>
+        <rect x="15" y="70" width="150" height="14" fill="#ccc" stroke="#999" rx="1"/>
+        <rect x="15" y="70" width="60" height="14" fill="#804040" rx="1"/>
+        <text x="8" y="41" fill="#555" font-size="9">A</text>
+        <text x="8" y="61" fill="#555" font-size="9">B</text>
+        <text x="8" y="81" fill="#555" font-size="9">C</text>
+      </svg>
+      <h4>Bar Chart</h4>
+      <div class="use">Use when: comparing amounts across categories</div>
+      <p><b>X-axis:</b> categories &nbsp; <b>Y-axis:</b> numeric value</p>
+      <p>Bars have <b>gaps</b> between them (categorical). Can be horizontal or vertical. For ranked data, sort bars by value.</p>
+    </div>
+
+    <div class="chart-card">
+      <svg class="sketch" width="200" height="90" viewBox="0 0 200 90">
+        <circle cx="100" cy="45" r="38" fill="none" stroke="#999" stroke-width="1"/>
+        <path d="M100 45 L100 7 A38 38 0 0 1 133 64 Z" fill="#a03030"/>
+        <path d="M100 45 L133 64 A38 38 0 0 1 67 80 Z" fill="#c06040"/>
+        <path d="M100 45 L67 80 A38 38 0 0 1 62 18 Z" fill="#804040"/>
+        <path d="M100 45 L62 18 A38 38 0 0 1 100 7 Z" fill="#e08060"/>
+        <text x="108" y="32" fill="#fff" font-size="8">30%</text>
+        <text x="103" y="70" fill="#fff" font-size="8">22%</text>
+      </svg>
+      <h4>Pie / Donut Chart</h4>
+      <div class="use">Use when: part-to-whole proportions (≤6 categories)</div>
+      <p>All slices must sum to 100%. Donut = pie with hollow center (easier to add label).</p>
+      <div class="warn">⚠ Avoid with many categories — angles are hard to compare. Use a bar chart for precision.</div>
+    </div>
+
+    <div class="chart-card">
+      <svg class="sketch" width="200" height="90" viewBox="0 0 200 90">
+        <rect x="70" y="30" width="60" height="38" fill="#f3d8d8" stroke="#a03030" stroke-width="1.5" rx="1"/>
+        <line x1="70" y1="50" x2="130" y2="50" stroke="#a03030" stroke-width="2.5"/>
+        <line x1="100" y1="30" x2="100" y2="12" stroke="#a03030" stroke-width="1.5" stroke-dasharray="3,2"/>
+        <line x1="100" y1="68" x2="100" y2="82" stroke="#a03030" stroke-width="1.5" stroke-dasharray="3,2"/>
+        <line x1="85" y1="12" x2="115" y2="12" stroke="#a03030" stroke-width="1.5"/>
+        <line x1="85" y1="82" x2="115" y2="82" stroke="#a03030" stroke-width="1.5"/>
+        <circle cx="155" cy="42" r="4" fill="none" stroke="#c04040" stroke-width="1.5"/>
+        <text x="162" y="46" fill="#a03030" font-size="8">outlier</text>
+        <text x="28" y="34" fill="#666" font-size="8">Q3</text>
+        <text x="28" y="53" fill="#a03030" font-size="8">median</text>
+        <text x="28" y="71" fill="#666" font-size="8">Q1</text>
+        <text x="28" y="16" fill="#666" font-size="8">max</text>
+        <text x="28" y="85" fill="#666" font-size="8">min</text>
+      </svg>
+      <h4>Box Plot (Box-and-Whisker)</h4>
+      <div class="use">Use when: spread, median, quartiles, outliers of one variable</div>
+      <p>Shows 5-number summary: <b>min, Q1, median, Q3, max</b>. Whiskers extend to last non-outlier value.</p>
+      <p>Outliers: points beyond \(Q_1 - 1.5 \times IQR\) or \(Q_3 + 1.5 \times IQR\)</p>
+    </div>
+
+    <div class="chart-card">
+      <svg class="sketch" width="200" height="90" viewBox="0 0 200 90">
+        <path d="M80 10 Q60 30 60 48 Q60 66 80 78 L100 82 L120 78 Q140 66 140 48 Q140 30 120 10 Z" fill="#f3d8d8" stroke="#a03030" stroke-width="1.5"/>
+        <path d="M86 20 Q74 34 74 48 Q74 62 86 70 L100 73 L114 70 Q126 62 126 48 Q126 34 114 20 Z" fill="#c06040" fill-opacity="0.5"/>
+        <line x1="58" y1="48" x2="142" y2="48" stroke="#a03030" stroke-width="1.5"/>
+        <text x="148" y="52" fill="#a03030" font-size="8">median</text>
+        <text x="148" y="25" fill="#666" font-size="7">wider = more</text>
+        <text x="148" y="34" fill="#666" font-size="7">data density</text>
+      </svg>
+      <h4>Violin Plot</h4>
+      <div class="use">Use when: distribution shape + density, richer than box plot</div>
+      <p>Width encodes <b>kernel density</b> at each value. Wider = more data points at that value. Usually includes median line.</p>
+    </div>
+
+    <div class="chart-card">
+      <svg class="sketch" width="200" height="90" viewBox="0 0 200 90">
+        <line x1="10" y1="5" x2="10" y2="82" stroke="#666" stroke-width="1"/>
+        <line x1="10" y1="82" x2="190" y2="82" stroke="#666" stroke-width="1"/>
+        <polyline points="10,75 40,45 70,55 100,30 130,50 160,20 190,35" fill="none" stroke="#a03030" stroke-width="2"/>
+        <path d="M10,75 40,45 70,55 100,30 130,50 160,20 190,35 L190,82 L10,82 Z" fill="#a03030" fill-opacity="0.12"/>
+        <circle cx="10" cy="75" r="3" fill="#a03030"/>
+        <circle cx="100" cy="30" r="3" fill="#a03030"/>
+        <circle cx="190" cy="35" r="3" fill="#a03030"/>
+      </svg>
+      <h4>Line Chart</h4>
+      <div class="use">Use when: trend over continuous scale (especially time)</div>
+      <p><b>X-axis:</b> continuous (time) &nbsp; <b>Y-axis:</b> numeric value</p>
+      <p>Area chart = filled version. Good for showing rate of change. Multiple lines = multiple series.</p>
+    </div>
+
+  </div>
+
+  <h3>Bivariate Charts — two variables:</h3>
+  <div class="chart-grid">
+
+    <div class="chart-card">
+      <svg class="sketch" width="200" height="90" viewBox="0 0 200 90">
+        <line x1="15" y1="5" x2="15" y2="82" stroke="#666" stroke-width="1"/>
+        <line x1="15" y1="82" x2="190" y2="82" stroke="#666" stroke-width="1"/>
+        <circle cx="35" cy="68" r="4" fill="#a03030" fill-opacity="0.75"/>
+        <circle cx="55" cy="55" r="4" fill="#a03030" fill-opacity="0.75"/>
+        <circle cx="75" cy="60" r="4" fill="#a03030" fill-opacity="0.75"/>
+        <circle cx="95" cy="42" r="4" fill="#a03030" fill-opacity="0.75"/>
+        <circle cx="110" cy="40" r="4" fill="#a03030" fill-opacity="0.75"/>
+        <circle cx="130" cy="28" r="4" fill="#a03030" fill-opacity="0.75"/>
+        <circle cx="155" cy="22" r="4" fill="#c04040" fill-opacity="0.75"/>
+        <circle cx="175" cy="18" r="4" fill="#a03030" fill-opacity="0.75"/>
+        <line x1="25" y1="72" x2="180" y2="12" stroke="#555" stroke-width="1.5" stroke-dasharray="4,3"/>
+      </svg>
+      <h4>Scatter Plot</h4>
+      <div class="use">Use when: relationship between two continuous variables</div>
+      <p>Each point = one observation. Dashed line = regression/trend line. Reveals <b>correlation, clusters, outliers</b>.</p>
+      <p>Positive slope → positive correlation; negative slope → negative correlation.</p>
+    </div>
+
+    <div class="chart-card">
+      <svg class="sketch" width="200" height="90" viewBox="0 0 200 90">
+        <rect x="20" y="45" width="30" height="38" fill="#804040" rx="1"/>
+        <rect x="20" y="28" width="30" height="17" fill="#a03030" rx="1"/>
+        <rect x="20" y="12" width="30" height="16" fill="#c06040" rx="1"/>
+        <rect x="60" y="38" width="30" height="45" fill="#804040" rx="1"/>
+        <rect x="60" y="22" width="30" height="16" fill="#a03030" rx="1"/>
+        <rect x="60" y="10" width="30" height="12" fill="#c06040" rx="1"/>
+        <rect x="100" y="52" width="30" height="31" fill="#804040" rx="1"/>
+        <rect x="100" y="35" width="30" height="17" fill="#a03030" rx="1"/>
+        <rect x="100" y="18" width="30" height="17" fill="#c06040" rx="1"/>
+        <rect x="148" y="60" width="12" height="12" fill="#c06040"/>
+        <text x="163" y="71" fill="#555" font-size="8">Cat A</text>
+        <rect x="148" y="75" width="12" height="12" fill="#a03030"/>
+        <text x="163" y="86" fill="#555" font-size="8">Cat B</text>
+        <line x1="10" y1="84" x2="145" y2="84" stroke="#666" stroke-width="1"/>
+      </svg>
+      <h4>Stacked Bar Chart</h4>
+      <div class="use">Use when: composition across groups (categorical × categorical)</div>
+      <p>Each bar divided into sub-category segments. <b>100% stacked</b> = proportions only (absolute values lost). Shows part-to-whole within each group.</p>
+    </div>
+
+    <div class="chart-card">
+      <svg class="sketch" width="200" height="90" viewBox="0 0 200 90">
+        <rect x="30" y="10" width="22" height="22" fill="#a03030" fill-opacity="0.2" stroke="#aaa"/>
+        <rect x="52" y="10" width="22" height="22" fill="#a03030" fill-opacity="0.55" stroke="#aaa"/>
+        <rect x="74" y="10" width="22" height="22" fill="#a03030" fill-opacity="0.9" stroke="#aaa"/>
+        <rect x="30" y="32" width="22" height="22" fill="#c06040" fill-opacity="0.7" stroke="#aaa"/>
+        <rect x="52" y="32" width="22" height="22" fill="#c06040" fill-opacity="0.3" stroke="#aaa"/>
+        <rect x="74" y="32" width="22" height="22" fill="#a03030" fill-opacity="0.4" stroke="#aaa"/>
+        <rect x="30" y="54" width="22" height="22" fill="#a03030" fill-opacity="0.6" stroke="#aaa"/>
+        <rect x="52" y="54" width="22" height="22" fill="#e05050" fill-opacity="0.6" stroke="#aaa"/>
+        <rect x="74" y="54" width="22" height="22" fill="#a03030" fill-opacity="0.1" stroke="#aaa"/>
+        <text x="105" y="28" fill="#555" font-size="8">darker = stronger</text>
+        <text x="105" y="42" fill="#555" font-size="8">correlation/frequency</text>
+      </svg>
+      <h4>Heatmap</h4>
+      <div class="use">Use when: value matrix, correlation matrices</div>
+      <p>Color encodes magnitude. Very common for <b>correlation matrices</b> — shows how all numeric variables relate at once. Rows × columns = two categorical or variable axes.</p>
+    </div>
+
+    <div class="chart-card">
+      <svg class="sketch" width="200" height="90" viewBox="0 0 200 90">
+        <line x1="10" y1="5" x2="10" y2="82" stroke="#666" stroke-width="1"/>
+        <line x1="10" y1="82" x2="190" y2="82" stroke="#666" stroke-width="1"/>
+        <rect x="25" y="42" width="22" height="32" fill="#f3d8d8" stroke="#a03030" stroke-width="1.5"/>
+        <line x1="25" y1="58" x2="47" y2="58" stroke="#a03030" stroke-width="2"/>
+        <rect x="78" y="28" width="22" height="40" fill="#f3d8d8" stroke="#c06040" stroke-width="1.5"/>
+        <line x1="78" y1="48" x2="100" y2="48" stroke="#c06040" stroke-width="2"/>
+        <rect x="130" y="48" width="22" height="26" fill="#f3d8d8" stroke="#804040" stroke-width="1.5"/>
+        <line x1="130" y1="62" x2="152" y2="62" stroke="#804040" stroke-width="2"/>
+        <text x="28" y="26" fill="#a03030" font-size="8">Group A</text>
+        <text x="78" y="22" fill="#c06040" font-size="8">Group B</text>
+        <text x="130" y="42" fill="#804040" font-size="8">Group C</text>
+      </svg>
+      <h4>Grouped Box Plot</h4>
+      <div class="use">Use when: comparing distributions across categories</div>
+      <p>Multiple box plots side by side — one per group. Directly compare spread, median, and outliers across categories.</p>
+    </div>
+
+    <div class="chart-card">
+      <svg class="sketch" width="200" height="90" viewBox="0 0 200 90">
+        <line x1="10" y1="5" x2="10" y2="82" stroke="#666" stroke-width="1"/>
+        <line x1="10" y1="82" x2="190" y2="82" stroke="#666" stroke-width="1"/>
+        <circle cx="50" cy="58" r="20" fill="#a03030" fill-opacity="0.25" stroke="#a03030"/>
+        <circle cx="105" cy="35" r="13" fill="#c06040" fill-opacity="0.25" stroke="#c06040"/>
+        <circle cx="155" cy="52" r="26" fill="#804040" fill-opacity="0.25" stroke="#804040"/>
+        <circle cx="78" cy="68" r="8" fill="#e05050" fill-opacity="0.25" stroke="#e05050"/>
+        <text x="120" y="10" fill="#666" font-size="7">size = 3rd variable</text>
+      </svg>
+      <h4>Bubble Chart</h4>
+      <div class="use">Use when: scatter plot with a 3rd (or 4th via color) dimension</div>
+      <p>X and Y = two numeric variables. <b>Bubble size</b> = 3rd numeric variable. Color can encode a 4th. Useful for comparing 3+ dimensions simultaneously.</p>
+    </div>
+
+    <div class="chart-card">
+      <svg class="sketch" width="200" height="90" viewBox="0 0 200 90">
+        <g transform="translate(100,46)">
+          <line x1="0" y1="-38" x2="0" y2="0" stroke="#ccc"/>
+          <line x1="36" y1="18" x2="0" y2="0" stroke="#ccc"/>
+          <line x1="22" y1="-30" x2="0" y2="0" stroke="#ccc"/>
+          <line x1="-36" y1="18" x2="0" y2="0" stroke="#ccc"/>
+          <line x1="-22" y1="-30" x2="0" y2="0" stroke="#ccc"/>
+          <polygon points="0,-30 28,14 17,-23 -29,14 -17,-23" fill="#a03030" fill-opacity="0.3" stroke="#a03030" stroke-width="1.5"/>
+        </g>
+        <text x="100" y="88" fill="#666" font-size="7" text-anchor="middle">each axis = one variable</text>
+      </svg>
+      <h4>Radar / Spider Chart</h4>
+      <div class="use">Use when: comparing multiple attributes of one or more subjects</div>
+      <p>Each axis = one variable. The polygon profile shows strengths/weaknesses across dimensions. Good for e.g., comparing player stats or product features.</p>
+    </div>
+
+  </div>
+
+  <h3>Selection Guide:</h3>
+  <table class="ctable">
+    <tr>
+      <th>You want to show…</th>
+      <th>Chart</th>
+      <th>Variable types needed</th>
+    </tr>
+    <tr><td>Distribution of one continuous variable</td><td><b>Histogram</b></td><td>1 continuous</td></tr>
+    <tr><td>Compare amounts across categories</td><td><b>Bar Chart</b></td><td>1 categorical + 1 numeric</td></tr>
+    <tr><td>Part of a whole</td><td><b>Pie / Donut</b></td><td>1 categorical (≤6 levels)</td></tr>
+    <tr><td>Spread, median, outliers</td><td><b>Box Plot</b></td><td>1+ continuous</td></tr>
+    <tr><td>Distribution shape + density</td><td><b>Violin Plot</b></td><td>1 continuous + group</td></tr>
+    <tr><td>Trend over time</td><td><b>Line Chart</b></td><td>time × numeric</td></tr>
+    <tr><td>Relationship between two continuous variables</td><td><b>Scatter Plot</b></td><td>2 continuous</td></tr>
+    <tr><td>Correlation matrix overview</td><td><b>Heatmap</b></td><td>many numeric</td></tr>
+    <tr><td>Composition across groups</td><td><b>Stacked Bar</b></td><td>2 categorical</td></tr>
+    <tr><td>3 variables simultaneously</td><td><b>Bubble Chart</b></td><td>3 continuous</td></tr>
+    <tr><td>Multi-attribute profile comparison</td><td><b>Radar Chart</b></td><td>multiple numeric</td></tr>
+    <tr><td>All pairwise relationships</td><td><b>Pairs Plot (scatter matrix)</b></td><td>many numeric</td></tr>
+  </table>
+
+</div><!-- /page2 -->
+
+
+<!-- ════════════════════════════════════════
+     PAGE 3 — DATA & SAMPLING
+════════════════════════════════════════ -->
+<div id="page3" class="page">
+  <h2>Data &amp; Sampling ✨</h2>
+  <p>Data sources, types, structure, sampling methods and variable types.</p>
+
+  <h3>Primary vs. Secondary Data:</h3>
+  <div class="container">
+    <div class="half">
+      <h4>Primary Data</h4>
+      <p>Collected specifically for the current research. Higher reliability — but costly and slow.</p>
+      <p><b>Collection methods:</b></p>
+      <table>
+        <tr><td>Surveys</td><td>— phone, email, in-person</td></tr>
+        <tr><td>Observations</td><td>— personal, mechanical</td></tr>
+        <tr><td>Experiments</td><td>— lab, field</td></tr>
+        <tr><td>Interviews</td><td>— structured, semi-structured, unstructured</td></tr>
+        <tr><td>Focus Groups</td><td>— group discussion</td></tr>
+      </table>
+      <div class="warn">Limitations: high cost, time-intensive, risk of researcher/selection bias, may not be comparable across populations.</div>
+    </div>
+    <div class="half">
+      <h4>Secondary Data</h4>
+      <p>Previously collected for another purpose. Cheaper and faster — but may be outdated or not perfectly fit your needs.</p>
+      <p><b>Sources:</b></p>
+      <table>
+        <tr><td>INSTAT</td><td>— demographic, economic data</td></tr>
+        <tr><td>World Bank / IMF / Eurostat</td><td>— macroeconomic</td></tr>
+        <tr><td>Open Data portals</td><td>— national/international</td></tr>
+        <tr><td>Logs / transactions / IoT</td><td>— digital systems</td></tr>
+        <tr><td>APIs</td><td>— social media, web services</td></tr>
+      </table>
+      <div class="good">Advantages: no collection needed, saves money &amp; time, often standardized, great for exploratory analysis.</div>
+    </div>
+  </div>
+
+  <h3>Primary vs. Secondary — Comparison:</h3>
+  <table class="ctable">
+    <tr><th>Aspect</th><th>Primary</th><th>Secondary</th></tr>
+    <tr><td>Cost</td><td>High</td><td>Low</td></tr>
+    <tr><td>Structure</td><td>Often unstructured</td><td>Often tabular</td></tr>
+    <tr><td>Amount</td><td>Limited</td><td>Large</td></tr>
+    <tr><td>Cleaning needed</td><td>Very necessary</td><td>Mandatory</td></tr>
+    <tr><td>Use in Data Science</td><td>Rarely (only when data doesn't exist)</td><td>In most cases</td></tr>
+    <tr><td>Reliability</td><td>Higher (purpose-built)</td><td>Variable</td></tr>
+  </table>
+
+  <hr>
+
+  <h3>Data Types:</h3>
+  <div class="container">
+    <div class="half">
+      <h4>Numeric (Quantitative)</h4>
+      <table>
+        <tr><td><b>Discrete</b></td><td>— countable values (1, 2, 3…) e.g. number of students</td></tr>
+        <tr><td><b>Continuous</b></td><td>— any value in a range e.g. weight, salary, temperature</td></tr>
+      </table>
+      <br>
+      <h4>Categorical (Qualitative)</h4>
+      <table>
+        <tr><td><b>Nominal</b></td><td>— no order e.g. city, gender, department</td></tr>
+        <tr><td><b>Ordinal</b></td><td>— has natural order e.g. education level (low/med/high), ratings</td></tr>
+      </table>
+    </div>
+    <div class="half">
+      <h4>By Structure</h4>
+      <table>
+        <tr><td><b>Structured</b></td><td>— tabular (rows/columns), easy to query. e.g. CSV, databases</td></tr>
+        <tr><td><b>Semi-structured</b></td><td>— has tags but flexible. e.g. JSON, XML, HTML</td></tr>
+        <tr><td><b>Unstructured</b></td><td>— no format. e.g. text, images, audio, video</td></tr>
+      </table>
+      <br>
+      <h4>By Nature</h4>
+      <table>
+        <tr><td><b>Temporal</b></td><td>— time-indexed (time series). Key: trend, seasonality, cycles.</td></tr>
+        <tr><td><b>Geospatial</b></td><td>— has location info (coordinates, regions). Visualized via maps.</td></tr>
+        <tr><td><b>Textual</b></td><td>— free-form text. Needs NLP preprocessing.</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <hr>
+
+  <h3>Sampling:</h3>
+  <div class="container">
+    <div class="half">
+      <h4>Why sample?</h4>
+      <p>Studying the entire population is often impossible. Sampling provides:</p>
+      <table>
+        <tr><td>Lower cost</td></tr>
+        <tr><td>Greater speed</td></tr>
+        <tr><td>Higher accuracy (more attention per unit)</td></tr>
+        <tr><td>Availability of elements</td></tr>
+      </table>
+      <br>
+      <h4>Sample size rule:</h4>
+      <p>\[ n \geq 30 \]</p>
+      <p>By the Central Limit Theorem, sample means are approximately normally distributed for \(n \geq 30\), regardless of the population distribution. Larger \(n\) → smaller sampling error.</p>
+    </div>
+    <div class="half">
+      <h4>Steps in sampling:</h4>
+      <table>
+        <tr><td>1.</td><td>Define the <b>target population</b></td></tr>
+        <tr><td>2.</td><td>Define <b>parameters of interest</b></td></tr>
+        <tr><td>3.</td><td>Establish a <b>sampling frame</b> (the list to draw from)</td></tr>
+        <tr><td>4.</td><td>Choose a <b>sampling method</b></td></tr>
+        <tr><td>5.</td><td>Determine appropriate <b>sample size</b></td></tr>
+      </table>
+      <br>
+      <h4>Factors affecting sample size:</h4>
+      <table>
+        <tr><td>—</td><td>Required data reliability</td></tr>
+        <tr><td>—</td><td>Required accuracy</td></tr>
+        <tr><td>—</td><td>Type of analysis to conduct</td></tr>
+        <tr><td>—</td><td>Size of the population</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <hr>
+
+  <h3>Variable Types (in analysis):</h3>
+  <table class="ctable">
+    <tr><th>Type</th><th>Definition</th><th>Example</th></tr>
+    <tr><td><b>Dependent</b></td><td>The outcome — changes depending on other variables</td><td>Monthly income</td></tr>
+    <tr><td><b>Independent</b></td><td>The predictor — causes changes in the dependent</td><td>Education level</td></tr>
+    <tr><td><b>External / Confounding</b></td><td>Alternative explanation — can affect the dependent variable too</td><td>Work experience</td></tr>
+  </table>
+
+</div><!-- /page3 -->
+
+
+<!-- ════════════════════════════════════════
+     PAGE 4 — DATA TRANSFORMATION
+════════════════════════════════════════ -->
+<div id="page4" class="page">
+  <h2>Data Transformation ✨</h2>
+  <p>Encoding categorical variables and scaling numerical variables for analysis and modeling.</p>
+  <div class="note">Data may be clean but still unusable for modeling. Transformation changes the <i>representation</i> — it does not fix errors, it adapts data to algorithm requirements.</div>
+
+  <h3>Encoding Categorical Variables:</h3>
+  <div class="container">
+    <div class="half">
+      <h4>Label Encoding — avoid for nominal!</h4>
+      <p>Assigns an integer to each category: IT→1, HR→2, Marketing→3</p>
+      <div class="warn">⚠ Creates a false ordering and false distances. Model thinks Marketing &gt; IT. Only use for truly <b>ordinal</b> variables (e.g., Low=1, Medium=2, High=3).</div>
+
+      <h4>Binary Encoding — for many categories:</h4>
+      <p>Step 1: assign integers. Step 2: convert to binary bits. Each bit → one column.</p>
+      <table>
+        <tr><td>Tirana → 1 → 01</td><td>bin_1=0, bin_2=1</td></tr>
+        <tr><td>Durrës → 2 → 10</td><td>bin_1=1, bin_2=0</td></tr>
+        <tr><td>Vlorë  → 3 → 11</td><td>bin_1=1, bin_2=1</td></tr>
+      </table>
+      <p>3 categories → 2 columns (vs. 3 for OHE). 100 categories → only \(\lceil \log_2 100 \rceil = 7\) columns.</p>
+      <div class="note">Use when: many categories, dimensionality matters. Less interpretable.</div>
+    </div>
+    <div class="half">
+      <h4>One-Hot Encoding (OHE) — standard for nominal:</h4>
+      <p>Creates one binary (0/1) column per category level. Each row has exactly one 1.</p>
+      <table>
+        <tr><td>department: IT, HR, Sales (k=3)</td></tr>
+        <tr><td>→ create only k−1 = 2 columns</td></tr>
+        <tr><td>IT &nbsp;&nbsp;→ dep_IT=1, dep_HR=0</td></tr>
+        <tr><td>HR &nbsp;&nbsp;→ dep_IT=0, dep_HR=1</td></tr>
+        <tr><td>Sales → dep_IT=0, dep_HR=0 (baseline)</td></tr>
+      </table>
+      <div class="warn">⚠ <b>Dummy Variable Trap:</b> always drop one column (use k−1). Including all k creates perfect multicollinearity — one column is perfectly predictable from the others. The dropped category becomes the <b>baseline</b>.</div>
+      <div class="note">Use when: few categories (&lt;15–20). Interpretability is important.</div>
+    </div>
+  </div>
+
+  <h3>Encoding Comparison:</h3>
+  <table class="ctable">
+    <tr><th>Method</th><th>Variable type</th><th>New columns</th><th>False ordering?</th><th>Best for</th></tr>
+    <tr><td><b>Label Encoding</b></td><td>Ordinal only</td><td>0 (modifies existing)</td><td>Yes ⚠</td><td>Ordered categories only</td></tr>
+    <tr><td><b>One-Hot Encoding</b></td><td>Nominal</td><td>k − 1</td><td>No</td><td>Few categories, interpretability</td></tr>
+    <tr><td><b>Binary Encoding</b></td><td>Nominal</td><td>⌈log₂(k)⌉</td><td>Minimal</td><td>Many categories, efficiency</td></tr>
+  </table>
+
+  <hr>
+
+  <h3>Scaling Numerical Variables:</h3>
+  <div class="note">Algorithms like KNN, SVM, and neural networks are sensitive to variable scale. A salary variable (thousands) will dominate an age variable (tens) simply due to magnitude. Scaling removes this bias.</div>
+
+  <div class="container">
+    <div class="half">
+      <h4>Min-Max Scaler (Normalization):</h4>
+      \[ x_{\text{scaled}} = \frac{x - x_{\min}}{x_{\max} - x_{\min}} \]
+      <p>Result: range [0, 1].</p>
+      <p>Example: Age [20, 30, 50], \(x_{\min}=20\), \(x_{\max}=50\):</p>
+      \[ 20 \to 0.00 \quad 30 \to 0.33 \quad 50 \to 1.00 \]
+      <div class="warn">⚠ Very sensitive to outliers. One extreme value compresses all others into a narrow range.</div>
+      <p>Best for: neural networks, KNN (when input must be in [0,1]).</p>
+    </div>
+    <div class="half">
+      <h4>Standard Scaler / Z-score (Standardization):</h4>
+      \[ Z = \frac{X - \mu}{\sigma} \]
+      <p>Result: mean = 0, std = 1 (no fixed range).</p>
+      <p>Example: Points [70, 80, 90], \(\mu=80\), \(\sigma=10\):</p>
+      \[ 70 \to -1.0 \quad 80 \to 0.0 \quad 90 \to +1.0 \]
+      <div class="note">Z-score tells you: how many standard deviations is this value from the mean.</div>
+      <p>Best for: most ML algorithms (SVM, regression). Most common default.</p>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="half">
+      <h4>Robust Scaler:</h4>
+      \[ X_{\text{scaled}} = \frac{X - Q_2}{Q_3 - Q_1} \]
+      <table>
+        <tr><td>\(Q_2\)</td><td>=> median</td></tr>
+        <tr><td>\(Q_1, Q_3\)</td><td>=> 25th and 75th percentiles</td></tr>
+        <tr><td>\(Q_3 - Q_1\)</td><td>=> IQR</td></tr>
+      </table>
+      <p>Extreme values have little impact on median and IQR.</p>
+      <div class="good">Best for: datasets with many outliers. Most robust option.</div>
+    </div>
+    <div class="half">
+      <h4>MaxAbs Scaler:</h4>
+      \[ X_{\text{scaled}} = \frac{X}{|X_{\max}|} \]
+      <p>Result: range [−1, 1]. Does NOT shift the mean — zeros remain zero.</p>
+      <p>Best for: sparse data (lots of zeros), e.g., text frequency matrices.</p>
+
+      <h4>Logarithmic Transformation:</h4>
+      \[ X_{\text{new}} = \log(X) \quad \text{(or } \log(X+1) \text{ if } X \geq 0 \text{)} \]
+      <p>Reduces positive skew. "Squeezes" large values, "stretches" small ones. Apply <b>before</b> other scaling.</p>
+      <div class="warn">⚠ Only works for \(X > 0\). Use \(\log(X+1)\) when zeros exist.</div>
+    </div>
+  </div>
+
+  <h3>Scaling Method Comparison:</h3>
+  <table class="ctable">
+    <tr><th>Method</th><th>Output range</th><th>Outlier sensitive?</th><th>Best use case</th></tr>
+    <tr><td><b>Min-Max</b></td><td>[0, 1]</td><td>Yes (very)</td><td>Neural nets, KNN, bounded range needed</td></tr>
+    <tr><td><b>Standard (Z)</b></td><td>No fixed range</td><td>Moderate</td><td>Default for most algorithms</td></tr>
+    <tr><td><b>Robust</b></td><td>No fixed range</td><td>No</td><td>Data with many outliers</td></tr>
+    <tr><td><b>MaxAbs</b></td><td>[−1, 1]</td><td>Moderate</td><td>Sparse data, preserve zeros</td></tr>
+    <tr><td><b>Log transform</b></td><td>Varies</td><td>Helps reduce</td><td>Skewed distribution, apply before scaling</td></tr>
+  </table>
+
+  <div class="warn">
+    <b>⚠ Data Leakage — critical concept:</b><br>
+    Scaling on the full dataset (train + test together) is <b>wrong</b>. Statistics (mean, min, max) computed on test data "leak" into training → artificially high performance on training, failure on real data.<br><br>
+    <b>Correct order:</b> 1) Split into train/test → 2) Compute scaling stats on train only → 3) Apply same stats to test set.
+  </div>
+
+</div><!-- /page4 -->
+
+
+<!-- ════════════════════════════════════════
+     PAGE 5 — QUICK REFERENCE
+════════════════════════════════════════ -->
+<div id="page5" class="page">
+  <h2>Quick Reference ✨</h2>
+  <p>All formulas and key distinctions in one place.</p>
+
+  <h3>All Formulas:</h3>
+  <div class="container">
+    <div class="half">
+      <h4>Central Tendency:</h4>
+      \[ \bar{x} = \frac{\sum x_i}{n} \]
+      \[ Me(X) = \text{middle value (sorted)} \]
+      \[ Mo(X) = \arg\max_x \; \text{freq}(x) \]
+
+      <h4>Spread:</h4>
+      \[ \sigma^2 = \frac{\sum(x_i - \mu)^2}{N} \quad \text{(population)} \]
+      \[ s^2 = \frac{\sum(x_i - \bar{x})^2}{n-1} \quad \text{(sample)} \]
+      \[ \sigma = \sqrt{\sigma^2} \]
+      \[ IQR = Q_3 - Q_1 \]
+
+      <h4>Outlier Fences:</h4>
+      \[ \text{Lower} = Q_1 - 1.5 \times IQR \]
+      \[ \text{Upper} = Q_3 + 1.5 \times IQR \]
+
+      <h4>Z-score:</h4>
+      \[ Z = \frac{x - \mu}{\sigma} \quad \Rightarrow \text{outlier if } |Z| > 3 \]
+    </div>
+    <div class="half">
+      <h4>Correlation:</h4>
+      \[ r = \frac{\sum(x_i - \bar{x})(y_i - \bar{y})}{n \cdot \sigma_x \cdot \sigma_y} \quad \in [-1, +1] \]
+      \[ \rho = 1 - \frac{6\sum d_i^2}{n(n^2-1)} \quad \text{(Spearman)} \]
+
+      <h4>Skewness:</h4>
+      \[ Sk = \frac{3(\bar{x} - Me(X))}{\sigma} \]
+
+      <h4>Scaling:</h4>
+      \[ \text{Min-Max: } \frac{x - x_{\min}}{x_{\max} - x_{\min}} \]
+      \[ \text{Z-score: } \frac{X - \mu}{\sigma} \]
+      \[ \text{Robust: } \frac{X - Q_2}{Q_3 - Q_1} \]
+      \[ \text{MaxAbs: } \frac{X}{|X_{\max}|} \]
+
+      <h4>Normal Distribution — 68-95-99.7 Rule:</h4>
+      \[ \mu \pm 1\sigma \to 68\% \quad \mu \pm 2\sigma \to 95\% \quad \mu \pm 3\sigma \to 99.7\% \]
+    </div>
+  </div>
+
+  <hr>
+
+  <h3>Key Distinctions for the Exam:</h3>
+  <table class="ctable">
+    <tr><th>Topic</th><th>Distinction</th></tr>
+    <tr><td><b>Mean vs. Median</b></td><td>Use median when data is skewed or has outliers (income, house prices). Mean for symmetric data.</td></tr>
+    <tr><td><b>Bar Chart vs. Histogram</b></td><td>Bar chart: categorical X, bars have gaps. Histogram: continuous X, no gaps (bins are adjacent).</td></tr>
+    <tr><td><b>Pearson vs. Spearman</b></td><td>Pearson: linear, normal data, sensitive to outliers. Spearman: rank-based, monotonic, robust, works for ordinal.</td></tr>
+    <tr><td><b>Normalization vs. Standardization</b></td><td>Min-Max scales to [0,1]. Z-score gives mean=0, σ=1, no fixed range. Z-score more robust to outliers.</td></tr>
+    <tr><td><b>Primary vs. Secondary Data</b></td><td>Primary: you collect it (costly, high reliability). Secondary: already exists (cheap, may be outdated).</td></tr>
+    <tr><td><b>OHE Dummy Variable Trap</b></td><td>With k categories use only k−1 columns. The dropped category = baseline. Including all k creates perfect multicollinearity.</td></tr>
+    <tr><td><b>Label Encoding warning</b></td><td>Never use for nominal variables — creates false ordering. Only valid for truly ordinal categories.</td></tr>
+    <tr><td><b>Data Leakage</b></td><td>Always split train/test BEFORE computing scaling stats. Computing on full dataset leaks test info into training.</td></tr>
+    <tr><td><b>Correlation ≠ Causation</b></td><td>High r does not mean one variable causes the other. A confounding variable may explain both.</td></tr>
+    <tr><td><b>IQR vs. Z-score outlier detection</b></td><td>IQR: non-parametric, robust, works for skewed data. Z-score: assumes normality.</td></tr>
+    <tr><td><b>n ≥ 30 rule</b></td><td>Central Limit Theorem: sample means approach normal distribution for n ≥ 30.</td></tr>
+    <tr><td><b>Positive skew</b></td><td>Tail on the RIGHT. Mean &gt; Median. Log transform reduces it.</td></tr>
+    <tr><td><b>Negative skew</b></td><td>Tail on the LEFT. Mean &lt; Median.</td></tr>
+  </table>
+
+  <hr>
+
+  <h3>Distribution Shape:</h3>
+  <table class="ctable">
+    <tr><th>Condition</th><th>Skewness</th><th>Mean vs. Median</th><th>Fix</th></tr>
+    <tr><td>Tail on the RIGHT</td><td>Positive (+)</td><td>Mean &gt; Median</td><td>Log transformation</td></tr>
+    <tr><td>Tail on the LEFT</td><td>Negative (−)</td><td>Mean &lt; Median</td><td>Square root / reflect + log</td></tr>
+    <tr><td>Symmetric, bell-shaped</td><td>≈ 0</td><td>Mean ≈ Median ≈ Mode</td><td>No fix needed</td></tr>
+  </table>
+
+</div><!-- /page5 -->
+
+</div><!-- /content -->
+
+<script>
+  const tabs = document.querySelectorAll('.tab');
+  const pages = document.querySelectorAll('.page');
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      tabs.forEach(t => t.classList.remove('active'));
+      pages.forEach(p => p.classList.remove('active'));
+      tab.classList.add('active');
+      document.getElementById(tab.dataset.target).classList.add('active');
+    });
+  });
+</script>
+
+<footer style="background-color:#c1c294; text-align:center; padding:10px 0; font-family:sans-serif; color:#000000;">
+  <p>Data Pre-processing &amp; Visualization — Exam Study Notes</p>
+</footer>
+
+</body>
+</html>
