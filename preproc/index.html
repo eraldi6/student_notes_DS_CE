@@ -894,7 +894,7 @@
   <div class="container">
     <div class="half">
       <h4>Min-Max Normalization:</h4>
-      \[ x_\text{scaled}=\frac{x-x_\min}{x_\max-x_\min} \]
+      \[ x_\text{scaled}=\frac{x-x_{min}}{x_{max}-x_{min}} \]
       <p>Result: [0, 1]. Example: Age [20,30,50] → [0.00, 0.33, 1.00]</p>
       <div class="warn">⚠ Sensitive to outliers — one extreme value compresses all others into a narrow band.</div>
       <p>Best for: neural networks, KNN.</p>
@@ -911,7 +911,7 @@
       <div class="good">Best for: datasets with many outliers.</div>
 
       <h4 style="margin-top:12px">MaxAbs Scaler:</h4>
-      \[ X_\text{scaled}=\frac{X}{|X_\max|} \]
+      \[ X_\text{scaled}=\frac{X}{|X_{max}|} \]
       <p>Result: [−1, 1]. Does not shift the mean — zeros stay zero.</p>
       <p>Best for: sparse data (lots of zeros).</p>
 
