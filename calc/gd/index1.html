@@ -270,6 +270,9 @@ button:hover:not(:disabled) { filter: brightness(1.1); }
 <header class="masthead">
   <h1>Regression &mdash; <span class="accent">3D</span></h1>
   <span class="eq">ŷ = w₁·x₁ + w₂·x₂ + b &nbsp;|&nbsp; L = (1/n)·Σ(ŷᵢ − yᵢ)²</span>
+  <a href="../">
+  <button>Calculus</button>
+</a>
 </header>
 
 <div class="layout">
@@ -320,17 +323,17 @@ button:hover:not(:disabled) { filter: brightness(1.1); }
     <div class="controls" style="margin-top:12px;">
       <div class="ctrl-row">
         <label for="w1-slider">weight w₁</label>
-        <input id="w1-slider" type="range" min="-2" max="4" step="0.01" value="0.5">
-        <span class="num" id="w1-num">0.50</span>
+        <input id="w1-slider" type="range" min="-3" max="6" step="0.01" value="1">
+        <span class="num" id="w1-num">1.00</span>
       </div>
       <div class="ctrl-row">
         <label for="w2-slider">weight w₂</label>
-        <input id="w2-slider" type="range" min="-2" max="4" step="0.01" value="0.5">
-        <span class="num" id="w2-num">0.50</span>
+        <input id="w2-slider" type="range" min="-3" max="6" step="0.01" value="1">
+        <span class="num" id="w2-num">1.00</span>
       </div>
       <div class="ctrl-row">
         <label for="b-slider">bias b</label>
-        <input id="b-slider" type="range" min="0" max="120" step="0.1" value="55">
+        <input id="b-slider" type="range" min="-20" max="80" step="0.1" value="30">
         <span class="num" id="b-num">30.0</span>
       </div>
     </div>
@@ -347,7 +350,7 @@ button:hover:not(:disabled) { filter: brightness(1.1); }
 
     <div class="note">
       <span class="em">Dataset.</span> Simulated house data: x₁ = Hours Studied,
-      x₂ = Sleep Hours, y = Exam Score.
+      x₂ = Sleep Hours, y = Exam Score. <br>
     </div>
   </section>
 </div>
@@ -359,84 +362,88 @@ button:hover:not(:disabled) { filter: brightness(1.1); }
 
 /* ============================================================
  *  DATASET — synthetic 2-predictor regression
+ *  y = 1.2*x1 − 0.8*x2 + 20 + noise
  * ============================================================ */
 (function seedRng() {
+  // LCG so data is always identical
   let s = 42;
   Math.rng = function() { s = (s * 1664525 + 1013904223) & 0xffffffff; return (s >>> 0) / 0xffffffff; };
 })();
 
 const X1_RAW = [16,18,32,20,23,16,18,19,20,16,27,22,28,18,19,13,31,22,14,16,23,24,18,28,23,25,19,15,31,18,21,13,21,16,24,17,18,24,21,31,26,23,28,28,18,27,24,20,19,23,20,14,13,30,17,23,16,15,24,15,21,14,19,6,22,6,16,7,16,25,19,21,15,18,14,23,30,9,6,17,39,23,28,16,17,28,21,17,24,19,17,27,29,24,21,14,13,16,22,27,5,21,22,19,23,30,24,22,12,23,29,23,25,21,22,19,16,7,25,20,23,15,27,22,14,22,20,18,23,23,16,21,31,8,13,17,17,12,25,18,18,5,24,10,3,23,15,17,20,21,25,14,27,17,18,28,16,20,18,19,23,13,10,14,24,14,25,31,21,17,29,2,19,20,25,27,16,13,14,14,12,17,31,10,13,23,20,13,31,27,11,16,15,18,25,10,19,20,14,27];
-const X2_RAW = [5,6,10,7,8,8,8,8,6,6,9,7,9,7,8,9,8,7,6,6,6,7,6,6,7,7,5,6,8,6,7,10,7,7,7,10,7,5,6,7,5,8,4,7,7,8,7,9,8,6,10,4,6,7,7,8,8,8,8,7,9,9,6,5,6,8,7,7,8,7,9,7,9,5,9,8,8,8,9,7,9,7,6,6,8,7,8,6,6,8,7,5,5,4,9,7,8,7,7,9,7,6,8,4,4,6,7,10,7,6,7,8,7,7,7,9,8,9,7,8,5,7,5,4,9,8,6,8,6,7,8,10,7,8,6,6,5,6,4,4,9,7,7,7,7,7,9,9,7,6,8,8,5,5,6,7,10,7,5,5,6,7,7,10,6,6,6,8,8,6,5,4,8,8,4,6,4,4,9,7,8,10,6,7,6,7,5,6,10,7,8,4,7,5,7,9,8,8,5,4];
-const Y_RAW  = [71,67,70,69,69,67,68,67,66,68,70,64,66,74,73,64,71,70,62,63,67,68,68,71,66,68,66,66,72,71,69,63,68,63,71,70,65,69,63,66,63,67,73,70,68,76,64,69,64,66,69,65,65,69,68,71,68,68,67,63,63,68,70,66,64,64,65,66,66,97,63,68,64,69,70,65,72,66,64,67,77,67,68,69,69,67,72,67,70,65,66,69,73,70,64,68,68,66,65,68,65,71,64,69,72,70,68,66,64,69,68,70,70,61,70,63,66,61,71,70,65,66,64,73,69,71,69,69,68,65,65,64,74,61,68,61,68,67,65,100,62,63,69,68,65,70,65,66,66,65,70,61,67,63,70,67,61,66,68,70,69,64,64,59,65,64,66,68,69,67,66,65,62,64,64,67,64,67,66,67,61,71,72,62,60,71,67,63,67,69,65,65,66,66,66,65,68,64,68,70];
-
+const X2_RAW = [5,6,10,7,8,8,8,8,6,6,9,7,9,7,8,9,8,7,6,6,6,7,6,6,7,7,5,6,8,6,7,10,7,7,7,10,7,5,6,7,5,8,4,7,7,8,7,9,8,6,10,4,6,7,7,8,8,8,8,7,9,9,6,5,6,8,7,7,8,7,9,7,9,5,9,8,8,8,9,7,9,7,6,6,8,7,8,6,6,8,7,5,5,4,9,7,8,7,7,9,7,6,8,4,4,6,7,10,7,6,7,8,7,7,7,9,8,9,7,8,5,7,5,4,9,8,6,8,6,7,8,10,7,8,6,6,5,6,4,4,9,7,7,7,7,7,9,9,7,6,8,8,5,5,6,7,10,7,5,5,6,7,7,10,6,6,6,8,8,6,5,4,8,8,4,6,4,4,9,7,8,10,6,7,6,7,5,6,10,7,8,4,7,5,7,9,8,8,5,4]; 
+const Y_RAW = [71,67,70,69,69,67,68,67,66,68,70,64,66,74,73,64,71,70,62,63,67,68,68,71,66,68,66,66,72,71,69,63,68,63,71,70,65,69,63,66,63,67,73,70,68,76,64,69,64,66,69,65,65,69,68,71,68,68,67,63,63,68,70,66,64,64,65,66,66,97,63,68,64,69,70,65,72,66,64,67,77,67,68,69,69,67,72,67,70,65,66,69,73,70,64,68,68,66,65,68,65,71,64,69,72,70,68,66,64,69,68,70,70,61,70,63,66,61,71,70,65,66,64,73,69,71,69,69,68,65,65,64,74,61,68,61,68,67,65,100,62,63,69,68,65,70,65,66,66,65,70,61,67,63,70,67,61,66,68,70,69,64,64,59,65,64,66,68,69,67,66,65,62,64,64,67,64,67,66,67,61,71,72,62,60,71,67,63,67,69,65,65,66,66,66,65,68,64,68,70];
 const N = X1_RAW.length;
 
-// ── FIX: declare arrays first, then fill them (centered) ──
-const X1 = new Float64Array(N);
-const X2 = new Float64Array(N);
-const YS = new Float64Array(N);
 
+// Mean-center each feature
+function mean(a) { return a.reduce((s,v) => s+v, 0) / a.length; }
+const MU1 = mean(X1_RAW), MU2 = mean(X2_RAW), MU_Y = mean(Y_RAW);
+
+// replace the centered arrays with:
+const X1 = new Float64Array(N), X2 = new Float64Array(N), YS = new Float64Array(N);
 for (let i = 0; i < N; i++) {
   X1[i] = X1_RAW[i];
   X2[i] = X2_RAW[i];
   YS[i] = Y_RAW[i];
 }
 
-// SS_tot for R² — must use mean-centered Y even with raw features
-function mean(a) { return a.reduce((s, v) => s + v, 0) / a.length; }
-const MU_Y = mean(Y_RAW);
-let SS_TOT = 0;
-for (let i = 0; i < N; i++) { const d = YS[i] - MU_Y; SS_TOT += d * d; }
+```
+for (let i = 0; i < N; i++) {
+  X1[i] = X1_RAW[i] - MU1;
+  X2[i] = X2_RAW[i] - MU2;
+  YS[i] = Y_RAW[i]  - MU_Y;  // center Y too so bias ≈ 0
+}
+```
 
-/* OLS closed-form (normal equations 3×3) */
+// SS_tot for R²
+let SS_TOT = 0;
+for (let i = 0; i < N; i++) { const d = YS[i]; SS_TOT += d*d; }
+
+/* OLS closed-form (normal equations 3x3) */
 function ols3() {
+  // [w1,w2,b] = (X^T X)^{-1} X^T y  where X has columns [x1,x2,1]
   let s11=0, s12=0, s1=0, s22=0, s2=0, sn=N;
   let sy1=0, sy2=0, sy=0;
-  for (let i = 0; i < N; i++) {
-    s11 += X1[i]*X1[i]; s12 += X1[i]*X2[i]; s1 += X1[i];
-    s22 += X2[i]*X2[i]; s2 += X2[i];
-    sy1 += YS[i]*X1[i]; sy2 += YS[i]*X2[i]; sy += YS[i];
+  for (let i=0;i<N;i++){
+    s11+=X1[i]*X1[i]; s12+=X1[i]*X2[i]; s1+=X1[i];
+    s22+=X2[i]*X2[i]; s2+=X2[i];
+    sy1+=YS[i]*X1[i]; sy2+=YS[i]*X2[i]; sy+=YS[i];
   }
+  // 3x3 symmetric system A*p = b
+  // A = [[s11,s12,s1],[s12,s22,s2],[s1,s2,sn]]
+  // b = [sy1,sy2,sy]
+  // Use Cramer's rule
   function det3(a,b,c,d,e,f,g,h,k){
     return a*(e*k-f*h)-b*(d*k-f*g)+c*(d*h-e*g);
   }
   const detA = det3(s11,s12,s1, s12,s22,s2, s1,s2,sn);
-  const w1 = det3(sy1,s12,s1, sy2,s22,s2, sy,s2,sn) / detA;
-  const w2 = det3(s11,sy1,s1, s12,sy2,s2, s1,sy,sn) / detA;
-  const b  = det3(s11,s12,sy1, s12,s22,sy2, s1,s2,sy) / detA;
-  return { w1, w2, b };
+  const w1 = det3(sy1,s12,s1, sy2,s22,s2, sy,s2,sn)/detA;
+  const w2 = det3(s11,sy1,s1, s12,sy2,s2, s1,sy,sn)/detA;
+  const b  = det3(s11,s12,sy1, s12,s22,sy2, s1,s2,sy)/detA;
+  return {w1,w2,b};
 }
 const OPT = ols3();
 
 /* Core math */
-function predict(w1, w2, b, i) { return w1*X1[i] + w2*X2[i] + b; }
-
-function loss(w1, w2, b) {
-  let s = 0;
-  for (let i = 0; i < N; i++) { const r = predict(w1,w2,b,i) - YS[i]; s += r*r; }
-  return s / N;
+function predict(w1,w2,b,i){ return w1*X1[i]+w2*X2[i]+b; }
+function loss(w1,w2,b){
+  let s=0; for(let i=0;i<N;i++){const r=predict(w1,w2,b,i)-YS[i];s+=r*r;} return s/N;
 }
-
-// ── FIX: grad() now correctly returns the gradient ──
-function grad(w1, w2, b) {
-  let g1 = 0, g2 = 0, gb = 0;
-  for (let i = 0; i < N; i++) {
-    const r = predict(w1, w2, b, i) - YS[i];
-    g1 += X1[i] * r;
-    g2 += X2[i] * r;
-    gb += r;
+function grad(w1,w2,b){
+  let g1=0,g2=0,gb=0;
+  for(let i=0;i<N;i++){
+    const r=predict(w1,w2,b,i)-YS[i];
+    g1+=X1[i]*r; g2+=X2[i]*r; gb+=r;
   }
-  return [(2/N)*g1, (2/N)*g2, (2/N)*gb];
+  return [(2/N)*g1,(2/N)*g2,(2/N)*gb];
 }
-
-function r2(w1, w2, b) {
-  let ssr = 0;
-  for (let i = 0; i < N; i++) { const r = predict(w1,w2,b,i) - YS[i]; ssr += r*r; }
-  return 1 - ssr / SS_TOT;
+function r2(w1,w2,b){
+  let ssr=0; for(let i=0;i<N;i++){const r=predict(w1,w2,b,i)-YS[i];ssr+=r*r;} return 1-ssr/SS_TOT;
 }
 
 /* State */
-const state = { w1:0.5, w2:0.5, b:55, lr:0.001, running:false, rafId:0 };
+const state = { w1:1, w2:1, b:30, lr:0.001, running:false, rafId:0 };
 const lossHistory = [];
 
 /* ============================================================
@@ -453,13 +460,16 @@ const camera = new THREE.PerspectiveCamera(42, 1, 0.1, 2000);
 camera.position.set(180, 140, 220);
 camera.lookAt(0, 0, 0);
 
+// Ambient + directional light
 scene.add(new THREE.AmbientLight(0xffffff, 0.6));
 const dLight = new THREE.DirectionalLight(0xffffff, 0.7);
 dLight.position.set(1, 2, 1);
 scene.add(dLight);
 
+// Scale factors to fit nicely in scene
 const X1_SCALE = 1.0, X2_SCALE = 1.0, Y_SCALE = 0.22;
 
+// Axes
 function makeAxis(dir, len, color) {
   const mat = new THREE.LineBasicMaterial({ color, linewidth: 2 });
   const geo = new THREE.BufferGeometry().setFromPoints([
@@ -468,16 +478,18 @@ function makeAxis(dir, len, color) {
   return new THREE.Line(geo, mat);
 }
 const axisLen = 110;
-scene.add(makeAxis(new THREE.Vector3(1,0,0), axisLen, 0x4f9cf5));
-scene.add(makeAxis(new THREE.Vector3(0,0,1), axisLen, 0xf5834f));
-scene.add(makeAxis(new THREE.Vector3(0,1,0), axisLen, 0x1dc87a));
+scene.add(makeAxis(new THREE.Vector3(1,0,0), axisLen, 0x4f9cf5));   // x1 axis
+scene.add(makeAxis(new THREE.Vector3(0,0,1), axisLen, 0xf5834f));   // x2 axis
+scene.add(makeAxis(new THREE.Vector3(0,1,0), axisLen, 0x1dc87a));   // y axis
 scene.add(makeAxis(new THREE.Vector3(-1,0,0), axisLen*0.3, 0x2a3050));
 scene.add(makeAxis(new THREE.Vector3(0,0,-1), axisLen*0.3, 0x2a3050));
 scene.add(makeAxis(new THREE.Vector3(0,-1,0), axisLen*0.3, 0x2a3050));
 
+// Grid on xz plane
 const gridHelper = new THREE.GridHelper(220, 20, 0x1e2230, 0x161a26);
 scene.add(gridHelper);
 
+// Data point spheres
 const ptMat = new THREE.MeshStandardMaterial({ color: 0x4f9cf5, roughness: 0.4, metalness: 0.2 });
 const ptGeo = new THREE.SphereGeometry(1.5, 8, 8);
 const ptMeshes = [];
@@ -490,29 +502,31 @@ for (let i = 0; i < N; i++) {
 }
 scene.add(ptGroup);
 
+// Residual lines
 const residMat = new THREE.LineBasicMaterial({ color: 0xc84fb8, transparent: true, opacity: 0.5 });
 let residGroup = new THREE.Group();
 scene.add(residGroup);
 
-function rebuildResiduals(w1, w2, b) {
+function rebuildResiduals(w1,w2,b) {
   residGroup.clear();
   for (let i = 0; i < N; i++) {
-    const yhat = predict(w1, w2, b, i);
+    const yhat = predict(w1,w2,b,i);
     const pts = [
-      new THREE.Vector3(X1[i]*X1_SCALE, YS[i]*Y_SCALE,  X2[i]*X2_SCALE),
-      new THREE.Vector3(X1[i]*X1_SCALE, yhat*Y_SCALE,   X2[i]*X2_SCALE)
+      new THREE.Vector3(X1[i]*X1_SCALE, YS[i]*Y_SCALE, X2[i]*X2_SCALE),
+      new THREE.Vector3(X1[i]*X1_SCALE, yhat*Y_SCALE,  X2[i]*X2_SCALE)
     ];
     const g = new THREE.BufferGeometry().setFromPoints(pts);
     residGroup.add(new THREE.Line(g, residMat));
   }
 }
 
+// Regression plane
 const PLANE_N = 20;
 let planeMesh = null;
 
-function buildPlaneMesh(w1, w2, b) {
+function buildPlaneMesh(w1,w2,b) {
   if (planeMesh) { scene.remove(planeMesh); planeMesh.geometry.dispose(); }
-  const lo1=-105, hi1=105, lo2=-105, hi2=105;
+  const lo1 = -105, hi1 = 105, lo2 = -105, hi2 = 105;
   const verts = [], idxs = [];
   for (let j = 0; j <= PLANE_N; j++) {
     for (let i = 0; i <= PLANE_N; i++) {
@@ -524,7 +538,7 @@ function buildPlaneMesh(w1, w2, b) {
   }
   for (let j = 0; j < PLANE_N; j++) {
     for (let i = 0; i < PLANE_N; i++) {
-      const a = j*(PLANE_N+1)+i, b2=a+1, c=a+(PLANE_N+1), d=c+1;
+      const a = j*(PLANE_N+1)+i, b2 = a+1, c = a+(PLANE_N+1), d = c+1;
       idxs.push(a,c,b2, b2,c,d);
     }
   }
@@ -540,15 +554,16 @@ function buildPlaneMesh(w1, w2, b) {
   scene.add(planeMesh);
 }
 
-function updateScene(w1, w2, b) {
-  buildPlaneMesh(w1, w2, b);
-  rebuildResiduals(w1, w2, b);
+function updateScene(w1,w2,b) {
+  buildPlaneMesh(w1,w2,b);
+  rebuildResiduals(w1,w2,b);
 }
 
 updateScene(state.w1, state.w2, state.b);
 
-/* Orbit controls */
-let isDragging = false, prevMouse = {x:0,y:0};
+/* ---- Orbit controls (manual, lightweight) ---- */
+let isDragging = false;
+let prevMouse = {x:0,y:0};
 let spherical = { theta: Math.atan2(220,180), phi: Math.atan2(140, Math.hypot(220,180)) };
 const ORBIT_R = Math.sqrt(180*180+140*140+220*220);
 
@@ -570,9 +585,10 @@ renderer.domElement.addEventListener('pointerdown', e => {
 });
 renderer.domElement.addEventListener('pointermove', e => {
   if (!isDragging) return;
-  const dx = e.clientX - prevMouse.x, dy = e.clientY - prevMouse.y;
+  const dx = e.clientX - prevMouse.x;
+  const dy = e.clientY - prevMouse.y;
   spherical.theta -= dx * 0.008;
-  spherical.phi = Math.max(0.12, Math.min(Math.PI*0.48, spherical.phi - dy*0.006));
+  spherical.phi   = Math.max(0.12, Math.min(Math.PI*0.48, spherical.phi - dy*0.006));
   prevMouse = {x:e.clientX, y:e.clientY};
   applyOrbit();
 });
@@ -582,13 +598,14 @@ renderer.domElement.addEventListener('wheel', e => {
   camera.position.multiplyScalar(factor);
 }, {passive:true});
 
+/* ---- Render loop ---- */
 let rafScene;
 function renderScene() {
   rafScene = requestAnimationFrame(renderScene);
   const w = wrap.clientWidth, h = wrap.clientHeight;
-  if (renderer.domElement.width !== w * window.devicePixelRatio) {
+  if (renderer.domElement.width !== w*window.devicePixelRatio) {
     renderer.setSize(w, h);
-    camera.aspect = w / h;
+    camera.aspect = w/h;
     camera.updateProjectionMatrix();
   }
   renderer.render(scene, camera);
@@ -600,61 +617,55 @@ renderScene();
  * ============================================================ */
 const sparkCanvas = document.getElementById('loss-sparkline');
 function drawSparkline() {
-  const dpr = window.devicePixelRatio || 1;
+  const dpr = window.devicePixelRatio||1;
   const w = sparkCanvas.clientWidth, h = 44;
-  sparkCanvas.width = w * dpr; sparkCanvas.height = h * dpr;
-  sparkCanvas.style.height = h + 'px';
+  sparkCanvas.width = w*dpr; sparkCanvas.height = h*dpr;
+  sparkCanvas.style.height = h+'px';
   const ctx = sparkCanvas.getContext('2d');
-  ctx.scale(dpr, dpr);
-  ctx.clearRect(0, 0, w, h);
+  ctx.scale(dpr,dpr);
+  ctx.clearRect(0,0,w,h);
   ctx.fillStyle = '#0d1018';
-  ctx.fillRect(0, 0, w, h);
+  ctx.fillRect(0,0,w,h);
   if (lossHistory.length < 2) return;
   const lo = Math.min(...lossHistory), hi = Math.max(...lossHistory);
-  const range = hi - lo || 1;
-  const sx = i => (i / (lossHistory.length-1)) * w;
-  const sy = v => h - ((v-lo) / range) * (h-6) - 3;
+  const range = hi-lo || 1;
+  const sx = i => (i/(lossHistory.length-1))*w;
+  const sy = v => h - ((v-lo)/range)*(h-6) - 3;
   ctx.strokeStyle = '#1dc87a';
   ctx.lineWidth = 1.5;
   ctx.beginPath();
   ctx.moveTo(sx(0), sy(lossHistory[0]));
-  for (let i = 1; i < lossHistory.length; i++) ctx.lineTo(sx(i), sy(lossHistory[i]));
+  for (let i=1;i<lossHistory.length;i++) ctx.lineTo(sx(i),sy(lossHistory[i]));
   ctx.stroke();
 }
 
 /* ============================================================
  *  INFO PANEL
  * ============================================================ */
-function fmt(v, d) { return Number.isFinite(v) ? v.toFixed(d) : '—'; }
-function fmtSci(v) {
+function fmt(v,d){ return Number.isFinite(v)?v.toFixed(d):'—'; }
+function fmtSci(v){
   if (!Number.isFinite(v)) return '—';
-  return (Math.abs(v) >= 1000 || (Math.abs(v) < 0.01 && v !== 0))
-    ? v.toExponential(2) : v.toFixed(3);
+  return (Math.abs(v)>=1000||(Math.abs(v)<0.01&&v!==0))?v.toExponential(2):v.toFixed(3);
 }
 
 function updateInfo() {
-  const { w1, w2, b } = state;
-  const L  = loss(w1, w2, b);
-  const g  = grad(w1, w2, b);
-  const R2 = r2(w1, w2, b);
-
-  document.getElementById('w1-out').textContent   = fmt(w1, 3);
-  document.getElementById('w2-out').textContent   = fmt(w2, 3);
-  document.getElementById('b-out').textContent    = fmt(b, 2);
-  document.getElementById('loss-out').textContent = fmt(L, 2);
-
+  const {w1,w2,b} = state;
+  const L = loss(w1,w2,b);
+  const g = grad(w1,w2,b);
+  const R2 = r2(w1,w2,b);
+  document.getElementById('w1-out').textContent = fmt(w1,3);
+  document.getElementById('w2-out').textContent = fmt(w2,3);
+  document.getElementById('b-out').textContent  = fmt(b,2);
+  document.getElementById('loss-out').textContent = fmt(L,2);
   const r2el = document.getElementById('r2-out');
-  r2el.textContent = fmt(R2, 4);
-  r2el.className   = 'v' + (R2 > 0.85 ? ' good' : '');
-
-  // ── FIX: gradient display now reads from the computed g array ──
+  r2el.textContent = fmt(R2,4);
+  r2el.className = 'v' + (R2>0.85?' good':'');
   document.getElementById('grad-out').textContent =
-    '⟨ ' + fmtSci(g[0]) + ',  ' + fmtSci(g[1]) + ',  ' + fmtSci(g[2]) + ' ⟩';
-
-  document.getElementById('n-label').textContent = 'n = ' + N;
-  document.getElementById('w1-num').textContent  = w1.toFixed(2);
-  document.getElementById('w2-num').textContent  = w2.toFixed(2);
-  document.getElementById('b-num').textContent   = b.toFixed(1);
+    '⟨ '+fmtSci(g[0])+',  '+fmtSci(g[1])+',  '+fmtSci(g[2])+' ⟩';
+  document.getElementById('n-label').textContent = 'n = '+N;
+  document.getElementById('w1-num').textContent = w1.toFixed(2);
+  document.getElementById('w2-num').textContent = w2.toFixed(2);
+  document.getElementById('b-num').textContent  = b.toFixed(1);
 }
 
 function render() {
@@ -666,23 +677,22 @@ function render() {
 /* ============================================================
  *  SLIDERS
  * ============================================================ */
-function syncSliders() {
+function syncSliders(){
   document.getElementById('w1-slider').value = state.w1;
   document.getElementById('w2-slider').value = state.w2;
   document.getElementById('b-slider').value  = state.b;
 }
-document.getElementById('w1-slider').addEventListener('input', e => {
+document.getElementById('w1-slider').addEventListener('input',e=>{
   state.w1 = parseFloat(e.target.value); render();
 });
-document.getElementById('w2-slider').addEventListener('input', e => {
+document.getElementById('w2-slider').addEventListener('input',e=>{
   state.w2 = parseFloat(e.target.value); render();
 });
-document.getElementById('b-slider').addEventListener('input', e => {
+document.getElementById('b-slider').addEventListener('input',e=>{
   state.b = parseFloat(e.target.value); render();
 });
-document.getElementById('lr-input').addEventListener('input', e => {
-  const v = parseFloat(e.target.value);
-  if (Number.isFinite(v) && v > 0) state.lr = v;
+document.getElementById('lr-input').addEventListener('input',e=>{
+  const v=parseFloat(e.target.value); if(Number.isFinite(v)&&v>0) state.lr=v;
 });
 
 /* ============================================================
@@ -697,17 +707,18 @@ function startDescent() {
   runBtn.disabled = true; stopBtn.disabled = false;
   lossHistory.length = 0;
   let stepsLeft = 600;
-  function tick() {
-    if (!state.running || stepsLeft <= 0) { stopDescent(); return; }
+  function tick(){
+    if (!state.running || stepsLeft<=0) { stopDescent(); return; }
     stepsLeft--;
     const g = grad(state.w1, state.w2, state.b);
     state.w1 -= state.lr * g[0];
     state.w2 -= state.lr * g[1];
     state.b  -= state.lr * g[2];
-    state.w1 = Math.max(-2,  Math.min(4,   state.w1));
-    state.w2 = Math.max(-2,  Math.min(4,   state.w2));
-    state.b  = Math.max(0,   Math.min(120, state.b));
-    lossHistory.push(loss(state.w1, state.w2, state.b));
+    // clamp to slider range
+    state.w1 = Math.max(-3, Math.min(6, state.w1));
+    state.w2 = Math.max(-3, Math.min(6, state.w2));
+    state.b  = Math.max(-20,Math.min(80,state.b));
+    lossHistory.push(loss(state.w1,state.w2,state.b));
     if (lossHistory.length > 300) lossHistory.shift();
     syncSliders();
     render();
@@ -715,8 +726,7 @@ function startDescent() {
   }
   state.rafId = requestAnimationFrame(tick);
 }
-
-function stopDescent() {
+function stopDescent(){
   state.running = false;
   cancelAnimationFrame(state.rafId);
   runBtn.disabled = false; stopBtn.disabled = true;
@@ -725,15 +735,15 @@ function stopDescent() {
 runBtn.addEventListener('click', startDescent);
 stopBtn.addEventListener('click', stopDescent);
 
-document.getElementById('reset-btn').addEventListener('click', () => {
+document.getElementById('reset-btn').addEventListener('click',()=>{
   stopDescent();
-  state.w1 = 0.5; state.w2 = 0.5; state.b = 55;
-  lossHistory.length = 0;
+  state.w1=1; state.w2=1; state.b=30;
+  lossHistory.length=0;
   syncSliders(); render();
 });
-document.getElementById('opt-btn').addEventListener('click', () => {
+document.getElementById('opt-btn').addEventListener('click',()=>{
   stopDescent();
-  state.w1 = OPT.w1; state.w2 = OPT.w2; state.b = OPT.b;
+  state.w1=OPT.w1; state.w2=OPT.w2; state.b=OPT.b;
   syncSliders(); render();
 });
 
