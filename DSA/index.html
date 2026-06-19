@@ -117,7 +117,7 @@
 <div class="content">
 
   <!-- ===== PAGE 1: Proofs ===== -->
-  <div id="page1" class="page">
+  <div id="page1" class="page active">
     <h2>Proof Methods</h2>
     <p>Can you prove it?</p>
 
@@ -489,74 +489,6 @@ Poly < Exp   : nᵏ = O(aⁿ) for any a>1, k>0
   <!-- ===== PAGE 3: Graph Theory / Probability Axioms ===== -->
   <div id="page3" class="page">
     
-    <!-- Lecture 5: Graph Theory - Max Flow / Min Cut -->
-
-    <h2>Max Flow &amp; Min Cut — Graph Definitions</h2>
-    <p>Graph-theoretic definitions from Lecture 5: flow networks, cuts, residual networks, and the Max-Flow Min-Cut theorem.</p>
-
-    <h3>&#167;G1 &#8212; Flow Network</h3>
-    <div class='def-box'><div class='label'>Definition</div>
-    <p>A <strong>flow network</strong> is a directed graph \(G=(V,E)\) with a <strong>capacity function</strong> \(c:E\to\mathbb{R}_{\ge0}\), a single <strong>source</strong> \(s\in V\) (no incoming edges), and a single <strong>sink</strong> \(t\in V\) (no outgoing edges). All other vertices are <strong>internal</strong>.</p></div>
-    <ul>
-      <li>No edge enters \(s\); no edge leaves \(t\).</li>
-      <li>Every vertex has at least one incident edge.</li>
-      <li>All capacities are integers (in the standard formulation).</li>
-    </ul>
-
-    <h3>&#167;G2 &#8212; Flow &amp; Its Value</h3>
-    <div class='def-box'><div class='label'>s-t Flow</div>
-    <p>A function \(f:E\to\mathbb{R}_{\ge0}\) satisfying:</p></div>
-    <div class='container'>
-      <div class='half'><h4>Capacity Constraint</h4>
-      \[ \forall\,(u,v)\in E \qquad 0 \le f(u,v) \le c(u,v) \]
-      </div>
-      <div class='half'><h4>Flow Conservation</h4>
-      \[ \forall\,v\in V{-}\{s,t\} \quad \sum_{x\in N_{\mathrm{in}}(v)}f(x,v)=\sum_{y\in N_{\mathrm{out}}(v)}f(v,y) \]
-      </div>
-    </div>
-    <h4>Value of a Flow</h4>
-    \[ v(f)=\sum_{x\in N_{\mathrm{out}}(s)}f(s,x)-\sum_{y\in N_{\mathrm{in}}(s)}f(y,s) \]
-    <p><strong>Max Flow Problem:</strong> Find the \(s\)-\(t\) flow \(f\) that maximises \(v(f)\).</p>
-
-    <h3>&#167;G3 &#8212; s-t Cut</h3>
-    <div class='def-box'><div class='label'>Definition</div>
-    <p>An <strong>\(s\)-\(t\) cut</strong> is a partition \(V=S\cup T\), \(S\cap T=\emptyset\), \(s\in S\), \(t\in T\). Its <strong>capacity</strong> counts only edges from \(S\) to \(T\):</p>
-    \[ c(S,T)=\sum_{\substack{(u,v)\in E\\u\in S,\,v\in T}}c(u,v) \]
-    </div>
-    <p><strong>Min Cut Problem:</strong> Find the \(s\)-\(t\) cut of minimum capacity (cheapest disconnection of \(s\) from \(t\)).</p>
-    <p><strong>Multiple sources/sinks:</strong> Add a super-source with \(\infty\)-capacity edges to all real sources; similarly for a super-sink.</p>
-
-    <h3>&#167;G4 &#8212; Max-Flow Min-Cut Theorem</h3>
-    <div class='def-box'><div class='label'>Lemma 1 &#8212; Weak Duality</div>
-    <p>For any flow \(f\) and any cut \((S,T)\):</p>
-    \[ v(f)\le c(S,T) \]</div>
-    <div class='def-box'><div class='label'>Corollary 1</div>
-    <p>If \(v(f)=c(S,T)\) for some \(f\) and \((S,T)\), then \(f\) is a <em>maximum flow</em> and \((S,T)\) is a <em>minimum cut</em>.</p></div>
-    <div class='def-box'><div class='label'>Theorem 1 &#8212; Max-Flow Min-Cut</div>
-    \[ \max_f\,v(f)=\min_{(S,T)}c(S,T) \]
-    <p>In every flow network, max \(s\)-\(t\) flow value = min \(s\)-\(t\) cut capacity.</p></div>
-
-    <h3>&#167;G5 &#8212; Residual Network</h3>
-    <div class='def-box'><div class='label'>Definition: \(G_f\)</div>
-    <p>Given \(G\) and flow \(f\), the <strong>residual network</strong> \(G_f\) has the same vertices. For each edge \((u,v)\in E\):</p></div>
-    <div class='table-wrap'><table>
-      <thead><tr><th>Condition</th><th>Edge in \(G_f\)</th><th>Type</th><th>Residual capacity</th></tr></thead>
-      <tbody>
-        <tr><td>\(f(u,v)&lt;c(u,v)\)</td><td>\((u,v)\)</td><td>Forward</td><td>\(c_f(u,v)=c(u,v)-f(u,v)\)</td></tr>
-        <tr><td>\(f(u,v)&gt;0\)</td><td>\((v,u)\)</td><td>Backward</td><td>\(c_f(v,u)=f(u,v)\)</td></tr>
-      </tbody>
-    </table></div>
-    <p>\(G_f\) contains only edges with strictly positive residual capacity. Each original edge yields at most 2 edges in \(G_f\), so \(|E_{G_f}|\le 2|E|\).</p>
-
-    <h3>&#167;G6 &#8212; Augmenting Path</h3>
-    <div class='def-box'><div class='label'>Definition</div>
-    <p>An <strong>augmenting path</strong> is any path from \(s\) to \(t\) in \(G_f\). Its <strong>bottleneck</strong> is \(x=\min_{e\in P}c_f(e)\).</p></div>
-    \[ f'(u,v)=\begin{cases}f(u,v)+x&(u,v)\in P\text{ (forward)}\\f(u,v)-x&(v,u)\in P\text{ (backward)}\\f(u,v)&\text{otherwise}\end{cases} \]
-    \[ v(f')=v(f)+x>v(f) \]
-    <div class='def-box'><div class='label'>Lemma 2</div>
-    <p>If \(t\) is not reachable from \(s\) in \(G_f\), then \(f\) is a max flow. (Let \(S=\) vertices reachable from \(s\); then \(v(f)=c(S,T)\).)</p></div>
-    <div class='def-box'><div class='label'>Lemma 3</div>
-    <p>If \(G_f\) has any path from \(s\) to \(t\), we can augment \(f\) to \(f'\) with \(v(f')>v(f)\).</p></div>
 
     <!-- ════ Lecture 4: Graph Theory Foundations ════ -->
     <h2>Graph Theory &#8212; Foundations</h2>
@@ -661,12 +593,131 @@ Poly < Exp   : nᵏ = O(aⁿ) for any a>1, k>0
         <tr><td><strong>Strongly connected component (SCC)</strong></td><td>A maximal strongly connected subgraph of a digraph.</td></tr>
       </tbody>
     </table></div>
+    
+    <!-- Lecture 5: Graph Theory - Max Flow / Min Cut -->
+    
+    <h2>Max Flow &amp; Min Cut — Graph Definitions</h2>
+    <p>Graph-theoretic definitions from Lecture 5: flow networks, cuts, residual networks, and the Max-Flow Min-Cut theorem.</p>
+
+    <h3>&#167;G1 &#8212; Flow Network</h3>
+    <div class='def-box'><div class='label'>Definition</div>
+    <p>A <strong>flow network</strong> is a directed graph \(G=(V,E)\) with a <strong>capacity function</strong> \(c:E\to\mathbb{R}_{\ge0}\), a single <strong>source</strong> \(s\in V\) (no incoming edges), and a single <strong>sink</strong> \(t\in V\) (no outgoing edges). All other vertices are <strong>internal</strong>.</p></div>
+    <ul>
+      <li>No edge enters \(s\); no edge leaves \(t\).</li>
+      <li>Every vertex has at least one incident edge.</li>
+      <li>All capacities are integers (in the standard formulation).</li>
+    </ul>
+
+    <h3>&#167;G2 &#8212; Flow &amp; Its Value</h3>
+    <div class='def-box'><div class='label'>s-t Flow</div>
+    <p>A function \(f:E\to\mathbb{R}_{\ge0}\) satisfying:</p></div>
+    <div class='container'>
+      <div class='half'><h4>Capacity Constraint</h4>
+      \[ \forall\,(u,v)\in E \qquad 0 \le f(u,v) \le c(u,v) \]
+      </div>
+      <div class='half'><h4>Flow Conservation</h4>
+      \[ \forall\,v\in V{-}\{s,t\} \quad \sum_{x\in N_{\mathrm{in}}(v)}f(x,v)=\sum_{y\in N_{\mathrm{out}}(v)}f(v,y) \]
+      </div>
+    </div>
+    <h4>Value of a Flow</h4>
+    \[ v(f)=\sum_{x\in N_{\mathrm{out}}(s)}f(s,x)-\sum_{y\in N_{\mathrm{in}}(s)}f(y,s) \]
+    <p><strong>Max Flow Problem:</strong> Find the \(s\)-\(t\) flow \(f\) that maximises \(v(f)\).</p>
+
+    <h3>&#167;G3 &#8212; s-t Cut</h3>
+    <div class='def-box'><div class='label'>Definition</div>
+    <p>An <strong>\(s\)-\(t\) cut</strong> is a partition \(V=S\cup T\), \(S\cap T=\emptyset\), \(s\in S\), \(t\in T\). Its <strong>capacity</strong> counts only edges from \(S\) to \(T\):</p>
+    \[ c(S,T)=\sum_{\substack{(u,v)\in E\\u\in S,\,v\in T}}c(u,v) \]
+    </div>
+    <p><strong>Min Cut Problem:</strong> Find the \(s\)-\(t\) cut of minimum capacity (cheapest disconnection of \(s\) from \(t\)).</p>
+    <p><strong>Multiple sources/sinks:</strong> Add a super-source with \(\infty\)-capacity edges to all real sources; similarly for a super-sink.</p>
+
+    <h3>&#167;G4 &#8212; Max-Flow Min-Cut Theorem</h3>
+    <div class='def-box'><div class='label'>Lemma 1 &#8212; Weak Duality</div>
+    <p>For any flow \(f\) and any cut \((S,T)\):</p>
+    \[ v(f)\le c(S,T) \]</div>
+    <div class='def-box'><div class='label'>Corollary 1</div>
+    <p>If \(v(f)=c(S,T)\) for some \(f\) and \((S,T)\), then \(f\) is a <em>maximum flow</em> and \((S,T)\) is a <em>minimum cut</em>.</p></div>
+    <div class='def-box'><div class='label'>Theorem 1 &#8212; Max-Flow Min-Cut</div>
+    \[ \max_f\,v(f)=\min_{(S,T)}c(S,T) \]
+    <p>In every flow network, max \(s\)-\(t\) flow value = min \(s\)-\(t\) cut capacity.</p></div>
+
+    <h3>&#167;G5 &#8212; Residual Network</h3>
+    <div class='def-box'><div class='label'>Definition: \(G_f\)</div>
+    <p>Given \(G\) and flow \(f\), the <strong>residual network</strong> \(G_f\) has the same vertices. For each edge \((u,v)\in E\):</p></div>
+    <div class='table-wrap'><table>
+      <thead><tr><th>Condition</th><th>Edge in \(G_f\)</th><th>Type</th><th>Residual capacity</th></tr></thead>
+      <tbody>
+        <tr><td>\(f(u,v)&lt;c(u,v)\)</td><td>\((u,v)\)</td><td>Forward</td><td>\(c_f(u,v)=c(u,v)-f(u,v)\)</td></tr>
+        <tr><td>\(f(u,v)&gt;0\)</td><td>\((v,u)\)</td><td>Backward</td><td>\(c_f(v,u)=f(u,v)\)</td></tr>
+      </tbody>
+    </table></div>
+    <p>\(G_f\) contains only edges with strictly positive residual capacity. Each original edge yields at most 2 edges in \(G_f\), so \(|E_{G_f}|\le 2|E|\).</p>
+
+    <h3>&#167;G6 &#8212; Augmenting Path</h3>
+    <div class='def-box'><div class='label'>Definition</div>
+    <p>An <strong>augmenting path</strong> is any path from \(s\) to \(t\) in \(G_f\). Its <strong>bottleneck</strong> is \(x=\min_{e\in P}c_f(e)\).</p></div>
+    \[ f'(u,v)=\begin{cases}f(u,v)+x&(u,v)\in P\text{ (forward)}\\f(u,v)-x&(v,u)\in P\text{ (backward)}\\f(u,v)&\text{otherwise}\end{cases} \]
+    \[ v(f')=v(f)+x>v(f) \]
+    <div class='def-box'><div class='label'>Lemma 2</div>
+    <p>If \(t\) is not reachable from \(s\) in \(G_f\), then \(f\) is a max flow. (Let \(S=\) vertices reachable from \(s\); then \(v(f)=c(S,T)\).)</p></div>
+    <div class='def-box'><div class='label'>Lemma 3</div>
+    <p>If \(G_f\) has any path from \(s\) to \(t\), we can augment \(f\) to \(f'\) with \(v(f')>v(f)\).</p></div>
+
+    
   </div>
 
   <!-- ===== PAGE 4: Al-Kwariz ===== -->
   <div id="page4" class="page">
-    <!-- Lecture 5: Algorithmic - Ford-Fulkerson -->
+    
+     <!-- ════ Lecture 4: Graph Representations (Al-Kwariz) ════ -->
+    <h2>Graph Representations</h2>
+    <p>Data structures for storing graphs and their trade-offs, from Lecture 4.</p>
 
+    <h3>&#167;R1 &#8212; Adjacency Matrix</h3>
+    <div class="def-box"><div class="label">Definition</div>
+    <p>An \(n\times n\) matrix \(A\) where:</p>
+    \[ A[i][j] = \begin{cases}1 & \text{if }(i,j)\in E \\ 0 & \text{otherwise}\end{cases} \]
+    <p>For a <strong>multigraph</strong>: \(A[i][j]\) = number of edges between \(i\) and \(j\).<br>
+    For a <strong>digraph</strong>: \(A[i][j]=1\) means arc from \(i\) (source/row) to \(j\) (destination/column).</p>
+    </div>
+    <ul>
+      <li>Symmetric for undirected graphs: \(A[i][j]=A[j][i]\).</li>
+      <li><strong>Space:</strong> \(\Theta(n^2)\).</li>
+      <li><strong>Edge query</strong> \((u,v)\in E\): \(O(1)\).</li>
+      <li><strong>Neighbour query</strong> (list all neighbours of \(v\)): \(O(n)\).</li>
+      <li><strong>Slow</strong> to add/remove vertices &#8212; matrix must be resized/copied.</li>
+    </ul>
+
+    <h3>&#167;R2 &#8212; Adjacency List</h3>
+    <div class="def-box"><div class="label">Definition</div>
+    <p>An array of \(n\) lists. \(\text{Adj}[v]\) contains all vertices adjacent to \(v\).</p>
+    <p>For a <strong>digraph</strong>: \(\text{Adj}[v]\) stores only the out-neighbours of \(v\).</p>
+    </div>
+    <ul>
+      <li><strong>Space:</strong> \(\Theta(n+m)\) where \(m=|E|\) &#8212; efficient for sparse graphs.</li>
+      <li><strong>Neighbour query</strong>: \(O(\deg(v))\).</li>
+      <li><strong>Edge query</strong> \((u,v)\in E\): \(O(\deg(u))\) &#8212; must scan the list.</li>
+      <li><strong>Slow</strong> to remove a vertex &#8212; must find and delete it from all neighbour lists.</li>
+      <li><strong>Preferred</strong> for sparse graphs and most algorithm implementations.</li>
+    </ul>
+
+    <h3>&#167;R3 &#8212; Trade-off Summary</h3>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Operation</th><th>Adjacency Matrix</th><th>Adjacency List</th></tr></thead>
+      <tbody>
+        <tr><td>Space</td><td>\(O(n^2)\)</td><td>\(O(n+m)\)</td></tr>
+        <tr><td>Edge query \((u,v)\in E?\)</td><td>\(O(1)\)</td><td>\(O(\deg(u))\)</td></tr>
+        <tr><td>Neighbour query</td><td>\(O(n)\)</td><td>\(O(\deg(v))\)</td></tr>
+        <tr><td>Add edge</td><td>\(O(1)\)</td><td>\(O(1)\)</td></tr>
+        <tr><td>Add vertex</td><td>\(O(n^2)\) (resize)</td><td>\(O(1)\)</td></tr>
+        <tr><td>Remove vertex</td><td>\(O(n^2)\) (resize)</td><td>\(O(n+m)\)</td></tr>
+        <tr><td>Best for</td><td>Dense graphs (\(m\approx n^2\))</td><td>Sparse graphs; most algorithms</td></tr>
+      </tbody>
+    </table></div>
+    <p><strong>Dense vs Sparse:</strong> A <em>dense</em> graph has \(m = \Theta(n^2)\) edges; a <em>sparse</em> graph has \(m = O(n)\) or \(O(n\log n)\). For real-world networks (web, social, biological) the graph is almost always sparse &#8212; adjacency list wins.</p>
+    <p><em>Note from lecture:</em> Adjacency list is assumed for the rest of the course.</p>
+    
+    <!-- Lecture 5: Algorithmic - Ford-Fulkerson -->
     <h2>Ford-Fulkerson &amp; Runtime</h2>
     <p>Algorithm, pseudocode, and all runtime proofs from Lecture 5.</p>
 
@@ -755,53 +806,8 @@ RUNTIMES
   Edmonds-Karp:  O(m^2 * n)           [dist never decreases]
     </pre>
 
-    <!-- ════ Lecture 4: Graph Representations (Al-Kwariz) ════ -->
-    <h2>Graph Representations</h2>
-    <p>Data structures for storing graphs and their trade-offs, from Lecture 4.</p>
-
-    <h3>&#167;R1 &#8212; Adjacency Matrix</h3>
-    <div class="def-box"><div class="label">Definition</div>
-    <p>An \(n\times n\) matrix \(A\) where:</p>
-    \[ A[i][j] = \begin{cases}1 & \text{if }(i,j)\in E \\ 0 & \text{otherwise}\end{cases} \]
-    <p>For a <strong>multigraph</strong>: \(A[i][j]\) = number of edges between \(i\) and \(j\).<br>
-    For a <strong>digraph</strong>: \(A[i][j]=1\) means arc from \(i\) (source/row) to \(j\) (destination/column).</p>
-    </div>
-    <ul>
-      <li>Symmetric for undirected graphs: \(A[i][j]=A[j][i]\).</li>
-      <li><strong>Space:</strong> \(\Theta(n^2)\).</li>
-      <li><strong>Edge query</strong> \((u,v)\in E\): \(O(1)\).</li>
-      <li><strong>Neighbour query</strong> (list all neighbours of \(v\)): \(O(n)\).</li>
-      <li><strong>Slow</strong> to add/remove vertices &#8212; matrix must be resized/copied.</li>
-    </ul>
-
-    <h3>&#167;R2 &#8212; Adjacency List</h3>
-    <div class="def-box"><div class="label">Definition</div>
-    <p>An array of \(n\) lists. \(\text{Adj}[v]\) contains all vertices adjacent to \(v\).</p>
-    <p>For a <strong>digraph</strong>: \(\text{Adj}[v]\) stores only the out-neighbours of \(v\).</p>
-    </div>
-    <ul>
-      <li><strong>Space:</strong> \(\Theta(n+m)\) where \(m=|E|\) &#8212; efficient for sparse graphs.</li>
-      <li><strong>Neighbour query</strong>: \(O(\deg(v))\).</li>
-      <li><strong>Edge query</strong> \((u,v)\in E\): \(O(\deg(u))\) &#8212; must scan the list.</li>
-      <li><strong>Slow</strong> to remove a vertex &#8212; must find and delete it from all neighbour lists.</li>
-      <li><strong>Preferred</strong> for sparse graphs and most algorithm implementations.</li>
-    </ul>
-
-    <h3>&#167;R3 &#8212; Trade-off Summary</h3>
-    <div class="table-wrap"><table>
-      <thead><tr><th>Operation</th><th>Adjacency Matrix</th><th>Adjacency List</th></tr></thead>
-      <tbody>
-        <tr><td>Space</td><td>\(O(n^2)\)</td><td>\(O(n+m)\)</td></tr>
-        <tr><td>Edge query \((u,v)\in E?\)</td><td>\(O(1)\)</td><td>\(O(\deg(u))\)</td></tr>
-        <tr><td>Neighbour query</td><td>\(O(n)\)</td><td>\(O(\deg(v))\)</td></tr>
-        <tr><td>Add edge</td><td>\(O(1)\)</td><td>\(O(1)\)</td></tr>
-        <tr><td>Add vertex</td><td>\(O(n^2)\) (resize)</td><td>\(O(1)\)</td></tr>
-        <tr><td>Remove vertex</td><td>\(O(n^2)\) (resize)</td><td>\(O(n+m)\)</td></tr>
-        <tr><td>Best for</td><td>Dense graphs (\(m\approx n^2\))</td><td>Sparse graphs; most algorithms</td></tr>
-      </tbody>
-    </table></div>
-    <p><strong>Dense vs Sparse:</strong> A <em>dense</em> graph has \(m = \Theta(n^2)\) edges; a <em>sparse</em> graph has \(m = O(n)\) or \(O(n\log n)\). For real-world networks (web, social, biological) the graph is almost always sparse &#8212; adjacency list wins.</p>
-    <p><em>Note from lecture:</em> Adjacency list is assumed for the rest of the course.</p>
+    
+    
   </div>
 
   <!-- ===== PAGE 5: Permutation ===== -->
