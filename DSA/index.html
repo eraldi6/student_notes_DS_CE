@@ -488,77 +488,7 @@ Poly < Exp   : nᵏ = O(aⁿ) for any a>1, k>0
 
   <!-- ===== PAGE 3: Graph Theory / Probability Axioms ===== -->
   <div id="page3" class="page">
-    <h2>Probability Axioms</h2>
-    <p>Definitions and theorems for Set Theory, Probability Axioms, Bayes' theorem, chain rule, and more.</p>
-
-    <h3>Set Theory</h3>
-    <div class="container">
-      <div class="half">
-        <div class="table-wrap"><table>
-          <tr><td>Union:</td><td>(OR) \( A \cup B \)</td></tr>
-          <tr><td colspan="2">Either A or B happens, or both.</td></tr>
-          <tr><td>Intersection:</td><td>(AND) \( A \cap B \)</td></tr>
-          <tr><td colspan="2">Both happen simultaneously.</td></tr>
-          <tr><td>Complement:</td><td>(NOT) \( \overline{A} \)</td></tr>
-          <tr><td colspan="2">Event A doesn't happen.</td></tr>
-          <tr><td>Difference:</td><td>\( A - B \)</td></tr>
-          <tr><td colspan="2">A happens, B doesn't.</td></tr>
-        </table></div>
-        <h4>Properties:</h4>
-        <p>Union: \(A\cup B=B\cup A\), \(A\cup A=A\), \(A\cup\Omega=\Omega\)<br>
-        Intersection: \(A\cap B=B\cap A\), \(A\cap A=A\), \(A\cap\Omega=A\)<br>
-        \(\overline{A}=\Omega-A\), disjoint: \(A\cap B=\emptyset\)<br>
-        Symmetric difference: \(A\Delta B=(A-B)\cup(B-A)\)</p>
-      </div>
-      <div class="half">
-        <div class="table-wrap"><table>
-          <tr><td>\(\Omega\)</td><td>=&gt;</td><td>Sample Space</td></tr>
-          <tr><td>\(\omega\)</td><td>=&gt;</td><td>Sample Outcome</td></tr>
-        </table></div>
-        <h4>De Morgan's Laws:</h4>
-        \[\overline{A\cup B}=\overline{A}\cap\overline{B}\] \[\overline{A\cap B}=\overline{A}\cup\overline{B}\]
-        <h4>Inclusion-Exclusion:</h4>
-        \[n(A\cup B)=n(A)+n(B)-n(A\cap B)\]
-        \[n(A\cup B\cup C)=n(A)+n(B)+n(C)-n(A\cap B)-n(A\cap C)-n(B\cap C)+n(A\cap B\cap C)\]
-        \[n(\overline{A}\cap\overline{B})=n(\Omega)-n(A\cup B)\]
-      </div>
-    </div>
-
-    <h3>Probability Axioms</h3>
-    <div class="container">
-      <div class="half">
-        <p>1. \(P(A)\ge0\) for all \(A\subset\Omega\)<br>
-        2. \(P(\Omega)=1\)<br>
-        3. Disjoint events: \[ P\!\left(\bigcup_i A_i\right)=\sum_i P(A_i) \]</p>
-        <p>\(P(\emptyset)=0\), \(P(\overline{A})=1-P(A)\), \(B\subseteq A\Rightarrow P(B)\le P(A)\)</p>
-      </div>
-      <div class="half">
-        <h4>Addition Rules:</h4>
-        \[P(A\cup B)=P(A)+P(B)-P(A\cap B)\]
-        <p>Disjoint: \(P(A\cup B)=P(A)+P(B)\)</p>
-        <p>Classical: \(P(A)=\dfrac{|A|}{|\Omega|}\)</p>
-      </div>
-    </div>
-
-    <h3>Conditional Probability &amp; Independence</h3>
-    <div class="container">
-      <div class="half">
-        <p>Independent: \(P(A\cap B)=P(A)P(B)\)</p>
-      </div>
-      <div class="half">
-        \[P(A\mid B)=\frac{P(A\cap B)}{P(B)}\]
-        <p>Independent: \(P(A\mid B)=P(A)\)</p>
-      </div>
-    </div>
-
-    <h3>Chain Rule &amp; Total Probability</h3>
-    \[P\!\left(\bigcap_{i=1}^nA_i\right)=P(A_1)\,P(A_2\mid A_1)\,P(A_3\mid A_1\cap A_2)\cdots\]
-    \[P(B)=\sum_{i=1}^nP(A_i)\,P(B\mid A_i)\]
-
-    <h3>Bayes' Theorem</h3>
-    \[P(A\mid B)=\frac{P(A)\,P(B\mid A)}{P(B)}\]
-    \[P(A_i\mid B)=\frac{P(A_i)\,P(B\mid A_i)}{\displaystyle\sum_{j=1}^nP(A_j)\,P(B\mid A_j)}\]
-
+    
     <!-- Lecture 5: Graph Theory - Max Flow / Min Cut -->
 
     <h2>Max Flow &amp; Min Cut — Graph Definitions</h2>
@@ -735,44 +665,6 @@ Poly < Exp   : nᵏ = O(aⁿ) for any a>1, k>0
 
   <!-- ===== PAGE 4: Al-Kwariz ===== -->
   <div id="page4" class="page">
-    <h2>CDF, Expectation, Variance</h2>
-    <p>Definitions for: Discrete Random Variable, CDF, Expected Value, Variance, and more.</p>
-
-    <h3>Random Variable</h3>
-    <div class="container">
-      <div class="half"><p>\(X:\Omega\to\mathbb{R}\). &nbsp; \(P(\{\omega:X(\omega)=x\})\) &nbsp; &nbsp; Range\((X)=\{X(\omega):\omega\in\Omega\}\)</p></div>
-    </div>
-
-    <h3>PMF &amp; PDF</h3>
-    <p><strong>PMF</strong> (discrete): \(p_X(x)=P(X=x)\). &nbsp; \(P(X\in A)=\displaystyle\sum_{x\in A}p_X(x)\)</p>
-    <p><strong>PDF</strong> (continuous): \(P(a\le X\le b)=\displaystyle\int_a^b f_X(x)\,dx\)</p>
-
-    <h3>CDF</h3>
-    <div class="container">
-      <div class="half">
-        <p>\(F_X(x)=P(X\le x)\)</p>
-        \[\lim_{x\to-\infty}F_X(x)=0 \quad \lim_{x\to+\infty}F_X(x)=1\]
-      </div>
-      <div class="half">
-        <p>Discrete: \(F_X(x)=\displaystyle\sum_{y\le x}p_X(y)\), &nbsp; \(P(a\le X\le b)=F_X(b)-F_X(a)\)</p>
-        <p>Continuous: \(F_X'(x)=f_X(x)\), &nbsp; \(F_X(x)=\displaystyle\int_{-\infty}^xf(t)\,dt\)</p>
-      </div>
-    </div>
-
-    <h3>Expectation</h3>
-    <div class="container">
-      <div class="half">
-        \[E(X)=\sum_x x\cdot p_X(x) \quad\text{or}\quad \int_{-\infty}^{+\infty}x\cdot f(x)\,dx\]
-      </div>
-      <div class="half">
-        <p><strong>LOTUS:</strong> \(E(g(X))=\displaystyle\sum_x g(x)p_X(x)\)</p>
-        <p><strong>Linearity:</strong> \(E(aX+b)=aE(X)+b\)</p>
-      </div>
-    </div>
-
-    <h3>Variance</h3>
-    \[\mathrm{Var}(X)=E[(X-\mu)^2]=E(X^2)-\mu^2 \qquad \mathrm{Var}(aX)=a^2\mathrm{Var}(X)\]
-
     <!-- Lecture 5: Algorithmic - Ford-Fulkerson -->
 
     <h2>Ford-Fulkerson &amp; Runtime</h2>
