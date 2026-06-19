@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DS_CE</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: system-ui, sans-serif;
+      background: #bdbaba;
+      overflow-x: hidden; /* prevent horizontal scroll at body level */
+    }
+
+    header {
+      background: #222;
+      color: #e3e4b6;
+      padding: 0.7rem 1rem;
+      font-size: 1.2rem;
+      text-align: left;
+    }
+
+    .tabs {
+      display: flex;
+      background: #ddd;
+      overflow-x: auto;           /* tabs scroll horizontally on very small screens */
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .tabs::-webkit-scrollbar { display: none; }
+
+    .tabs button {
+      flex: 1 0 auto;             /* don't shrink below content width */
+      min-width: 80px;
+      padding: 0.65rem 0.5rem;
+      border: none;
+      background: #bbbaba;
+      cursor: pointer;
+      font-size: 1rem;
+      white-space: nowrap;
+    }
+
+    .tabs button.active {
+      background: #f7f7f7;
+      border-bottom: 4px solid #380e0e;
+      font-weight: bold;
+    }
+
+    .content {
+      padding: 1.25rem;
+      background: #fae4e4;
+      overflow-x: hidden;
+    }
+
+    .page { display: none; }
+    .page.active { display: block; }
+
+    /* Two-column layout — stacks on small screens */
+    .container {
+      display: flex;
+      gap: 10px;
+    }
+    .half {
+      flex: 1;
+      min-width: 0; /* critical: lets flex children shrink below content width */
+    }
+    @media (max-width: 600px) {
+      .container { flex-direction: column; }
+      .half { width: 100%; }
+    }
+
+    p  { font-size: 1.05rem; line-height: 1.6; margin-top: 0.5rem; }
+    h4 { font-size: 1.1rem;  margin: 0.6rem 0 0.2rem -5px; }
+    h3 { font-size: 1.4rem;  margin: 1rem 0 0.3rem -10px; }
+    h2 { font-size: 1.9rem;  margin: 0 0 0.8rem -15px; }
+
+    /* Tables — scrollable wrapper on mobile */
+    .table-wrap {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      margin-bottom: 0.5rem;
+    }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      min-width: 280px;
+    }
+    th, td {
+      padding: 0.3rem 0.6rem;
+      text-align: left;
+      vertical-align: top;
+    }
+    thead th {
+      background: #e8c8c8;
+      border-bottom: 2px solid #c89898;
+    }
+
+    /* Pre block — scrollable, never wider than viewport */
+    pre {
+      background: #f0dada;
+      padding: 0.75rem 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      font-size: 0.82rem;
+      line-height: 1.5;
+      white-space: pre;
+      max-width: 100%;
+    }
+
+    /* KaTeX display math — prevent overflow */
+    .katex-display {
+      overflow-x: auto;
+      overflow-y: hidden;
+      -webkit-overflow-scrolling: touch;
+      padding-bottom: 2px;
+    }
+
+    ul, ol { padding-left: 1.4rem; margin-top: 0.4rem; }
+    li { margin-bottom: 0.25rem; font-size: 1.05rem; line-height: 1.6; }
+
+    /* Footer */
+    footer {
+      background-color: #c1c294;
+      text-align: center;
+      padding: 10px 0;
+      font-family: sans-serif;
+      color: #000;
+    }
+    footer p { font-size: 0.95rem; margin: 2px 0; }
+  </style>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+          onload="renderMathInElement(document.body, {
+            throwOnError: false,
+            displayMode: false,
+            delimiters: [
+              {left:'\\[', right:'\\]', display:true},
+              {left:'\\(', right:'\\)', display:false}
+            ]
+          });"></script>
+</head>
+<body>
+
+<header>DSA, mendoj.</header>
+
+<div class="tabs">
+  <button class="tab" data-target="page1">Proofs</button>
+  <button class="tab active" data-target="page2">Big Not</button>
+  <button class="tab" data-target="page3">Graph Theory</button>
+  <button class="tab" data-target="page4">Al-Kwariz</button>
+  <button class="tab" data-target="page5">Permutation</button>
+</div>
+
+<div class="content">
+
+  <!-- ===== PAGE 1: Proofs ===== -->
+  <div id="page1" class="page">
+    <h2>Proof Methods</h2>
+    <p>Can you prove it?</p>
+
+    <h3>Foundational Logic (Prerequisite)</h3>
+    <p>Basic logical vocabulary.</p>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Concept</th><th>Notation</th><th>Meaning</th><th>Proof Relevance</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Implication</td>
+            <td>\( p \to q \)</td>
+            <td>"if \(p\) then \(q\)"</td>
+            <td>Direct proof assumes \(p\) and derives \(q\).</td>
+          </tr>
+          <tr>
+            <td>Contrapositive</td>
+            <td>\( \lnot q \to \lnot p \)</td>
+            <td>Logically equivalent to \(p \to q\).</td>
+            <td>Used in proofs by contraposition.</td>
+          </tr>
+          <tr>
+            <td>Contradiction</td>
+            <td>\( \lnot p \to (r \land \lnot r) \)</td>
+            <td>\( \lnot p \) leads to a falsehood.</td>
+            <td>Used in proofs by contradiction.</td>
+          </tr>
+          <tr>
+            <td>Biconditional</td>
+            <td>\( p \leftrightarrow q \)</td>
+            <td>\( (p \to q) \land (q \to p) \)</td>
+            <td>Used for equivalence proofs (two directions).</td>
+          </tr>
+          <tr>
+            <td>Quantifiers</td>
+            <td>\( \forall x\,P(x),\ \exists x\,P(x) \)</td>
+            <td>"for all", "there exists"</td>
+            <td>Universal vs. existential proofs.</td>
+          </tr>
+          <tr>
+            <td>Negation of quantifiers</td>
+            <td>\( \lnot\forall x\,P(x) \equiv \exists x\,\lnot P(x) \)</td>
+            <td>Flip quantifier, negate predicate.</td>
+            <td>Used in counterexamples and contradiction setups.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p><strong>Study action:</strong> Write truth tables for \(p \to q\), \(\lnot q \to \lnot p\), and \(p \leftrightarrow q\). Prove that \(\lnot(p \to q) \equiv p \land \lnot q\).</p>
+
+    <h3>Core Proof Methods (The "Big Five")</h3>
+    <p>Each method has a template, a heuristic for when to use it, and typical pitfalls.</p>
+
+    <h4>— Direct Proof</h4>
+    <ol>
+      <li>Assume the hypothesis \(p\) is true.</li>
+      <li>Use definitions, axioms, and earlier theorems.</li>
+      <li>Deduce the conclusion \(q\) step by step.</li>
+      <li>End with a clear statement such as "Therefore \(p \to q\)".</li>
+    </ol>
+    <p><strong>When to use:</strong> The hypothesis gives concrete algebraic or arithmetic information (parity, divisibility, set membership).</p>
+    <p><strong>Example:</strong> If \(n\) is even, then \(n^2\) is even. Assume \(n = 2k\). Then \(n^2 = 4k^2 = 2(2k^2)\), which is even.</p>
+
+    <h4>— Proof by Contraposition</h4>
+    <ol>
+      <li>State that you will prove the contrapositive: \(\lnot q \to \lnot p\).</li>
+      <li>Assume \(\lnot q\).</li>
+      <li>Derive \(\lnot p\).</li>
+      <li>Conclude that the original implication \(p \to q\) holds.</li>
+    </ol>
+    <p><strong>When to use:</strong> It is easier to start from \(\lnot q\) than from \(p\). Many parity and divisibility statements fall here.</p>
+    <p><strong>Example:</strong> If \(n^2\) is even, then \(n\) is even. The contrapositive: if \(n = 2k+1\) is odd, then \(n^2 = 2(2k^2+2k)+1\) is odd.</p>
+
+    <h4>— Proof by Contradiction</h4>
+    <ol>
+      <li>Assume the negation: \(\lnot p\) or \(p \land \lnot q\).</li>
+      <li>Derive a contradiction of the form \(r \land \lnot r\).</li>
+      <li>Conclude the original statement must be true.</li>
+    </ol>
+    <p><strong>When to use:</strong> The statement is negative ("no largest prime"), or direct/contrapositive routes are unclear.</p>
+    <p><strong>Example:</strong> Prove \(\sqrt{2}\) is irrational. Assume \(\sqrt{2} = a/b\) in lowest terms. Then \(2b^2 = a^2\), so both \(a\) and \(b\) are even — contradicting lowest terms.</p>
+    <p><strong>Pitfall:</strong> The contradiction must arise from your own assumptions, not from external facts.</p>
+
+    <h4>— Proof by Cases (Exhaustion)</h4>
+    <ol>
+      <li>Identify mutually exclusive, exhaustive cases \(c_1, \dots, c_k\).</li>
+      <li>Prove \(c_i \to q\) for each case \(i\).</li>
+      <li>Conclude that \(q\) holds in all cases.</li>
+    </ol>
+    <p><strong>When to use:</strong> The hypothesis naturally splits into cases (parity, modular residue, sign).</p>
+    <p><strong>Example:</strong> For any integer \(n\), \(n^2 \equiv 0\) or \(1 \pmod{3}\). Cases \(n \equiv 0, 1, 2\) give residues \(0, 1, 4 \equiv 1\).</p>
+
+    <h4>— Mathematical Induction (Weak and Strong)</h4>
+    <p><strong>Weak induction template:</strong></p>
+    <ol>
+      <li><strong>Base step:</strong> Prove \(P(n_0)\).</li>
+      <li><strong>Inductive hypothesis:</strong> Assume \(P(k)\) holds for arbitrary \(k \ge n_0\).</li>
+      <li><strong>Inductive step:</strong> Prove \(P(k) \to P(k+1)\).</li>
+      <li>Conclude \(\forall n \ge n_0,\, P(n)\).</li>
+    </ol>
+    <p><strong>Strong induction template:</strong></p>
+    <ol>
+      <li><strong>Base steps:</strong> Prove \(P(a), \dots, P(b)\).</li>
+      <li><strong>Strong hypothesis:</strong> Assume \(P(a), \dots, P(k)\) all hold.</li>
+      <li><strong>Step:</strong> Prove \(P(k+1)\) using the full set of assumptions.</li>
+      <li>Conclude \(\forall n \ge a,\, P(n)\).</li>
+    </ol>
+    <p><strong>Classic examples:</strong></p>
+    <ul>
+      <li>Sum formulas: \(\displaystyle\sum_{i=1}^n i = \frac{n(n+1)}{2}\).</li>
+      <li>Divisibility: \(3 \mid (n^3 - n)\).</li>
+      <li>Inequalities: \(2^n > n^2\) for \(n \ge 5\).</li>
+      <li>Recurrences: \(F_n &lt; 2^n\) for Fibonacci numbers.</li>
+      <li>Fundamental Theorem of Arithmetic via strong induction.</li>
+    </ul>
+    <p><strong>Pitfall checklist:</strong></p>
+    <ul>
+      <li>Base case matches the stated domain.</li>
+      <li>Inductive step uses the inductive hypothesis explicitly.</li>
+      <li>Strong induction: state clearly which earlier cases are used.</li>
+    </ul>
+
+    <h3>Specialized Proof Types</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Type</th><th>Goal</th><th>Template Core</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Existence \((\exists x\,P(x))\)</td>
+            <td>At least one object works.</td>
+            <td>Constructive: exhibit a concrete \(x\). Non-constructive: contradiction or external theorems.</td>
+          </tr>
+          <tr>
+            <td>Uniqueness \((\exists! x\,P(x))\)</td>
+            <td>Existence + at most one solution.</td>
+            <td>Prove existence, then assume \(x, y\) both satisfy \(P\) and show \(x = y\).</td>
+          </tr>
+          <tr>
+            <td>Equivalence \((p \leftrightarrow q)\)</td>
+            <td>Two statements are logically equivalent.</td>
+            <td>Prove \(p \to q\) and \(q \to p\) separately.</td>
+          </tr>
+          <tr>
+            <td>Counterexample</td>
+            <td>Disprove \(\forall x\,P(x)\).</td>
+            <td>Find one explicit \(x\) with \(\lnot P(x)\).</td>
+          </tr>
+          <tr>
+            <td>Vacuous / trivial</td>
+            <td>Implications with false antecedent or always-true consequent.</td>
+            <td>Note hypothesis never holds, or conclusion is always true.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Proof-Writing Hygiene</h3>
+    <ul>
+      <li><strong>Declare variables</strong> ("Let \(n \in \mathbb{Z}\) …").</li>
+      <li><strong>State the hypothesis</strong> explicitly ("Assume \(n\) is even.").</li>
+      <li><strong>Write in complete sentences</strong>; keep verbs outside math symbols.</li>
+      <li><strong>Justify each step</strong> ("by definition of even", "by the inductive hypothesis").</li>
+      <li><strong>End with a recap</strong> and a closing symbol (□ or "QED").</li>
+    </ul>
+    <p><strong>Self-check:</strong> Did you use all hypotheses? Are definitions correct? Is the flow linear?</p>
+
+    <h3>Quick-Reference Cheat Sheet</h3>
+    <pre>
+TO PROVE                USE THIS FIRST
+--------------------------------------------------
+p → q                   Direct (assume p, derive q)
+p → q, ¬q simpler       Contraposition (¬q → ¬p)
+¬p or "no largest…"     Contradiction (assume ¬p, find ⊥)
+p = c₁ ∨ c₂ ∨ …         Proof by cases (each cᵢ → q)
+∀n ≥ n₀ P(n)            Induction (base, IH, step)
+P(k+1) needs P(1..k)    Strong induction
+∃x P(x)                 Constructive example or contradiction
+∃!x P(x)                Existence + uniqueness (x = y)
+p ↔ q                   Two direct proofs (→ and ←)
+Disprove ∀x P(x)        One counterexample
+    </pre>
+  </div>
+
+  <!-- ===== PAGE 2: Big Not / Distributions ===== -->
+  <div id="page2" class="page active">
+    <h2>Classic Distributions</h2>
+    <p>PMF/PDF, Expectation, and Variance for: Uniform, Bernoulli, Binomial, Poisson, Geometric, and Normal.</p>
+
+    <h3>Discrete Uniform Distribution</h3>
+    <div class="container">
+      <div class="half">
+        <p>Probability Mass Function:
+          \[ P(X=x) = \frac{1}{n} \]
+        </p>
+        <div class="table-wrap"><table>
+          <tr><td>\( n \)</td><td>=&gt;</td><td>number of equally likely outcomes</td></tr>
+        </table></div>
+      </div>
+      <div class="half">
+        <p>Expectation: \[ E(X) = \frac{n+1}{2} \]</p>
+        <p>Variance: \[ \mathrm{Var}(X) = \frac{n^2-1}{12} \]</p>
+      </div>
+    </div>
+
+    <h3>Bernoulli Distribution: \( X \sim \mathrm{Ber}(p) \)</h3>
+    <div class="container">
+      <div class="half">
+        <p>Probability Mass Function:
+          \[ P(X=x) = \begin{cases} p & x=1 \\ 1-p & x=0 \end{cases} \]
+        </p>
+        <div class="table-wrap"><table>
+          <tr><td>\( p \)</td><td>=&gt;</td><td>probability of success</td></tr>
+        </table></div>
+      </div>
+      <div class="half">
+        <p>Expectation: \[ E(X) = p \]</p>
+        <p>Variance: \[ \mathrm{Var}(X) = p(1-p) \]</p>
+      </div>
+    </div>
+
+    <h3>Binomial Distribution: \( X \sim B(n,p) \)</h3>
+    <div class="container">
+      <div class="half">
+        <p>Probability Mass Function:
+          \[ P(X=k) = \binom{n}{k} p^k(1-p)^{n-k} \]
+        </p>
+        <div class="table-wrap"><table>
+          <tr><td>\( p \)</td><td>=&gt;</td><td>probability of success per trial</td></tr>
+          <tr><td>\( n \)</td><td>=&gt;</td><td>number of trials</td></tr>
+          <tr><td>\( k \)</td><td>=&gt;</td><td>number of successes</td></tr>
+        </table></div>
+      </div>
+      <div class="half">
+        <p>Expectation: \[ E(X) = n \cdot p \]</p>
+        <p>Variance: \[ \mathrm{Var}(X) = n \cdot p(1-p) \]</p>
+      </div>
+    </div>
+
+    <h3>Poisson Distribution: \( X \sim \mathrm{Pois}(\lambda) \)</h3>
+    <div class="container">
+      <div class="half">
+        <p>Probability Mass Function:
+          \[ P(X=k) = \frac{e^{-\lambda}\lambda^k}{k!} \]
+        </p>
+        <div class="table-wrap"><table>
+          <tr><td>\( \lambda \)</td><td>=&gt;</td><td>average rate (intensity)</td></tr>
+          <tr><td>\( k \)</td><td>=&gt;</td><td>observed count</td></tr>
+        </table></div>
+        <h4>→ Poisson Approximation</h4>
+        <p>When Binomial has large \(n\) and small \(p\), use \(\lambda = np\):
+          \[ X \approx \mathrm{Pois}(np) \]
+        </p>
+      </div>
+      <div class="half">
+        <p>Expectation: \[ E(X) = \lambda \]</p>
+        <p>Variance: \[ \mathrm{Var}(X) = \lambda \]</p>
+      </div>
+    </div>
+
+    <h3>Geometric Distribution: \( X \sim G(p) \)</h3>
+    <div class="container">
+      <div class="half">
+        <p>Probability Mass Function:
+          \[ P(X=k) = (1-p)^{k-1} \cdot p \]
+        </p>
+        <div class="table-wrap"><table>
+          <tr><td>\( p \)</td><td>=&gt;</td><td>probability of success</td></tr>
+          <tr><td>\( k \)</td><td>=&gt;</td><td>trial number of first success</td></tr>
+        </table></div>
+      </div>
+      <div class="half">
+        <p>Expectation: \[ E(X) = \frac{1}{p} \]</p>
+        <p>Variance: \[ \mathrm{Var}(X) = \frac{1-p}{p^2} \]</p>
+      </div>
+    </div>
+
+    <h3>Normal Distribution: \( X \sim N(\mu,\sigma^2) \)</h3>
+    <div class="container">
+      <div class="half">
+        <p>Probability Density Function:
+          \[ f(x) = \frac{1}{\sigma\sqrt{2\pi}}\,e^{-\frac{(x-\mu)^2}{2\sigma^2}} \]
+        </p>
+        <div class="table-wrap"><table>
+          <tr><td>\( \mu \)</td><td>=&gt;</td><td>mean (location)</td></tr>
+          <tr><td>\( \sigma \)</td><td>=&gt;</td><td>standard deviation (spread)</td></tr>
+        </table></div>
+        <h4>→ Standard Normal</h4>
+        <p>Standardize: \( Z = \dfrac{X-\mu}{\sigma} \sim N(0,1) \)</p>
+      </div>
+      <div class="half">
+        <p>Expectation: \[ E(X) = \mu \]</p>
+        <p>Variance: \[ \mathrm{Var}(X) = \sigma^2 \]</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== PAGE 3: Graph Theory / Probability Axioms ===== -->
+  <div id="page3" class="page">
+    <h2>Probability Axioms</h2>
+    <p>This page took this project beyond the thousand-line barrier.</p>
+    <p>Definitions and theorems for Set Theory, Probability Axioms, Bayes' theorem, chain rule, and more.</p>
+
+    <h3>Set Theory</h3>
+    <div class="container">
+      <div class="half">
+        <div class="table-wrap"><table>
+          <tr><td>Union:</td><td>(OR) \( A \cup B \)</td></tr>
+          <tr><td colspan="2">Either A or B happens, or both.</td></tr>
+          <tr><td>Intersection:</td><td>(AND) \( A \cap B \)</td></tr>
+          <tr><td colspan="2">Both A and B happen simultaneously.</td></tr>
+          <tr><td>Complement:</td><td>(NOT) \( A^C \) or \( \overline{A} \)</td></tr>
+          <tr><td colspan="2">Event A doesn't happen.</td></tr>
+          <tr><td>Difference:</td><td>(A but not B) \( A - B \)</td></tr>
+          <tr><td colspan="2">A happens, B doesn't.</td></tr>
+        </table></div>
+        <h4>Properties:</h4>
+        <p>Union:
+          \[ A \cup (B \cup C) = (A \cup B) \cup C \]
+          \[ A \cup B = B \cup A,\quad A \cup A = A,\quad A \cup \Omega = \Omega \]
+          Intersection:
+          \[ A \cap (B \cap C) = (A \cap B) \cap C \]
+          \[ A \cap B = B \cap A,\quad A \cap A = A,\quad A \cap \Omega = A \]
+          Complement: \( \overline{A} = \Omega - A \)<br>
+          Disjoint (Mutually Exclusive): \( A \cap B = \emptyset \)<br>
+          Symmetric difference: \( A \Delta B = (A-B) \cup (B-A) \)
+        </p>
+      </div>
+      <div class="half">
+        <div class="table-wrap"><table>
+          <tr><td>\( \Omega \)</td><td>=&gt;</td><td>Sample Space</td></tr>
+          <tr><td>\( \omega \)</td><td>=&gt;</td><td>Sample Outcome</td></tr>
+        </table></div>
+        <h4>De Morgan's Laws:</h4>
+        \[ \overline{A \cup B} = \overline{A} \cap \overline{B} \]
+        \[ \overline{A \cap B} = \overline{A} \cup \overline{B} \]
+        <h4>Number of Elements:</h4>
+        \[ n(A \cup B) = n(A) + n(B) - n(A \cap B) \]
+        Three sets:
+        \[ n(A \cup B \cup C) = n(A)+n(B)+n(C) \]
+        \[ -\,n(A \cap B)-n(A \cap C)-n(B \cap C)+n(A \cap B \cap C) \]
+        Complements:
+        \[ n(\overline{A}) = n(\Omega) - n(A) \]
+        \[ n(\overline{A} \cap \overline{B}) = n(\Omega) - n(A \cup B) \]
+        <h4>Partition:</h4>
+        <p>\(A_1 \cup \cdots \cup A_n = \Omega\) and \(A_i \cap A_j = \emptyset\) for \(i \ne j\).</p>
+      </div>
+    </div>
+
+    <h3>Probability Axioms</h3>
+    <div class="container">
+      <div class="half">
+        <p>
+          1. \(P(A) \ge 0\) for all \(A \subset \Omega\)<br>
+          2. \(P(\Omega) = 1\)<br>
+          3. For disjoint events:
+          \[ P(A_1 \cup A_2 \cup \cdots) = \sum_i P(A_i) \]
+        </p>
+        <h4>Properties:</h4>
+        <p>
+          \(P(\emptyset) = 0\)<br>
+          \(P(\overline{A}) = 1 - P(A)\)<br>
+          \(0 \le P(A) \le 1\)<br>
+          \(B \subseteq A \Rightarrow P(B) \le P(A)\)
+        </p>
+      </div>
+      <div class="half">
+        <div class="table-wrap"><table>
+          <tr><td>\(\Omega\)</td><td>=&gt;</td><td>Probability Space</td></tr>
+          <tr><td>\(P(\Omega)\)</td><td>=&gt;</td><td>Probability Measure</td></tr>
+        </table></div>
+        <h4>Addition Rules:</h4>
+        \[ P(A \cup B) = P(A) + P(B) - P(A \cap B) \]
+        Disjoint: \( P(A \cup B) = P(A) + P(B) \)
+      </div>
+    </div>
+
+    <h3>Classical Probability</h3>
+    <div class="container">
+      <div class="half">
+        <p>For Sample Space \(\Omega\):
+          \[ P(A) = \frac{|A|}{|\Omega|} \]
+        </p>
+      </div>
+      <div class="half">
+        <div class="table-wrap"><table>
+          <tr><td>\(|A|\)</td><td>=&gt;</td><td>Cardinality of event A</td></tr>
+          <tr><td>\(|\Omega|\)</td><td>=&gt;</td><td>Cardinality of Sample Space</td></tr>
+        </table></div>
+      </div>
+    </div>
+
+    <h3>Conditional Probability</h3>
+    <div class="container">
+      <div class="half">
+        <h4>Independence:</h4>
+        <p>Two events are independent if:
+          \[ P(A \cap B) = P(A)\,P(B) \]
+        </p>
+      </div>
+      <div class="half">
+        <h4>Conditional probability:</h4>
+        \[ P(A \mid B) = \frac{P(A \cap B)}{P(B)} \]
+        <p>For independent events: \( P(A \mid B) = P(A) \)</p>
+      </div>
+    </div>
+
+    <h3>Chain Rule</h3>
+    <p>For events \(A_1, A_2, \ldots, A_n\):
+      \[ P\!\left(\bigcap_{i=1}^n A_i\right) = P(A_1)\,P(A_2 \mid A_1)\,P(A_3 \mid A_1 \cap A_2)\cdots \]
+    </p>
+    <h4>Law of Total Probability:</h4>
+    <p>If \(A_1, \ldots, A_n\) partition \(\Omega\) and \(B\) is another event:
+      \[ P(B) = \sum_{i=1}^{n} P(A_i)\,P(B \mid A_i) \]
+    </p>
+
+    <h3>Bayes' Theorem</h3>
+    <p>For \(P(A), P(B) > 0\):
+      \[ P(A \mid B) = \frac{P(A)\,P(B \mid A)}{P(B)} \]
+    </p>
+    <h4>Extended form (partition + Bayes'):</h4>
+    <p>
+      \[ P(A_i \mid B) = \frac{P(A_i)\,P(B \mid A_i)}{\displaystyle\sum_{j=1}^{n} P(A_j)\,P(B \mid A_j)} \]
+    </p>
+  </div>
+
+  <!-- ===== PAGE 4: Al-Kwariz / CDF Expectation Variance ===== -->
+  <div id="page4" class="page">
+    <h2>CDF, Expectation, Variance</h2>
+    <p>Definitions for: Discrete Random Variable, CDF, Expected Value, Variance, and more.</p>
+
+    <h3>Random Variable</h3>
+    <div class="container">
+      <div class="half">
+        <p>A random variable is a function \(X : \Omega \to \mathbb{R}\) assigning each \(\omega\) a real number.
+          \[ P(\{\omega : X(\omega) = x\}) \]
+        </p>
+      </div>
+      <div class="half">
+        <p>Its range is the set of values it can take:
+          \[ \mathrm{Range}(X) = \{X(\omega) : \omega \in \Omega\} \]
+        </p>
+      </div>
+    </div>
+
+    <h3>Probability Mass Function</h3>
+    <p>The probability of landing exactly at \(x\).</p>
+    <p>For a <strong>discrete random variable \(X\)</strong>, the PMF \(p_X\) is:
+      \[ p_X(x) = P(X = x), \quad x \in \mathrm{Range}(X) \]
+      For any set \(A\): \( P(X \in A) = \displaystyle\sum_{x \in A} p_X(x) \)
+    </p>
+
+    <h3>Probability Density Function</h3>
+    <p>The intensity of probability around \(x\).</p>
+    <p>A <strong>continuous random variable \(X\)</strong> satisfies:
+      \[ P(a \le X \le b) = \int_{a}^{b} f_X(x)\,dx \]
+      for some non-negative function \(f_X\), called the <strong>Probability Density Function.</strong>
+    </p>
+
+    <h3>Cumulative Distribution Function</h3>
+    <div class="container">
+      <div class="half">
+        <p>The CDF \(F_X\) of a random variable \(X\):
+          \[ F_X(x) = P(X \le x), \quad x \in \mathbb{R} \]
+        </p>
+        <h4>Properties:</h4>
+        \[ \lim_{x \to -\infty} F_X(x) = 0 \]
+        \[ \lim_{x \to +\infty} F_X(x) = 1 \]
+        \[ 0 \le F_X(x) \le 1 \]
+      </div>
+      <div class="half">
+        <p>For discrete \(X\):
+          \[ F_X(x) = \sum_{y \le x} p_X(y) \]
+          \[ P(a \le X \le b) = F_X(b) - F_X(a) \]
+        </p>
+        <h4>Continuous random variable:</h4>
+        \[ F_X'(x) = f_X(x) \]
+        \[ F_X(x) = \int_{-\infty}^{x} f(t)\,dt \]
+      </div>
+    </div>
+
+    <h3>Expectation</h3>
+    <div class="container">
+      <div class="half">
+        <p>For a random variable \(X\):
+          \[ E(X) = \sum_{\omega \in \Omega} X(\omega) \cdot P(\omega) \]
+          For PMF \(p_X\):
+          \[ E(X) = \sum_{x \in \mathrm{Range}(X)} x \cdot p_X(x) \]
+        </p>
+        <h4>Continuous:</h4>
+        \[ E(X) = \int_{-\infty}^{+\infty} x \cdot f(x)\,dx \]
+      </div>
+      <div class="half">
+        <h4>Law of the Unconscious Statistician:</h4>
+        <p>For \(Y = g(X)\):
+          \[ E(g(X)) = \sum_x g(x)\,p_X(x) \]
+          \[ E(g(X)) = \int_{-\infty}^{+\infty} g(x)\,f(x)\,dx \]
+        </p>
+        <h4>Linearity:</h4>
+        \[ E(aX) = a\,E(X) \]
+        \[ E(X+b) = E(X)+b \]
+        \[ E(aX+b) = a\,E(X)+b \]
+      </div>
+    </div>
+
+    <h3>Variance</h3>
+    <div class="container">
+      <div class="half">
+        <p>For \(E(X) = \mu\):
+          \[ \mathrm{Var}(X) = E[(X-\mu)^2] \]
+        </p>
+      </div>
+      <div class="half">
+        <p>Alternative formula:
+          \[ \mathrm{Var}(X) = E(X^2) - \mu^2 \]
+        </p>
+        <h4>Theorem:</h4>
+        \[ \mathrm{Var}(aX) = a^2\,\mathrm{Var}(X) \]
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== PAGE 5: Permutation ===== -->
+  <div id="page5" class="page">
+    <h2>Permutation &amp;&amp; Combinatorics</h2>
+    <p>Formulas for: permutation with/without repetition, identical items, and combinations.</p>
+
+    <h3>Permutation with Repetition</h3>
+    <div class="container">
+      <div class="half">
+        <p>All data: \[ P(n,n) = n^{n} \]</p>
+        <p>Order matters, elements can be repeated.</p>
+      </div>
+      <div class="half">
+        <p>Selection \(r\): \[ P(n,r) = n^{r} \]</p>
+        <div class="table-wrap"><table>
+          <tr><td>\(n\)</td><td>=&gt;</td><td>all available choices</td></tr>
+          <tr><td>\(r\)</td><td>=&gt;</td><td>selection size</td></tr>
+        </table></div>
+      </div>
+    </div>
+
+    <h3>Permutation without Repetition</h3>
+    <div class="container">
+      <div class="half">
+        <p>All data: \[ P(n,n) = n! \]</p>
+        <p>Order matters, each element used at most once.</p>
+      </div>
+      <div class="half">
+        <p>Selection \(r\): \[ P(n,r) = \frac{n!}{(n-r)!} \]</p>
+        <div class="table-wrap"><table>
+          <tr><td>\(n\)</td><td>=&gt;</td><td>all available choices</td></tr>
+          <tr><td>\(r\)</td><td>=&gt;</td><td>selection size</td></tr>
+        </table></div>
+      </div>
+    </div>
+
+    <h3>Permutation with Identical Items</h3>
+    <div class="container">
+      <div class="half">
+        <p>All data: \[ P(n,n) = \frac{n!}{p_1!\,p_2!\cdots p_k!} \]</p>
+        <p>Order matters; identical items counted only once.</p>
+      </div>
+      <div class="half">
+        <p>Selection \(r\): \[ P(n,r) = \frac{n!}{(n-r)!\,p_1!\,p_2!\cdots p_k!} \]</p>
+        <div class="table-wrap"><table>
+          <tr><td>\(n\)</td><td>=&gt;</td><td>all available choices</td></tr>
+          <tr><td>\(r\)</td><td>=&gt;</td><td>selection size</td></tr>
+          <tr><td>\(p_k\)</td><td>=&gt;</td><td>identical items of type \(k\)</td></tr>
+        </table></div>
+      </div>
+    </div>
+
+    <h3>Combination</h3>
+    <div class="container">
+      <div class="half">
+        <p>All data: \[ C(n,n) = \binom{n}{n} = 1 \]</p>
+        <p>Order doesn't matter.</p>
+      </div>
+      <div class="half">
+        <p>Selection \(r\): \[ C(n,r) = \binom{n}{r} = \frac{n!}{r!\,(n-r)!} \]</p>
+        <div class="table-wrap"><table>
+          <tr><td>\(n\)</td><td>=&gt;</td><td>all available choices</td></tr>
+          <tr><td>\(r\)</td><td>=&gt;</td><td>selection size</td></tr>
+        </table></div>
+      </div>
+    </div>
+
+    <h3>Properties</h3>
+    <div class="container">
+      <div class="half">
+        <p>
+          \[ P(n,r) = C(n,r) \cdot r! \]
+          \[ C(n,0) = \binom{n}{0} = 1 \]
+        </p>
+      </div>
+    </div>
+  </div>
+
+</div><!-- end .content -->
+
+<script>
+  const tabs = document.querySelectorAll('.tab');
+  const pages = document.querySelectorAll('.page');
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      tabs.forEach(t => t.classList.remove('active'));
+      pages.forEach(p => p.classList.remove('active'));
+      tab.classList.add('active');
+      document.getElementById(tab.dataset.target).classList.add('active');
+    });
+  });
+</script>
+
+<footer>
+  <p>Erald Hysenbelli &copy;</p>
+  <p>19.06.2026</p>
+</footer>
+
+</body>
+</html>

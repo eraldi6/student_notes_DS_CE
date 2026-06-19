@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DS_CE</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body { font-family: system-ui, sans-serif; background: #bdbaba; overflow-x: hidden; }
+
+    header { background: #222; color: #e3e4b6; padding: 0.7rem 1rem; font-size: 1.2rem; }
+
+    .tabs {
+      display: flex; background: #ddd;
+      overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none;
+    }
+    .tabs::-webkit-scrollbar { display: none; }
+    .tabs button {
+      flex: 1 0 auto; min-width: 80px; padding: 0.65rem 0.5rem;
+      border: none; background: #bbbaba; cursor: pointer; font-size: 1rem; white-space: nowrap;
+    }
+    .tabs button.active { background: #f7f7f7; border-bottom: 4px solid #380e0e; font-weight: bold; }
+
+    .content { padding: 1.25rem; background: #fae4e4; overflow-x: hidden; }
+    .page { display: none; }
+    .page.active { display: block; }
+
+    .container { display: flex; gap: 10px; }
+    .half { flex: 1; min-width: 0; }
+    @media (max-width: 600px) { .container { flex-direction: column; } .half { width: 100%; } }
+
+    p  { font-size: 1.05rem; line-height: 1.6; margin-top: 0.5rem; }
+    h4 { font-size: 1.1rem; margin: 0.8rem 0 0.2rem -5px; }
+    h3 { font-size: 1.4rem; margin: 1.2rem 0 0.3rem -10px; }
+    h2 { font-size: 1.9rem; margin: 0 0 0.8rem -15px; }
+
+    .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; margin-bottom: 0.5rem; }
+    table { border-collapse: collapse; width: 100%; min-width: 260px; }
+    th, td { padding: 0.35rem 0.6rem; text-align: left; vertical-align: top; }
+    thead th { background: #e8c8c8; border-bottom: 2px solid #c89898; }
+    tr:nth-child(even) td { background: rgba(0,0,0,0.03); }
+
+    pre {
+      background: #f0dada; padding: 0.75rem 1rem; border-radius: 6px;
+      overflow-x: auto; -webkit-overflow-scrolling: touch;
+      font-size: 0.82rem; line-height: 1.5; white-space: pre; max-width: 100%;
+    }
+
+    /* pseudocode blocks */
+    .code-block {
+      background: #fdf0d0; border: 1px solid #d4b87a; border-radius: 6px;
+      padding: 0.75rem 1rem; margin: 0.6rem 0;
+      font-family: 'Courier New', monospace; font-size: 0.85rem; line-height: 1.6;
+      overflow-x: auto; -webkit-overflow-scrolling: touch;
+    }
+    .code-block .kw  { color: #0055aa; font-weight: bold; }
+    .code-block .cmt { color: #777; font-style: italic; }
+    .code-block .fn  { color: #c00; font-weight: bold; }
+
+    .katex-display { overflow-x: auto; overflow-y: hidden; -webkit-overflow-scrolling: touch; padding-bottom: 2px; }
+
+    ul, ol { padding-left: 1.4rem; margin-top: 0.4rem; }
+    li { margin-bottom: 0.3rem; font-size: 1.05rem; line-height: 1.6; }
+
+    .def-box {
+      background: #f5d5d5; border-left: 4px solid #380e0e;
+      border-radius: 4px; padding: 0.7rem 1rem; margin: 0.8rem 0;
+    }
+    .def-box .label {
+      font-weight: bold; font-size: 0.85rem; text-transform: uppercase;
+      letter-spacing: 0.05em; color: #380e0e; margin-bottom: 0.3rem;
+    }
+
+    .growth-chain {
+      display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem; margin: 0.6rem 0;
+    }
+    .growth-chain .fn  { background: #e8c8c8; border-radius: 4px; padding: 0.2rem 0.5rem; font-family: monospace; font-size: 0.95rem; }
+    .growth-chain .arr { color: #380e0e; font-weight: bold; }
+
+    /* recursion tree diagram */
+    .rec-tree {
+      font-family: monospace; font-size: 0.82rem; line-height: 1.8;
+      background: #f0dada; border-radius: 6px; padding: 0.75rem 1rem;
+      overflow-x: auto; margin: 0.6rem 0;
+    }
+
+    footer { background-color: #c1c294; text-align: center; padding: 10px 0; font-family: sans-serif; color: #000; }
+    footer p { font-size: 0.95rem; margin: 2px 0; }
+  </style>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+          onload="renderMathInElement(document.body, {
+            throwOnError: false,
+            delimiters: [
+              {left:'\\[', right:'\\]', display:true},
+              {left:'\\(', right:'\\)', display:false}
+            ]
+          });"></script>
+  <script data-goatcounter="https://eraldi6.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+</head>
+<body>
+
+<header>DSA, mendoj.</header>
+
+<div class="tabs">
+  <button class="tab" data-target="page1">Proofs</button>
+  <button class="tab" data-target="page2">Big Not</button>
+  <button class="tab active" data-target="page3">Graph Theory</button>
+  <button class="tab" data-target="page4">Al-Kwariz</button>
+  <button class="tab" data-target="page5">Permutation</button>
+</div>
+
+<div class="content">
+
+  <!-- ===== PAGE 1: Proofs ===== -->
+  <div id="page1" class="page">
+    <h2>Proof Methods</h2>
+    <p>Can you prove it?</p>
+
+    <h3>Foundational Logic (Prerequisite)</h3>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Concept</th><th>Notation</th><th>Meaning</th><th>Proof Relevance</th></tr></thead>
+      <tbody>
+        <tr><td>Implication</td><td>\( p \to q \)</td><td>"if \(p\) then \(q\)"</td><td>Direct proof assumes \(p\) and derives \(q\).</td></tr>
+        <tr><td>Contrapositive</td><td>\( \lnot q \to \lnot p \)</td><td>Logically equivalent to \(p \to q\).</td><td>Used in proofs by contraposition.</td></tr>
+        <tr><td>Contradiction</td><td>\( \lnot p \to (r \land \lnot r) \)</td><td>\( \lnot p \) leads to a falsehood.</td><td>Used in proofs by contradiction.</td></tr>
+        <tr><td>Biconditional</td><td>\( p \leftrightarrow q \)</td><td>\( (p \to q) \land (q \to p) \)</td><td>Used for equivalence proofs (two directions).</td></tr>
+        <tr><td>Quantifiers</td><td>\( \forall x\,P(x),\ \exists x\,P(x) \)</td><td>"for all", "there exists"</td><td>Universal vs. existential proofs.</td></tr>
+        <tr><td>Negation of quantifiers</td><td>\( \lnot\forall x\,P(x) \equiv \exists x\,\lnot P(x) \)</td><td>Flip quantifier, negate predicate.</td><td>Used in counterexamples and contradiction setups.</td></tr>
+      </tbody>
+    </table></div>
+    <p><strong>Study action:</strong> Write truth tables for \(p \to q\), \(\lnot q \to \lnot p\), and \(p \leftrightarrow q\). Prove \(\lnot(p \to q) \equiv p \land \lnot q\).</p>
+
+    <h3>Core Proof Methods (The "Big Five")</h3>
+    <h4>— Direct Proof</h4>
+    <ol><li>Assume \(p\) is true.</li><li>Use definitions, axioms, earlier theorems.</li><li>Deduce \(q\) step by step.</li><li>Conclude "Therefore \(p \to q\)".</li></ol>
+    <p><strong>Example:</strong> If \(n = 2k\), then \(n^2 = 4k^2 = 2(2k^2)\) is even.</p>
+
+    <h4>— Proof by Contraposition</h4>
+    <ol><li>Prove \(\lnot q \to \lnot p\).</li><li>Assume \(\lnot q\), derive \(\lnot p\).</li><li>Conclude \(p \to q\) holds.</li></ol>
+    <p><strong>Example:</strong> If \(n = 2k+1\) is odd, then \(n^2 = 2(2k^2+2k)+1\) is odd.</p>
+
+    <h4>— Proof by Contradiction</h4>
+    <ol><li>Assume \(\lnot p\) or \(p \land \lnot q\).</li><li>Derive contradiction \(r \land \lnot r\).</li><li>Conclude original statement is true.</li></ol>
+    <p><strong>Example:</strong> \(\sqrt{2}\) irrational — assuming \(\sqrt{2}=a/b\) in lowest terms forces both \(a,b\) even. Contradiction. □</p>
+
+    <h4>— Proof by Cases</h4>
+    <ol><li>Identify mutually exclusive, exhaustive cases.</li><li>Prove \(c_i \to q\) for each.</li></ol>
+
+    <h4>— Mathematical Induction</h4>
+    <p><strong>Weak:</strong> Base \(P(n_0)\) → IH \(P(k)\) → Step \(P(k+1)\). &emsp; <strong>Strong:</strong> Assume \(P(a),\dots,P(k)\); prove \(P(k+1)\).</p>
+    <p><strong>Examples:</strong> \(\sum_{i=1}^n i = \frac{n(n+1)}{2}\) &nbsp;·&nbsp; \(3 \mid (n^3-n)\) &nbsp;·&nbsp; \(2^n > n^2\) for \(n \ge 5\).</p>
+
+    <h3>Quick-Reference Cheat Sheet</h3>
+    <pre>
+TO PROVE                USE THIS FIRST
+--------------------------------------------------
+p → q                   Direct (assume p, derive q)
+p → q, ¬q simpler       Contraposition (¬q → ¬p)
+¬p or "no largest…"     Contradiction (assume ¬p, find ⊥)
+p = c₁ ∨ c₂ ∨ …         Proof by cases
+∀n ≥ n₀ P(n)            Induction (base, IH, step)
+P(k+1) needs P(1..k)    Strong induction
+∃x P(x)                 Constructive example or contradiction
+p ↔ q                   Two direct proofs (→ and ←)
+Disprove ∀x P(x)        One counterexample
+    </pre>
+  </div>
+
+  <!-- ===== PAGE 2: Big Notation — Lectures 1, 2, 3 ===== -->
+  <div id="page2" class="page active">
+    <h2>Asymptotic Notation &amp; Sorting</h2>
+    <p>Every concept, definition, formula, and proof from <strong>Lectures 1–3</strong>: InsertionSort, asymptotic notation, and MergeSort / Divide-and-Conquer.</p>
+
+    <!-- ── L1/L2 content (condensed) ── -->
+    <h3>§1 — Algorithm (Definition)</h3>
+    <div class="def-box">
+      <div class="label">Definition</div>
+      <p>An <strong>algorithm</strong> is an explicit, precise, unambiguous, mechanically executable sequence of elementary instructions, usually intended to accomplish a specific purpose.</p>
+    </div>
+
+    <h3>§2 — The Sorting Problem</h3>
+    <p>Given a list of objects and a comparison function, rearrange them in <strong>ascending order</strong>. Only requirement: a way to compare any two elements.</p>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Input type</th><th>Comparison</th><th>Example</th></tr></thead>
+      <tbody>
+        <tr><td>Numbers</td><td>Numeric \(\le\)</td><td>\(11,100,60,70 \to 11,60,70,100\)</td></tr>
+        <tr><td>Words</td><td>Lexicographic</td><td>"work, word, worm" → "word, work, worm"</td></tr>
+        <tr><td>Dates</td><td>Chronological</td><td>May 12, 2021 &lt; March 1, 2025</td></tr>
+        <tr><td>Table rows</td><td>Any key field</td><td>Students sorted by grade</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3>§3 — InsertionSort</h3>
+    <div class="def-box">
+      <div class="label">How it works</div>
+      <p>Maintains a sorted prefix \(A[:i]\). Each outer iteration \(i\) takes \(A[i]\) and walks left, shifting elements right until it finds the correct insertion point. After iteration \(i\), \(A[:i+1]\) is sorted.</p>
+    </div>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Line</th><th>Operations \(T_i\)</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>\(n\)</td></tr>
+        <tr><td>2</td><td>\(n-1\)</td></tr>
+        <tr><td>4</td><td>\(2(n-1)\)</td></tr>
+        <tr><td>5 (inner loop cond.)</td><td>\(2(n-1) \le T_5 \le n(n-1)\)</td></tr>
+        <tr><td>6</td><td>\(0 \le T_6 \le \tfrac{1}{2}n(n-1)\)</td></tr>
+        <tr><td>7</td><td>\(0 \le T_7 \le n(n-1)\)</td></tr>
+        <tr><td>8</td><td>\(n-1\)</td></tr>
+        <tr><td><strong>Total</strong></td><td>\(7n-6 \le T(n) \le 2.5n^2+2.5n-4\)</td></tr>
+      </tbody>
+    </table></div>
+    <div class="container">
+      <div class="half">
+        <div class="def-box"><div class="label">Best Case</div><p>Already sorted. \(T(n)=\Theta(n)\)</p></div>
+      </div>
+      <div class="half">
+        <div class="def-box"><div class="label">Worst Case</div><p>Reverse sorted. \(T(n)=\Theta(n^2)\)</p></div>
+      </div>
+    </div>
+    <p><strong>Loop Invariant:</strong> After iteration \(i\), \(A[:i+1]\) is sorted. Proved by induction (base: one element; step: IH + inner-while places \(A[i]\) at correct position \(j^*+1\)).</p>
+
+    <h3>§4 — Guiding Principles</h3>
+    <div class="container">
+      <div class="half">
+        <div class="def-box"><div class="label">Worst-Case Analysis</div><p>Claims hold for <em>every</em> input of size \(n\). Adversary picks worst input; we still meet \(T(n)\).</p></div>
+      </div>
+      <div class="half">
+        <div class="def-box"><div class="label">Asymptotic Analysis</div><p>Focus on growth rate as \(n\to\infty\). Ignore constants and lower-order terms.</p></div>
+      </div>
+    </div>
+
+    <h3>§5 — Big-O &nbsp; (Upper Bound)</h3>
+    <div class="def-box">
+      <div class="label">Formal Definition</div>
+      \[ T(n) = O(f(n)) \iff \exists\,c>0,\,n_0\ \text{ s.t. }\ \forall n \ge n_0,\quad 0 \le T(n) \le c\cdot f(n) \]
+    </div>
+    <p><strong>Example proof:</strong> \(5n^2+100n+500 = O(n^2)\). Divide by \(n^2\): \(5+\frac{100}{n}+\frac{500}{n^2}\le c\). Choose \(n_0=10 \Rightarrow c=20\). ✓</p>
+    <p><strong>Non-example:</strong> \(n^3-200n^2 \ne O(n^2)\): would require \(n-200\le c\) for all \(n\), impossible.</p>
+
+    <h3>§6 — Big-Ω &nbsp; (Lower Bound)</h3>
+    <div class="def-box">
+      <div class="label">Formal Definition</div>
+      \[ T(n) = \Omega(f(n)) \iff \exists\,c>0,\,n_0\ \text{ s.t. }\ \forall n \ge n_0,\quad 0 \le c\cdot f(n) \le T(n) \]
+    </div>
+
+    <h3>§7 — Big-Θ &nbsp; (Tight Bound)</h3>
+    <div class="def-box">
+      <div class="label">Formal Definition</div>
+      \[ T(n)=\Theta(f(n)) \iff T(n)=O(f(n))\ \text{ and }\ T(n)=\Omega(f(n)) \]
+      \[ \iff \exists\,c_1,c_2>0,\,n_0\ \text{ s.t. }\ \forall n\ge n_0,\quad c_1 f(n)\le T(n)\le c_2 f(n) \]
+    </div>
+    <p><strong>Limit test (Claim 1):</strong> If \(\displaystyle\lim_{n\to\infty}\frac{f(n)}{g(n)}=c>0\), then \(f(n)=\Theta(g(n))\).</p>
+
+    <h3>§8 — Notation Summary</h3>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Notation</th><th>Bound</th><th>Meaning</th><th>Condition (\(\forall n\ge n_0\))</th></tr></thead>
+      <tbody>
+        <tr><td>\(O(f(n))\)</td><td>Upper</td><td>Grows no faster than \(f\)</td><td>\(T(n)\le c\cdot f(n)\)</td></tr>
+        <tr><td>\(\Omega(f(n))\)</td><td>Lower</td><td>Grows no slower than \(f\)</td><td>\(c\cdot f(n)\le T(n)\)</td></tr>
+        <tr><td>\(\Theta(f(n))\)</td><td>Tight</td><td>Same rate as \(f\)</td><td>\(c_1 f(n)\le T(n)\le c_2 f(n)\)</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3>§9 — Properties of Asymptotic Notation</h3>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Rule</th><th>Statement</th></tr></thead>
+      <tbody>
+        <tr><td>Transitivity (1.1a)</td><td>If \(f=O(g)\) and \(g=O(h)\), then \(f=O(h)\).</td></tr>
+        <tr><td>Transitivity (1.1b)</td><td>If \(f=\Omega(g)\) and \(g=\Omega(h)\), then \(f=\Omega(h)\).</td></tr>
+        <tr><td>Transitivity (1.2)</td><td>If \(f=\Theta(g)\) and \(g=\Theta(h)\), then \(f=\Theta(h)\).</td></tr>
+        <tr><td>Sum rule (1.3)</td><td>If \(f=O(h)\) and \(g=O(h)\), then \(f+g=O(h)\).</td></tr>
+        <tr><td>Dominance</td><td>If \(g=O(f)\), then \(f+g=\Theta(f)\). The slower part dominates.</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3>§10 — Common Function Bounds</h3>
+    <p><strong>Polynomials (Claim 2 &amp; 3):</strong> Every degree-\(k\) polynomial \(= \Theta(n^k)\).</p>
+    <p><strong>Logarithms (Claim 4):</strong> \(\log_b n = O(n^x)\) for any \(x>0\). Base independence: \(\log_a n = \Theta(\log_b n)\) — write \(O(\log n)\) without base.</p>
+    <p><strong>Exponentials (Claims 5 &amp; 6):</strong> \(n^k = O(a^n)\) for any \(a>1,k>0\). For \(a>b>1\): \(b^n=O(a^n)\) but \(a^n\ne\Theta(b^n)\).</p>
+    <div class="growth-chain">
+      <span class="fn">\(O(1)\)</span><span class="arr">≺</span>
+      <span class="fn">\(O(\log n)\)</span><span class="arr">≺</span>
+      <span class="fn">\(O(n)\)</span><span class="arr">≺</span>
+      <span class="fn">\(O(n\log n)\)</span><span class="arr">≺</span>
+      <span class="fn">\(O(n^2)\)</span><span class="arr">≺</span>
+      <span class="fn">\(O(n^3)\)</span><span class="arr">≺</span>
+      <span class="fn">\(O(2^n)\)</span><span class="arr">≺</span>
+      <span class="fn">\(O(n!)\)</span>
+    </div>
+
+    <!-- ════════════════════════════════════════════ -->
+    <!-- LECTURE 3 — NEW CONTENT BELOW               -->
+    <!-- ════════════════════════════════════════════ -->
+
+    <h3>§11 — Divide-and-Conquer Paradigm</h3>
+    <div class="def-box">
+      <div class="label">Definition</div>
+      <p>Given an input of size \(n\), imagine a <em>magic box</em> that solves the same problem for any input strictly smaller than \(n\). Your job: break the big input into smaller pieces, run them through the box, then stitch the results together. The box is not magic — it is the same algorithm called recursively until a trivial base case is reached.</p>
+    </div>
+    <p>Every divide-and-conquer algorithm performs three steps in the recursive case:</p>
+    <ol>
+      <li><strong>Divide</strong> — split the problem into smaller instances of the same problem.</li>
+      <li><strong>Conquer</strong> — solve each subproblem recursively.</li>
+      <li><strong>Combine</strong> — merge the subproblem solutions into a solution for the original.</li>
+    </ol>
+    <p>Recursion <strong>bottoms out</strong> at the <strong>base case</strong>, where the input is small enough to solve directly (e.g. \(n\le1\)).</p>
+
+    <h3>§12 — MergeSort</h3>
+    <div class="def-box">
+      <div class="label">Algorithm Idea</div>
+      <p>Split the array in half, recursively sort both halves, then <strong>merge</strong> the two sorted halves into one sorted array.</p>
+    </div>
+
+    <h4>MergeSort Pseudocode</h4>
+    <div class="code-block">
+<span class="fn">MergeSort</span>(A)<br>
+1 &nbsp; n = len(A)<br>
+2 &nbsp; <span class="kw">if</span> n &lt;= 1: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cmt"># base case: already sorted</span><br>
+3 &nbsp; &nbsp;&nbsp;&nbsp; <span class="kw">return</span> A<br>
+4 &nbsp; L = <span class="fn">MergeSort</span>(A[0:n/2]) &nbsp;&nbsp;<span class="cmt"># sort left half</span><br>
+5 &nbsp; R = <span class="fn">MergeSort</span>(A[n/2:n]) &nbsp;&nbsp;<span class="cmt"># sort right half</span><br>
+6 &nbsp; <span class="kw">return</span> <span class="fn">Merge</span>(L, R) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cmt"># merge the two halves</span>
+    </div>
+    <p>Python notation: \(A[:n/2] = [A[0],\ldots,A[n/2-1]]\), \(A[n/2:] = [A[n/2],\ldots,A[n-1]]\). Integer division: \(n/2\) means \(\lfloor n/2 \rfloor\).</p>
+
+    <h4>Merge Pseudocode</h4>
+    <div class="code-block">
+<span class="fn">Merge</span>(L, R) &nbsp;&nbsp;<span class="cmt"># Assume L and R are already sorted</span><br>
+1 &nbsp; S = List of size n<br>
+2 &nbsp; i = 0; j = 0<br>
+3 &nbsp; <span class="kw">for</span> k in [0, ..., n-1]:<br>
+4 &nbsp; &nbsp;&nbsp;&nbsp; <span class="kw">if</span> L[i] &lt; R[j]:<br>
+5 &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; S[k] = L[i]<br>
+6 &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; i = i + 1<br>
+7 &nbsp; &nbsp;&nbsp;&nbsp; <span class="kw">else</span>:<br>
+8 &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; S[k] = R[j]<br>
+9 &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; j = j + 1<br>
+10 &nbsp; <span class="kw">return</span> S<br>
+<br>
+<span class="cmt"># Note: pseudocode above is incomplete — handle end-of-L or end-of-R!</span>
+    </div>
+    <p><strong>How Merge works:</strong> Keep two pointers, one per sorted half. At each step, copy the smaller of the two pointed-to elements into the result, then advance that pointer. Repeat until all elements are copied.</p>
+
+    <h3>§13 — Correctness of MergeSort</h3>
+
+    <h4>Correctness of Merge (induction on iterations)</h4>
+    <div class="def-box">
+      <div class="label">Loop Invariant (IH)</div>
+      <p>After iteration \(t\) of the for loop, \(S[:t-1]\) contains the \(t\) smallest elements of \(L\) and \(R\) in sorted order. Moreover, \(L[i]\) and \(R[j]\) are the smallest elements of their arrays not yet copied to \(S\).</p>
+    </div>
+    <ul>
+      <li><strong>Base case (\(t=0\)):</strong> \(i=j=0\), \(S\) empty. \(L[0]\) and \(R[0]\) are smallest in their arrays. ✓</li>
+      <li><strong>Inductive step:</strong> By IH, after iteration \(t-1\), \(S[:t-2]\) holds the \(t-1\) smallest elements. WLOG \(L[i]\le R[j]\) in iteration \(t\). Then \(L[i]\) is the smallest not yet copied; appending it gives \(S[:t-1]\) with the \(t\) smallest elements in sorted order. ✓</li>
+      <li><strong>Conclusion:</strong> When Merge terminates (\(t=n,\,k=n-1\)), \(S[:n-1]\) contains all elements of \(L\) and \(R\) in sorted order. □</li>
+    </ul>
+
+    <h4>Correctness of MergeSort (strong induction on \(n\))</h4>
+    <div class="def-box">
+      <div class="label">Inductive Hypothesis</div>
+      <p>Whenever MergeSort returns an array of size \(\le i\), that array is sorted.</p>
+    </div>
+    <ul>
+      <li><strong>Base case (\(i=1\)):</strong> Arrays of length 0 or 1 are trivially sorted. ✓</li>
+      <li><strong>Inductive step:</strong> For input of length \(i>1\), both halves have length \(&lt;i\). By strong IH, lines 4 and 5 correctly produce sorted \(L\) and \(R\). Since Merge is correct (proved above), MergeSort returns the sorted array. ✓</li>
+      <li><strong>Conclusion:</strong> By induction, MergeSort correctly sorts any array of length \(n\). □</li>
+    </ul>
+
+    <h3>§14 — Running Time of MergeSort</h3>
+
+    <h4>Work per node</h4>
+    <p>In a single call to MergeSort with input of size \(k = n/2^t\):</p>
+    <ul>
+      <li>Checking base case: \(O(1)\)</li>
+      <li>Computing midpoint (divide step): \(O(1)\)</li>
+      <li>Running Merge: \(O(k)\) — the for loop runs exactly \(k\) times, each iteration \(O(1)\)</li>
+    </ul>
+    <p>Total work per node with input size \(k\): \(O(1)+O(1)+O(k) = O(k)\).</p>
+
+    <h4>Recursion Tree</h4>
+    <div class="rec-tree">
+Level 0 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;n&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;] &nbsp;&nbsp;&nbsp;&nbsp; 1 problem of size n,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; work = C·n<br>
+Level 1 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[&nbsp;&nbsp;n/2&nbsp;&nbsp;] [&nbsp;&nbsp;n/2&nbsp;&nbsp;] &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2 problems of size n/2,&nbsp;&nbsp; work = C·n<br>
+Level 2 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[n/4][n/4][n/4][n/4] &nbsp;&nbsp;&nbsp;&nbsp; 4 problems of size n/4,&nbsp;&nbsp; work = C·n<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;⋮<br>
+Level t &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2ᵗ problems of size n/2ᵗ, &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; work = 2ᵗ · C·(n/2ᵗ) = C·n<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;⋮<br>
+Level log n &nbsp;&nbsp;&nbsp;&nbsp;n problems of size 1, &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; work = C·n
+    </div>
+    <p><strong>Key insight:</strong> Work at every level \(t\) equals \(2^t \cdot C\cdot(n/2^t) = C\cdot n\) — <em>constant per level, independent of \(t\)</em>. The two exponentials cancel exactly.</p>
+    <p>Number of levels: \(\log n + 1\) (tree depth is \(\log n\) since size halves each level).</p>
+
+    <h4>Claim 1 — MergeSort Runtime (Recursion Tree Proof)</h4>
+    <div class="def-box">
+      <div class="label">Theorem</div>
+      \[ T_{\text{MergeSort}}(n) = O(n \log n) \]
+    </div>
+    <p><strong>Proof:</strong></p>
+    \[ \text{Total} = (\text{ops per level}) \times (\text{number of levels}) \le C\cdot n \cdot (\log n + 1) = C\cdot(n\log n + n) = O(n\log n) \quad \square \]
+
+    <h4>Recurrence Relation</h4>
+    <div class="def-box">
+      <div class="label">Recurrence</div>
+      \[ T(n) \le 2\,T\!\left(\frac{n}{2}\right) + C\cdot n \qquad T(1) \le C \]
+      <p>where \(C\) is a constant. For \(n=2^k\): \(T(2^k) \le 2\,T(2^{k-1}) + C\cdot 2^k\).</p>
+    </div>
+
+    <h4>"Plug-and-Pattern-Match" Proof</h4>
+    <p>Unrolling the recurrence \(k\) times (let \(n=2^k\)):</p>
+    \[ T(2^k) \le 2^i\,T(2^{k-i}) + i\cdot C\cdot 2^k \]
+    <p>Setting \(i=k\) and using \(T(2^0)=T(1)\le C\):</p>
+    \[ T(2^k) \le 2^k\cdot C + k\cdot C\cdot 2^k = C(k+1)2^k = O(2^k\cdot k) \]
+    <p>Since \(n=2^k\) and \(k=\log n\):</p>
+    \[ T(n) = O(n\log n) \quad \square \]
+
+    <h4>"Induction-from-the-Ansatz" Proof</h4>
+    <p>Guess \(T(2^k)\le C(k+1)2^k\) and prove by induction.</p>
+    <ul>
+      <li><strong>Base (\(k=0\)):</strong> \(T(1)\le C = C\cdot1\cdot1 = C(0+1)2^0\). ✓</li>
+      <li><strong>IH:</strong> \(T(2^{k-1})\le C\cdot k\cdot 2^{k-1}\).</li>
+      <li><strong>Step:</strong>
+        \[ T(2^k)\le 2T(2^{k-1})+C\cdot 2^k \le 2\cdot Ck\cdot 2^{k-1}+C\cdot 2^k = Ck\cdot 2^k + C\cdot 2^k = C(k+1)2^k \quad\square \]
+      </li>
+    </ul>
+
+    <h3>§15 — InsertionSort vs MergeSort</h3>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Property</th><th>InsertionSort</th><th>MergeSort</th></tr></thead>
+      <tbody>
+        <tr><td>Paradigm</td><td>"Make it a little better each time"</td><td>Divide-and-Conquer</td></tr>
+        <tr><td>Best case</td><td>\(\Theta(n)\)</td><td>\(\Theta(n\log n)\)</td></tr>
+        <tr><td>Worst case</td><td>\(\Theta(n^2)\)</td><td>\(\Theta(n\log n)\)</td></tr>
+        <tr><td>In-place?</td><td>Yes</td><td>No (needs auxiliary array)</td></tr>
+        <tr><td>Best for</td><td>Small arrays (&lt; 50 items)</td><td>Large data, external sorting, parallelism</td></tr>
+        <tr><td>Correctness proof</td><td>Loop invariant (weak induction)</td><td>Two-level induction: Merge + MergeSort</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3>§16 — Practical Notes on MergeSort</h3>
+    <ul>
+      <li><strong>External sorting:</strong> Merge only needs the "tips" (front elements) of each half — great when data doesn't fit in memory.</li>
+      <li><strong>Predictable runtime:</strong> \(\Theta(n\log n)\) in all cases — no worst-case blowup unlike InsertionSort.</li>
+      <li><strong>Parallelism:</strong> Recursive calls can run in parallel. Naive parallelisation gives \(\Theta(n)\) (sequential merge bottleneck). Parallel merge reduces this to \(\Theta(n/\log^2 n)\) with infinite CPUs.</li>
+      <li><strong>Design question to ask:</strong> <em>If I could solve this problem for any portion of the input independently, can I stitch those solutions back together?</em></li>
+    </ul>
+
+    <h3>§17 — Quick-Reference Cheat Sheet</h3>
+    <pre>
+NOTATION     BOUND      FORMAL CONDITION (∀ n ≥ n₀)
+--------------------------------------------------------------
+O(f(n))      Upper      T(n)  ≤  c · f(n)
+Ω(f(n))      Lower      c · f(n)  ≤  T(n)
+Θ(f(n))      Tight      c₁·f(n) ≤ T(n) ≤ c₂·f(n)
+
+ALGORITHM          BEST          WORST         METHOD
+--------------------------------------------------------------
+InsertionSort      Θ(n)          Θ(n²)         Loop invariant
+MergeSort          Θ(n log n)    Θ(n log n)    Divide-and-Conquer
+
+MERGESORT RECURRENCE
+--------------------------------------------------------------
+T(n) ≤ 2T(n/2) + C·n,   T(1) ≤ C
+→ T(n) = O(n log n)  [recursion tree / unrolling / ansatz]
+
+RECURSION TREE TRICK
+--------------------------------------------------------------
+Level t:   2ᵗ problems × C·(n/2ᵗ) each = C·n per level
+Levels:    log n + 1
+Total:     C·n·(log n + 1) = O(n log n)
+
+GROWTH ORDER (slowest → fastest)
+--------------------------------------------------------------
+O(1) ≺ O(log n) ≺ O(n) ≺ O(n log n) ≺ O(n²) ≺ O(2ⁿ) ≺ O(n!)
+
+KEY PROPERTIES
+--------------------------------------------------------------
+Transitivity : f=O(g), g=O(h)  ⟹  f=O(h)
+Sum rule     : f=O(h), g=O(h)  ⟹  f+g=O(h)
+Dominance    : g=O(f)          ⟹  f+g=Θ(f)
+Limit test   : lim f/g = c>0   ⟹  f=Θ(g)
+Log bases    : log_a n = Θ(log_b n)  for any a,b > 1
+Poly < Exp   : nᵏ = O(aⁿ) for any a>1, k>0
+    </pre>
+  </div>
+
+  <!-- ===== PAGE 3: Graph Theory / Probability Axioms ===== -->
+  <div id="page3" class="page">
+    <h2>Probability Axioms</h2>
+    <p>Definitions and theorems for Set Theory, Probability Axioms, Bayes' theorem, chain rule, and more.</p>
+
+    <h3>Set Theory</h3>
+    <div class="container">
+      <div class="half">
+        <div class="table-wrap"><table>
+          <tr><td>Union:</td><td>(OR) \( A \cup B \)</td></tr>
+          <tr><td colspan="2">Either A or B happens, or both.</td></tr>
+          <tr><td>Intersection:</td><td>(AND) \( A \cap B \)</td></tr>
+          <tr><td colspan="2">Both happen simultaneously.</td></tr>
+          <tr><td>Complement:</td><td>(NOT) \( \overline{A} \)</td></tr>
+          <tr><td colspan="2">Event A doesn't happen.</td></tr>
+          <tr><td>Difference:</td><td>\( A - B \)</td></tr>
+          <tr><td colspan="2">A happens, B doesn't.</td></tr>
+        </table></div>
+        <h4>Properties:</h4>
+        <p>Union: \(A\cup B=B\cup A\), \(A\cup A=A\), \(A\cup\Omega=\Omega\)<br>
+        Intersection: \(A\cap B=B\cap A\), \(A\cap A=A\), \(A\cap\Omega=A\)<br>
+        \(\overline{A}=\Omega-A\), disjoint: \(A\cap B=\emptyset\)<br>
+        Symmetric difference: \(A\Delta B=(A-B)\cup(B-A)\)</p>
+      </div>
+      <div class="half">
+        <div class="table-wrap"><table>
+          <tr><td>\(\Omega\)</td><td>=&gt;</td><td>Sample Space</td></tr>
+          <tr><td>\(\omega\)</td><td>=&gt;</td><td>Sample Outcome</td></tr>
+        </table></div>
+        <h4>De Morgan's Laws:</h4>
+        \[\overline{A\cup B}=\overline{A}\cap\overline{B}\] \[\overline{A\cap B}=\overline{A}\cup\overline{B}\]
+        <h4>Inclusion-Exclusion:</h4>
+        \[n(A\cup B)=n(A)+n(B)-n(A\cap B)\]
+        \[n(A\cup B\cup C)=n(A)+n(B)+n(C)-n(A\cap B)-n(A\cap C)-n(B\cap C)+n(A\cap B\cap C)\]
+        \[n(\overline{A}\cap\overline{B})=n(\Omega)-n(A\cup B)\]
+      </div>
+    </div>
+
+    <h3>Probability Axioms</h3>
+    <div class="container">
+      <div class="half">
+        <p>1. \(P(A)\ge0\) for all \(A\subset\Omega\)<br>
+        2. \(P(\Omega)=1\)<br>
+        3. Disjoint events: \[ P\!\left(\bigcup_i A_i\right)=\sum_i P(A_i) \]</p>
+        <p>\(P(\emptyset)=0\), \(P(\overline{A})=1-P(A)\), \(B\subseteq A\Rightarrow P(B)\le P(A)\)</p>
+      </div>
+      <div class="half">
+        <h4>Addition Rules:</h4>
+        \[P(A\cup B)=P(A)+P(B)-P(A\cap B)\]
+        <p>Disjoint: \(P(A\cup B)=P(A)+P(B)\)</p>
+        <p>Classical: \(P(A)=\dfrac{|A|}{|\Omega|}\)</p>
+      </div>
+    </div>
+
+    <h3>Conditional Probability &amp; Independence</h3>
+    <div class="container">
+      <div class="half">
+        <p>Independent: \(P(A\cap B)=P(A)P(B)\)</p>
+      </div>
+      <div class="half">
+        \[P(A\mid B)=\frac{P(A\cap B)}{P(B)}\]
+        <p>Independent: \(P(A\mid B)=P(A)\)</p>
+      </div>
+    </div>
+
+    <h3>Chain Rule &amp; Total Probability</h3>
+    \[P\!\left(\bigcap_{i=1}^nA_i\right)=P(A_1)\,P(A_2\mid A_1)\,P(A_3\mid A_1\cap A_2)\cdots\]
+    \[P(B)=\sum_{i=1}^nP(A_i)\,P(B\mid A_i)\]
+
+    <h3>Bayes' Theorem</h3>
+    \[P(A\mid B)=\frac{P(A)\,P(B\mid A)}{P(B)}\]
+    \[P(A_i\mid B)=\frac{P(A_i)\,P(B\mid A_i)}{\displaystyle\sum_{j=1}^nP(A_j)\,P(B\mid A_j)}\]
+
+    <!-- Lecture 5: Graph Theory - Max Flow / Min Cut -->
+
+    <h2>Max Flow &amp; Min Cut — Graph Definitions</h2>
+    <p>Graph-theoretic definitions from Lecture 5: flow networks, cuts, residual networks, and the Max-Flow Min-Cut theorem.</p>
+
+    <h3>&#167;G1 &#8212; Flow Network</h3>
+    <div class='def-box'><div class='label'>Definition</div>
+    <p>A <strong>flow network</strong> is a directed graph \(G=(V,E)\) with a <strong>capacity function</strong> \(c:E\to\mathbb{R}_{\ge0}\), a single <strong>source</strong> \(s\in V\) (no incoming edges), and a single <strong>sink</strong> \(t\in V\) (no outgoing edges). All other vertices are <strong>internal</strong>.</p></div>
+    <ul>
+      <li>No edge enters \(s\); no edge leaves \(t\).</li>
+      <li>Every vertex has at least one incident edge.</li>
+      <li>All capacities are integers (in the standard formulation).</li>
+    </ul>
+
+    <h3>&#167;G2 &#8212; Flow &amp; Its Value</h3>
+    <div class='def-box'><div class='label'>s-t Flow</div>
+    <p>A function \(f:E\to\mathbb{R}_{\ge0}\) satisfying:</p></div>
+    <div class='container'>
+      <div class='half'><h4>Capacity Constraint</h4>
+      \[ \forall\,(u,v)\in E \qquad 0 \le f(u,v) \le c(u,v) \]
+      </div>
+      <div class='half'><h4>Flow Conservation</h4>
+      \[ \forall\,v\in V{-}\{s,t\} \quad \sum_{x\in N_{\mathrm{in}}(v)}f(x,v)=\sum_{y\in N_{\mathrm{out}}(v)}f(v,y) \]
+      </div>
+    </div>
+    <h4>Value of a Flow</h4>
+    \[ v(f)=\sum_{x\in N_{\mathrm{out}}(s)}f(s,x)-\sum_{y\in N_{\mathrm{in}}(s)}f(y,s) \]
+    <p><strong>Max Flow Problem:</strong> Find the \(s\)-\(t\) flow \(f\) that maximises \(v(f)\).</p>
+
+    <h3>&#167;G3 &#8212; s-t Cut</h3>
+    <div class='def-box'><div class='label'>Definition</div>
+    <p>An <strong>\(s\)-\(t\) cut</strong> is a partition \(V=S\cup T\), \(S\cap T=\emptyset\), \(s\in S\), \(t\in T\). Its <strong>capacity</strong> counts only edges from \(S\) to \(T\):</p>
+    \[ c(S,T)=\sum_{\substack{(u,v)\in E\\u\in S,\,v\in T}}c(u,v) \]
+    </div>
+    <p><strong>Min Cut Problem:</strong> Find the \(s\)-\(t\) cut of minimum capacity (cheapest disconnection of \(s\) from \(t\)).</p>
+    <p><strong>Multiple sources/sinks:</strong> Add a super-source with \(\infty\)-capacity edges to all real sources; similarly for a super-sink.</p>
+
+    <h3>&#167;G4 &#8212; Max-Flow Min-Cut Theorem</h3>
+    <div class='def-box'><div class='label'>Lemma 1 &#8212; Weak Duality</div>
+    <p>For any flow \(f\) and any cut \((S,T)\):</p>
+    \[ v(f)\le c(S,T) \]</div>
+    <div class='def-box'><div class='label'>Corollary 1</div>
+    <p>If \(v(f)=c(S,T)\) for some \(f\) and \((S,T)\), then \(f\) is a <em>maximum flow</em> and \((S,T)\) is a <em>minimum cut</em>.</p></div>
+    <div class='def-box'><div class='label'>Theorem 1 &#8212; Max-Flow Min-Cut</div>
+    \[ \max_f\,v(f)=\min_{(S,T)}c(S,T) \]
+    <p>In every flow network, max \(s\)-\(t\) flow value = min \(s\)-\(t\) cut capacity.</p></div>
+
+    <h3>&#167;G5 &#8212; Residual Network</h3>
+    <div class='def-box'><div class='label'>Definition: \(G_f\)</div>
+    <p>Given \(G\) and flow \(f\), the <strong>residual network</strong> \(G_f\) has the same vertices. For each edge \((u,v)\in E\):</p></div>
+    <div class='table-wrap'><table>
+      <thead><tr><th>Condition</th><th>Edge in \(G_f\)</th><th>Type</th><th>Residual capacity</th></tr></thead>
+      <tbody>
+        <tr><td>\(f(u,v)&lt;c(u,v)\)</td><td>\((u,v)\)</td><td>Forward</td><td>\(c_f(u,v)=c(u,v)-f(u,v)\)</td></tr>
+        <tr><td>\(f(u,v)&gt;0\)</td><td>\((v,u)\)</td><td>Backward</td><td>\(c_f(v,u)=f(u,v)\)</td></tr>
+      </tbody>
+    </table></div>
+    <p>\(G_f\) contains only edges with strictly positive residual capacity. Each original edge yields at most 2 edges in \(G_f\), so \(|E_{G_f}|\le 2|E|\).</p>
+
+    <h3>&#167;G6 &#8212; Augmenting Path</h3>
+    <div class='def-box'><div class='label'>Definition</div>
+    <p>An <strong>augmenting path</strong> is any path from \(s\) to \(t\) in \(G_f\). Its <strong>bottleneck</strong> is \(x=\min_{e\in P}c_f(e)\).</p></div>
+    \[ f'(u,v)=\begin{cases}f(u,v)+x&(u,v)\in P\text{ (forward)}\\f(u,v)-x&(v,u)\in P\text{ (backward)}\\f(u,v)&\text{otherwise}\end{cases} \]
+    \[ v(f')=v(f)+x>v(f) \]
+    <div class='def-box'><div class='label'>Lemma 2</div>
+    <p>If \(t\) is not reachable from \(s\) in \(G_f\), then \(f\) is a max flow. (Let \(S=\) vertices reachable from \(s\); then \(v(f)=c(S,T)\).)</p></div>
+    <div class='def-box'><div class='label'>Lemma 3</div>
+    <p>If \(G_f\) has any path from \(s\) to \(t\), we can augment \(f\) to \(f'\) with \(v(f')>v(f)\).</p></div>
+
+    <!-- ════ Lecture 4: Graph Theory Foundations ════ -->
+    <h2>Graph Theory &#8212; Foundations</h2>
+    <p>All definitions, types, walks, and connectivity from Lecture 4 (Slides).</p>
+
+    <h3>&#167;L4-1 &#8212; What Is a Graph?</h3>
+    <div class="def-box"><div class="label">Definition</div>
+    <p>A <strong>graph</strong> \(G=(V,E)\) is a set of <strong>vertices</strong> (nodes) \(V\) and a set of <strong>edges</strong> \(E\), where each edge connects a pair of vertices. It models pairwise relationships between items.</p></div>
+    <ul>
+      <li><strong>Order</strong> of \(G\): the number of vertices \(|V|\).</li>
+      <li><strong>Size</strong> of \(G\): the number of edges \(|E|\).</li>
+      <li>A graph of order 0 or 1 is called <strong>trivial</strong>.</li>
+      <li>Drawing: vertices as circles, edges as lines &#8212; only connectivity matters, not geometry.</li>
+    </ul>
+    <p><em>Origin:</em> Leonhard Euler (1736) solved the K&#246;nigsberg Seven Bridges Problem by abstracting land masses as vertices and bridges as edges &#8212; the first theorem in graph theory.</p>
+
+    <h3>&#167;L4-2 &#8212; Basic Concepts</h3>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Term</th><th>Definition</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Adjacent vertices</strong></td><td>Two vertices connected by an edge: \(u\) and \(v\) are adjacent if \(\{u,v\}\in E\).</td></tr>
+        <tr><td><strong>Incident</strong></td><td>A vertex \(v\) is incident to edge \(e\) if \(v\) is an endpoint of \(e\).</td></tr>
+        <tr><td><strong>Neighbour set</strong></td><td>\(N(v)=\{u:\{u,v\}\in E\}\) &#8212; all vertices adjacent to \(v\).</td></tr>
+        <tr><td><strong>Degree</strong> \(\deg(v)\)</td><td>Number of edges incident to \(v\). Equals \(|N(v)|\) in simple graphs.</td></tr>
+        <tr><td><strong>Isolated vertex</strong></td><td>A vertex with degree 0.</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3>&#167;L4-3 &#8212; Handshaking Lemma</h3>
+    <div class="def-box"><div class="label">Theorem</div>
+    \[ \sum_{v\in V}\deg(v) = 2|E| \]
+    <p>The sum of all vertex degrees equals twice the number of edges. Consequence: the number of odd-degree vertices is always <strong>even</strong>.</p></div>
+
+    <h3>&#167;L4-4 &#8212; Types of Graphs</h3>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Type</th><th>Definition</th><th>Key property</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Simple graph</strong></td><td>No loops, no parallel edges.</td><td>Standard default.</td></tr>
+        <tr><td><strong>Multigraph</strong></td><td>Allows <em>parallel edges</em> (multiple edges between same pair) and/or <em>loops</em> (edge from \(v\) to itself).</td><td>K&#246;nigsberg graph is a multigraph.</td></tr>
+        <tr><td><strong>Digraph</strong> (directed)</td><td>Each edge is an <em>arc</em> with direction: \((u\to v)\neq(v\to u)\).</td><td>Models asymmetric relations (Instagram follows, hyperlinks, prerequisites).</td></tr>
+        <tr><td><strong>Weighted graph</strong></td><td>Each edge carries a numerical weight \(w(e)\).</td><td>Used in shortest-path and flow problems.</td></tr>
+      </tbody>
+    </table></div>
+
+    <h4>Digraph Terminology</h4>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Term</th><th>Meaning</th></tr></thead>
+      <tbody>
+        <tr><td>Source / tail</td><td>The vertex an arc leaves from.</td></tr>
+        <tr><td>Destination / head / successor</td><td>The vertex an arc points to.</td></tr>
+        <tr><td>In-degree \(\deg^-(v)\)</td><td>Number of arcs entering \(v\).</td></tr>
+        <tr><td>Out-degree \(\deg^+(v)\)</td><td>Number of arcs leaving \(v\).</td></tr>
+      </tbody>
+    </table></div>
+    <p>Handshaking analogue for digraphs: \(\displaystyle\sum_{v}\deg^+(v)=\sum_{v}\deg^-(v)=|E|\).</p>
+
+    <h3>&#167;L4-5 &#8212; Special Graphs</h3>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Graph</th><th>Definition</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Complete graph</strong> \(K_n\)</td><td>Every pair of distinct vertices is connected by an edge. Has \(\binom{n}{2}=\frac{n(n-1)}{2}\) edges.</td></tr>
+        <tr><td><strong>\(k\)-Regular graph</strong></td><td>Every vertex has the same degree \(k\).</td></tr>
+        <tr><td><strong>Bipartite graph</strong></td><td>Vertices split into two disjoint sets \(A,B\); edges only between \(A\) and \(B\), never within.</td></tr>
+        <tr><td><strong>Graph complement</strong> \(\bar{G}\)</td><td>Same vertices as \(G\); an edge in \(\bar{G}\) iff NOT in \(G\).</td></tr>
+        <tr><td><strong>Subgraph</strong></td><td>\(H=(V',E')\) where \(V'\subseteq V\) and \(E'\subseteq E\).</td></tr>
+        <tr><td><strong>Induced subgraph</strong></td><td>Subgraph on \(V'\subseteq V\) keeping ALL edges of \(G\) with both endpoints in \(V'\).</td></tr>
+        <tr><td><strong>Spanning subgraph</strong></td><td>Subgraph that uses ALL vertices (\(V'=V\)), possibly fewer edges.</td></tr>
+        <tr><td><strong>Clique</strong></td><td>A subset of vertices that are all pairwise adjacent (a complete induced subgraph).</td></tr>
+        <tr><td><strong>Independent set</strong></td><td>A subset of vertices with no edges between them.</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3>&#167;L4-6 &#8212; Walks, Trails, Paths, Cycles</h3>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Term</th><th>Definition</th><th>Constraint</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Walk</strong></td><td>A sequence of vertices \(v_0,v_1,\ldots,v_k\) where each consecutive pair is connected by an edge.</td><td>No restriction &#8212; vertices and edges may repeat.</td></tr>
+        <tr><td><strong>Trail</strong></td><td>A walk with no repeated <em>edges</em>.</td><td>Vertices may repeat.</td></tr>
+        <tr><td><strong>Closed trail</strong></td><td>A trail where \(v_0=v_k\).</td><td>Eulerian circuit is a closed trail covering all edges.</td></tr>
+        <tr><td><strong>Path</strong></td><td>A trail with no repeated <em>vertices</em> (except possibly ends).</td><td>Edges and vertices both distinct.</td></tr>
+        <tr><td><strong>Cycle</strong></td><td>A closed path: \(v_0=v_k\) with no other repeated vertices.</td><td>Minimum length 3.</td></tr>
+        <tr><td><strong>Hamiltonian cycle</strong></td><td>A cycle that visits every vertex exactly once.</td><td>Hamilton (1857); Knight&#8217;s tour (Rudrata, 9th c.).</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3>&#167;L4-7 &#8212; Distance &amp; Diameter</h3>
+    <div class="def-box"><div class="label">Definitions</div>
+    <p><strong>Distance</strong> \(d(u,v)\): the length (number of edges) of the <em>shortest path</em> between \(u\) and \(v\). If no path exists, \(d(u,v)=\infty\).</p>
+    <p><strong>Diameter</strong> \(\text{diam}(G)\): the maximum distance between any two vertices:</p>
+    \[ \text{diam}(G) = \max_{u,v\in V}\,d(u,v) \]
+    </div>
+
+    <h3>&#167;L4-8 &#8212; Connectivity</h3>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Concept</th><th>Definition</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Connected graph</strong></td><td>There exists a path between every pair of vertices.</td></tr>
+        <tr><td><strong>Disconnected graph</strong></td><td>At least one pair of vertices has no connecting path.</td></tr>
+        <tr><td><strong>Connected component</strong></td><td>A maximal connected subgraph. A graph is connected iff it has exactly one component.</td></tr>
+        <tr><td><strong>Strongly connected digraph</strong></td><td>For every pair \((u,v)\), there is a directed path from \(u\) to \(v\) AND from \(v\) to \(u\).</td></tr>
+        <tr><td><strong>Weakly connected digraph</strong></td><td>The underlying undirected graph (replace each arc with an undirected edge) is connected.</td></tr>
+        <tr><td><strong>Strongly connected component (SCC)</strong></td><td>A maximal strongly connected subgraph of a digraph.</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+
+  <!-- ===== PAGE 4: Al-Kwariz ===== -->
+  <div id="page4" class="page">
+    <h2>CDF, Expectation, Variance</h2>
+    <p>Definitions for: Discrete Random Variable, CDF, Expected Value, Variance, and more.</p>
+
+    <h3>Random Variable</h3>
+    <div class="container">
+      <div class="half"><p>\(X:\Omega\to\mathbb{R}\). &nbsp; \(P(\{\omega:X(\omega)=x\})\) &nbsp; &nbsp; Range\((X)=\{X(\omega):\omega\in\Omega\}\)</p></div>
+    </div>
+
+    <h3>PMF &amp; PDF</h3>
+    <p><strong>PMF</strong> (discrete): \(p_X(x)=P(X=x)\). &nbsp; \(P(X\in A)=\displaystyle\sum_{x\in A}p_X(x)\)</p>
+    <p><strong>PDF</strong> (continuous): \(P(a\le X\le b)=\displaystyle\int_a^b f_X(x)\,dx\)</p>
+
+    <h3>CDF</h3>
+    <div class="container">
+      <div class="half">
+        <p>\(F_X(x)=P(X\le x)\)</p>
+        \[\lim_{x\to-\infty}F_X(x)=0 \quad \lim_{x\to+\infty}F_X(x)=1\]
+      </div>
+      <div class="half">
+        <p>Discrete: \(F_X(x)=\displaystyle\sum_{y\le x}p_X(y)\), &nbsp; \(P(a\le X\le b)=F_X(b)-F_X(a)\)</p>
+        <p>Continuous: \(F_X'(x)=f_X(x)\), &nbsp; \(F_X(x)=\displaystyle\int_{-\infty}^xf(t)\,dt\)</p>
+      </div>
+    </div>
+
+    <h3>Expectation</h3>
+    <div class="container">
+      <div class="half">
+        \[E(X)=\sum_x x\cdot p_X(x) \quad\text{or}\quad \int_{-\infty}^{+\infty}x\cdot f(x)\,dx\]
+      </div>
+      <div class="half">
+        <p><strong>LOTUS:</strong> \(E(g(X))=\displaystyle\sum_x g(x)p_X(x)\)</p>
+        <p><strong>Linearity:</strong> \(E(aX+b)=aE(X)+b\)</p>
+      </div>
+    </div>
+
+    <h3>Variance</h3>
+    \[\mathrm{Var}(X)=E[(X-\mu)^2]=E(X^2)-\mu^2 \qquad \mathrm{Var}(aX)=a^2\mathrm{Var}(X)\]
+
+    <!-- Lecture 5: Algorithmic - Ford-Fulkerson -->
+
+    <h2>Ford-Fulkerson &amp; Runtime</h2>
+    <p>Algorithm, pseudocode, and all runtime proofs from Lecture 5.</p>
+
+    <h3>&#167;A1 &#8212; Ford-Fulkerson Algorithm</h3>
+    <div class='code-block'>
+<span class='fn'>FordFulkerson</span>(G, s, t)<br>
+1 &nbsp; <span class='kw'>for</span> each (u,v) &isin; E: f(u,v) = 0 &nbsp;&nbsp;&nbsp;<span class='cmt'># zero flow</span><br>
+2 &nbsp; Build residual network G_f<br>
+3 &nbsp; <span class='kw'>while</span> &exist; path P from s to t in G_f:<br>
+4 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; x = min c_f(e) over e &isin; P &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class='cmt'># bottleneck</span><br>
+5 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Augment f along P by x<br>
+6 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Update G_f<br>
+7 &nbsp; <span class='kw'>return</span> f
+    </div>
+    <p><strong>Why greedy alone fails:</strong> Pushing forward greedily can get stuck before reaching max flow. Backward edges in \(G_f\) allow &ldquo;undoing&rdquo; committed flow to reroute it optimally.</p>
+
+    <h3>&#167;A2 &#8212; Path Selection Methods</h3>
+    <div class='table-wrap'><table>
+      <thead><tr><th>Method</th><th>Path chosen</th><th>Path cost</th><th>Total runtime</th></tr></thead>
+      <tbody>
+        <tr><td>Na&iuml;ve (DFS)</td><td>Any \(s\)-\(t\) path</td><td>\(O(m)\)</td><td>\(O(v(f^*)\cdot m)\) &mdash; may not terminate for irrationals</td></tr>
+        <tr><td><strong>Fattest path</strong></td><td>Maximises \(\min_{e\in P}c_f(e)\)</td><td>\(O(m+n)\)</td><td>\(O(m(m+n)\log v(f^*))\)</td></tr>
+        <tr><td><strong>Edmonds-Karp</strong> (BFS)</td><td>Fewest edges</td><td>\(O(m)\)</td><td>\(O(m^2 n)\)</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3>&#167;A3 &#8212; Fattest Path Runtime Proof</h3>
+    <div class='def-box'><div class='label'>Proposition 1 (Main Claim)</div>
+    <p>After one fattest-path augmentation, the remaining max flow value in \(G_f\) satisfies:</p>
+    \[ v(f')_{\text{new}} \le v(f')\!\left(1-\tfrac{1}{m}\right) \]
+    </div>
+    <p><strong>Proof:</strong> Let \(x=\min_{e\in P}c_f(e)\). Define \(S\) = vertices reachable from \(s\) via residual edges with capacity \(&gt;x\). Any edge from \(S\) to \(V\setminus S\) has capacity \(\le x\), so \(c_f(S,V\setminus S)\le m\cdot x\). By Max-Flow Min-Cut: \(v(f')\le m\cdot x\), i.e. \(x\ge v(f')/m\). Augmenting by \(x\) reduces remaining max flow by \(x\ge v(f')/m\). &square;</p>
+    <p>After \(k=m\ln v(f^*)\) iterations the remaining max flow satisfies:</p>
+    \[ v(f^*)\left(1-\tfrac{1}{m}\right)^{m\ln v(f^*)} &lt; v(f^*)\cdot e^{-\ln v(f^*)}=1 \]
+    <p>Since residual capacities are integers and the remaining max flow is \(&lt;1\), it must be 0. Total runtime:</p>
+    \[ T_{\text{fattest}}=O(m(m+n)\log v(f^*)) \]
+
+    <h3>&#167;A4 &#8212; Edmonds-Karp Runtime Proof</h3>
+    <div class='def-box'><div class='label'>Lemma 4 &#8212; Distances Never Decrease</div>
+    <p>Let \(d_i(v)\) = unweighted distance from \(s\) to \(v\) in \(G_f^{(i)}\). Then:</p>
+    \[ d_{i+1}(v)\ge d_i(v) \quad \forall\,i\ge1,\,v\in V \]
+    </div>
+    <p><strong>Proof:</strong> Induction on \(d_i(v)\). Base \(d=0\): \(v=s\), \(d_{i+1}(s)=0\). Step: let \(u\) be predecessor of \(v\) on shortest path in \(G_f^{(i)}\), so \(d_i(u)=d_i(v)-1\).<br>
+    Case 1: \((u,v)\in G_f^{(i+1)}\): triangle inequality gives \(d_{i+1}(v)\le d_i(u)+1=d_i(v)\). &#10003;<br>
+    Case 2: \((u,v)\notin G_f^{(i+1)}\): \((v,u)\) was on the \(i\)-th augmenting path, so \(d_{i+1}(u)=d_{i+1}(v)+1\), giving \(d_{i+1}(v)\le d_i(v)\). &#10003; &square;</p>
+    <div class='def-box'><div class='label'>Proposition 2 &#8212; Edge Disappearances</div>
+    <p>Any edge \((u,v)\) can disappear from \(G_f\) at most \(n/2\) times.</p></div>
+    <p><strong>Proof:</strong> Between two consecutive disappearances of \((u,v)\), \(d(u)\) increases by \(\ge 2\) (via Lemma 4). Since \(0\le d(u)\le n-1\), there are at most \(n/2\) disappearances. &square;</p>
+    <p>Total edge disappearances \(\le m\cdot(n/2)\); each iteration costs \(O(m)\) (BFS):</p>
+    \[ T_{\text{Edmonds-Karp}}=O(m^2 n) \]
+
+    <h3>&#167;A5 &#8212; Runtime Summary</h3>
+    <div class='table-wrap'><table>
+      <thead><tr><th>Algorithm</th><th>Path method</th><th>Runtime</th><th>Key bound used</th></tr></thead>
+      <tbody>
+        <tr><td>Ford-Fulkerson (na&iuml;ve)</td><td>Any</td><td>\(O(v(f^*)\cdot m)\)</td><td>+1 per augmentation</td></tr>
+        <tr><td>Fattest path FF</td><td>Max bottleneck</td><td>\(O(m(m+n)\log v(f^*))\)</td><td>\(x\ge v(f')/m\)</td></tr>
+        <tr><td>Edmonds-Karp</td><td>BFS (shortest)</td><td>\(O(m^2 n)\)</td><td>Distances never decrease; \(n/2\) disappearances per edge</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3>&#167;A6 &#8212; Cheat Sheet</h3>
+    <pre>
+FLOW NETWORK
+  Capacity:     0 &le; f(u,v) &le; c(u,v)
+  Conservation: &sum; f(x,v) = &sum; f(v,y)  for all internal v
+  Flow value:   v(f) = &sum; f(s,x) - &sum; f(y,s)
+
+CUT
+  c(S,T) = &sum; c(u,v)  for u&isin;S, v&isin;T, (u,v)&isin;E
+  Weak duality: v(f) &le; c(S,T)
+
+MAX-FLOW MIN-CUT:  max v(f) = min c(S,T)
+
+RESIDUAL NETWORK
+  Forward:  c_f(u,v) = c(u,v)-f(u,v)  [if f(u,v) &lt; c(u,v)]
+  Backward: c_f(v,u) = f(u,v)          [if f(u,v) &gt; 0]
+
+AUGMENTING PATH (bottleneck x = min c_f(e))
+  f'(u,v) = f(u,v)+x (forward)  or  f(u,v)-x (backward)
+  v(f') = v(f) + x
+
+RUNTIMES
+  Naive:         O(v(f*) * m)
+  Fattest path:  O(m(m+n) log v(f*))  [x &ge; v(f')/m]
+  Edmonds-Karp:  O(m^2 * n)           [dist never decreases]
+    </pre>
+
+    <!-- ════ Lecture 4: Graph Representations (Al-Kwariz) ════ -->
+    <h2>Graph Representations</h2>
+    <p>Data structures for storing graphs and their trade-offs, from Lecture 4.</p>
+
+    <h3>&#167;R1 &#8212; Adjacency Matrix</h3>
+    <div class="def-box"><div class="label">Definition</div>
+    <p>An \(n\times n\) matrix \(A\) where:</p>
+    \[ A[i][j] = \begin{cases}1 & \text{if }(i,j)\in E \\ 0 & \text{otherwise}\end{cases} \]
+    <p>For a <strong>multigraph</strong>: \(A[i][j]\) = number of edges between \(i\) and \(j\).<br>
+    For a <strong>digraph</strong>: \(A[i][j]=1\) means arc from \(i\) (source/row) to \(j\) (destination/column).</p>
+    </div>
+    <ul>
+      <li>Symmetric for undirected graphs: \(A[i][j]=A[j][i]\).</li>
+      <li><strong>Space:</strong> \(\Theta(n^2)\).</li>
+      <li><strong>Edge query</strong> \((u,v)\in E\): \(O(1)\).</li>
+      <li><strong>Neighbour query</strong> (list all neighbours of \(v\)): \(O(n)\).</li>
+      <li><strong>Slow</strong> to add/remove vertices &#8212; matrix must be resized/copied.</li>
+    </ul>
+
+    <h3>&#167;R2 &#8212; Adjacency List</h3>
+    <div class="def-box"><div class="label">Definition</div>
+    <p>An array of \(n\) lists. \(\text{Adj}[v]\) contains all vertices adjacent to \(v\).</p>
+    <p>For a <strong>digraph</strong>: \(\text{Adj}[v]\) stores only the out-neighbours of \(v\).</p>
+    </div>
+    <ul>
+      <li><strong>Space:</strong> \(\Theta(n+m)\) where \(m=|E|\) &#8212; efficient for sparse graphs.</li>
+      <li><strong>Neighbour query</strong>: \(O(\deg(v))\).</li>
+      <li><strong>Edge query</strong> \((u,v)\in E\): \(O(\deg(u))\) &#8212; must scan the list.</li>
+      <li><strong>Slow</strong> to remove a vertex &#8212; must find and delete it from all neighbour lists.</li>
+      <li><strong>Preferred</strong> for sparse graphs and most algorithm implementations.</li>
+    </ul>
+
+    <h3>&#167;R3 &#8212; Trade-off Summary</h3>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Operation</th><th>Adjacency Matrix</th><th>Adjacency List</th></tr></thead>
+      <tbody>
+        <tr><td>Space</td><td>\(O(n^2)\)</td><td>\(O(n+m)\)</td></tr>
+        <tr><td>Edge query \((u,v)\in E?\)</td><td>\(O(1)\)</td><td>\(O(\deg(u))\)</td></tr>
+        <tr><td>Neighbour query</td><td>\(O(n)\)</td><td>\(O(\deg(v))\)</td></tr>
+        <tr><td>Add edge</td><td>\(O(1)\)</td><td>\(O(1)\)</td></tr>
+        <tr><td>Add vertex</td><td>\(O(n^2)\) (resize)</td><td>\(O(1)\)</td></tr>
+        <tr><td>Remove vertex</td><td>\(O(n^2)\) (resize)</td><td>\(O(n+m)\)</td></tr>
+        <tr><td>Best for</td><td>Dense graphs (\(m\approx n^2\))</td><td>Sparse graphs; most algorithms</td></tr>
+      </tbody>
+    </table></div>
+    <p><strong>Dense vs Sparse:</strong> A <em>dense</em> graph has \(m = \Theta(n^2)\) edges; a <em>sparse</em> graph has \(m = O(n)\) or \(O(n\log n)\). For real-world networks (web, social, biological) the graph is almost always sparse &#8212; adjacency list wins.</p>
+    <p><em>Note from lecture:</em> Adjacency list is assumed for the rest of the course.</p>
+  </div>
+
+  <!-- ===== PAGE 5: Permutation ===== -->
+  <div id="page5" class="page">
+    <h2>Permutation &amp;&amp; Combinatorics</h2>
+    <p>Formulas for: permutation with/without repetition, identical items, and combinations.</p>
+
+    <h3>Permutation with Repetition</h3>
+    <div class="container">
+      <div class="half"><p>All data: \(P(n,n)=n^n\). Order matters, elements can repeat.</p></div>
+      <div class="half"><p>Selection \(r\): \(P(n,r)=n^r\)</p></div>
+    </div>
+
+    <h3>Permutation without Repetition</h3>
+    <div class="container">
+      <div class="half"><p>All data: \(P(n,n)=n!\). Each element used at most once.</p></div>
+      <div class="half"><p>Selection \(r\): \(P(n,r)=\dfrac{n!}{(n-r)!}\)</p></div>
+    </div>
+
+    <h3>Permutation with Identical Items</h3>
+    <div class="container">
+      <div class="half"><p>All data: \(P(n,n)=\dfrac{n!}{p_1!\,p_2!\cdots p_k!}\)</p></div>
+      <div class="half"><p>Selection \(r\): \(P(n,r)=\dfrac{n!}{(n-r)!\,p_1!\cdots p_k!}\)</p></div>
+    </div>
+
+    <h3>Combination</h3>
+    <div class="container">
+      <div class="half"><p>All data: \(C(n,n)=\binom{n}{n}=1\). Order doesn't matter.</p></div>
+      <div class="half"><p>Selection \(r\): \(C(n,r)=\binom{n}{r}=\dfrac{n!}{r!\,(n-r)!}\)</p></div>
+    </div>
+
+    <h3>Properties</h3>
+    <p>\(P(n,r)=C(n,r)\cdot r!\) &emsp; \(C(n,0)=1\)</p>
+  </div>
+
+</div><!-- end .content -->
+
+<script>
+  const tabs = document.querySelectorAll('.tab');
+  const pages = document.querySelectorAll('.page');
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      tabs.forEach(t => t.classList.remove('active'));
+      pages.forEach(p => p.classList.remove('active'));
+      tab.classList.add('active');
+      document.getElementById(tab.dataset.target).classList.add('active');
+    });
+  });
+</script>
+
+<footer>
+  <p>Erald Hysenbelli &copy;</p>
+  <p>19.06.2026</p>
+</footer>
+</body>
+</html>
