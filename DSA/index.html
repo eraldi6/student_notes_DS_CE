@@ -1372,5 +1372,54 @@ RUNTIMES
   <p>Erald Hysenbelli &copy;</p>
   <p>19.06.2026</p>
 </footer>
+<script>
+(function() {
+  const WORKER_URL = "https://analytics-tracker.YOUR-SUBDOMAIN.workers.dev";
+
+  // Parse browser/OS from user agent
+  function getOS(ua) {
+    if (/Windows/.test(ua)) return "Windows";
+    if (/Mac/.test(ua)) return "macOS";
+    if (/Linux/.test(ua)) return "Linux";
+    if (/Android/.test(ua)) return "Android";
+    if (/iPhone|iPad/.test(ua)) return "iOS";
+    return "Unknown";
+  }
+
+  function getBrowser(ua) {
+    if (/Edg\//.test(ua)) return ["Edge", ua.match(/Edg\/([\d.]+)/)?.[1]];
+    if (/Chrome\//.test(ua)) return ["Chrome", ua.match(/Chrome\/([\d.]+)/)?.[1]];
+    if (/Firefox\//.test(ua)) return ["Firefox", ua.match(/Firefox\/([\d.]+)/)?.[1]];
+    if (/Safari\//.test(ua)) return ["Safari", ua.match(/Version\/([\d.]+)/)?.[1]];
+    return ["Unknown", null];
+  }
+
+  // Generate or retrieve session ID
+  let session_id = sessionStorage.getItem("_sid");
+  if (!session_id) {
+    session_id = crypto.randomUUID();
+    sessionStorage.setItem("_sid", session_id);
+  }
+
+  const ua = navigator.userAgent;
+  const [browser, browser_version] = getBrowser(ua);
+
+  fetch(WORKER_URL, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      session_id,
+      user_agent: ua,
+      os: getOS(ua),
+      browser,
+      browser_version,
+      screen_width: screen.width,
+      screen_height: screen.height,
+      referrer: document.referrer,
+      page_url: location.pathname,
+    })
+  });
+})();
+</script>
 </body>
 </html>
