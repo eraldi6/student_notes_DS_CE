@@ -1374,7 +1374,7 @@ RUNTIMES
 </footer>
 <script>
 (function() {
-  const WORKER_URL = "https://analytics-tracker.YOUR-SUBDOMAIN.workers.dev";
+  const WORKER_URL = "https://dsce.eraldhysenbelli.workers.dev";
 
   // Parse browser/OS from user agent
   function getOS(ua) {
@@ -1387,12 +1387,18 @@ RUNTIMES
   }
 
   function getBrowser(ua) {
-    if (/Edg\//.test(ua)) return ["Edge", ua.match(/Edg\/([\d.]+)/)?.[1]];
-    if (/Chrome\//.test(ua)) return ["Chrome", ua.match(/Chrome\/([\d.]+)/)?.[1]];
-    if (/Firefox\//.test(ua)) return ["Firefox", ua.match(/Firefox\/([\d.]+)/)?.[1]];
-    if (/Safari\//.test(ua)) return ["Safari", ua.match(/Version\/([\d.]+)/)?.[1]];
-    return ["Unknown", null];
-  }
+  if (/Edg\//.test(ua))     return ["Edge",    ua.match(/Edg\/([\d.]+)/)?.[1]];
+  if (/OPR\//.test(ua))     return ["Opera",   ua.match(/OPR\/([\d.]+)/)?.[1]];
+  if (/Chrome\//.test(ua))  return ["Chrome",  ua.match(/Chrome\/([\d.]+)/)?.[1]];
+  if (/Firefox\//.test(ua)) return ["Firefox", ua.match(/Firefox\/([\d.]+)/)?.[1]];
+  if (/CriOS\//.test(ua))   return ["Chrome (iOS)", ua.match(/CriOS\/([\d.]+)/)?.[1]];
+  if (/FxiOS\//.test(ua))   return ["Firefox (iOS)", ua.match(/FxiOS\/([\d.]+)/)?.[1]];
+  // Safari must come AFTER Chrome/Edge — they all contain "Safari/" in their UA
+  if (/Version\//.test(ua) && /Safari\//.test(ua))
+                            return ["Safari",  ua.match(/Version\/([\d.]+)/)?.[1]];
+  if (/Safari\//.test(ua))  return ["Safari",  null]; // fallback for edge cases
+  return ["Unknown", null];
+}
 
   // Generate or retrieve session ID
   let session_id = sessionStorage.getItem("_sid");
