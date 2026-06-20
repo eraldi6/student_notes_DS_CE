@@ -107,17 +107,570 @@
 <header>DSA, mendoj.</header>
 
 <div class="tabs">
-  <button class="tab active" data-target="page1">Proofs</button>
-  <button class="tab" data-target="page2">Big Not</button>
-  <button class="tab" data-target="page3">Graph Theory</button>
-  <button class="tab" data-target="page4">Al-Kwariz</button>
-  <button class="tab" data-target="page5">Permutation</button>
+  <button class="tab active" data-target="page1">Exercises</button>
+  <button class="tab" data-target="page2">Proofs</button>
+  <button class="tab" data-target="page3">Big Not</button>
+  <button class="tab" data-target="page4">Graph Theory</button>
+  <button class="tab" data-target="page5">Al-Kwariz</button>
+  <button class="tab" data-target="page6">Permutation</button>
 </div>
 
 <div class="content">
 
-  <!-- ===== PAGE 1: Proofs ===== -->
+
   <div id="page1" class="page active">
+    <h2>Exercises</h2>
+    <p>Try</p>
+
+    <div>
+        <h3>Question 1</h3>
+        <p>
+          A sorting method with Big-Oh complexity \(O(n\log n)\) spends exactly \(1\) millisecond to sort \(1000\) data items. Assuming that the running time \(T(n)\) for sorting \(n\) items is directly proportional to \(n\log n\), i.e., \(T(n)=cn\log n\), derive a formula for \(T(n)\) in terms of the known time \(T(n_0)\) for sorting \(n_0\) items, and estimate how long this method will take to sort \(1{,}000{,}000\) items.
+        </p>
+
+        <button onclick="toggleAnswer('answer1', this)">
+            Show Answer
+        </button>
+
+        <div id="answer1" style="display:none; margin-top:10px;">
+            Since \(T(n)=cn\log n\), and for a known input size \(n_0\),
+
+\[
+T(n_0)=cn_0\log n_0,
+\]
+
+we obtain
+
+\[
+c=\frac{T(n_0)}{n_0\log n_0}.
+\]
+
+Substituting into the expression for \(T(n)\),
+
+\[
+T(n)=\frac{T(n_0)}{n_0\log n_0}\,n\log n.
+\]
+
+Therefore,
+
+\[
+\boxed{T(n)=T(n_0)\frac{n\log n}{n_0\log n_0}}.
+\]
+
+Given \(n_0=1000\) and \(T(1000)=1\text{ ms}\),
+
+\[
+T(1{,}000{,}000)
+=
+1\text{ ms}\cdot
+\frac{1{,}000{,}000\log(1{,}000{,}000)}
+{1000\log(1000)}.
+\]
+
+Using base-10 logarithms,
+
+\[
+\log(1000)=3,\qquad \log(1{,}000{,}000)=6,
+\]
+
+hence
+
+\[
+T(1{,}000{,}000)
+=
+1\text{ ms}\cdot
+\frac{1{,}000{,}000\cdot 6}
+{1000\cdot 3}
+=
+2000\text{ ms}
+=
+2\text{ s}.
+\]
+
+Thus, the estimated running time for sorting \(1{,}000{,}000\) items is
+
+\[
+\boxed{2\text{ seconds}}.
+\]
+        </div>
+    </div>
+
+    <hr>
+    <div>
+        <h3>Question 2</h3>
+        <p>A quadratic algorithm with processing time \(T(n)=cn^2\) spends \(T(n_0)\) seconds for processing \(n_0\) data items. How much time will be spent for processing \(n=5000\) data items, assuming that \(n_0=100\) and \(T(100)=1\text{ ms}\)?</p>
+
+        <button onclick="toggleAnswer('answer2', this)">
+            Show Answer
+        </button>
+
+        <div id="answer2" style="display:none; margin-top:10px;">
+            Since the algorithm is quadratic,
+
+\[
+T(n)=cn^2.
+\]
+
+Using the known value \(T(n_0)\),
+
+\[
+T(n_0)=cn_0^2,
+\]
+
+so
+
+\[
+c=\frac{T(n_0)}{n_0^2}.
+\]
+
+Substituting into \(T(n)\),
+
+\[
+T(n)=T(n_0)\frac{n^2}{n_0^2}.
+\]
+
+With \(n=5000\), \(n_0=100\), and \(T(100)=1\text{ ms}\),
+
+\[
+T(5000)
+=
+1\text{ ms}\cdot
+\frac{5000^2}{100^2}
+=
+1\text{ ms}\cdot
+\left(\frac{5000}{100}\right)^2
+=
+1\text{ ms}\cdot 50^2
+=
+2500\text{ ms}.
+\]
+
+Since
+
+\[
+2500\text{ ms}=2.5\text{ s},
+\]
+
+the processing time is
+
+\[
+\boxed{T(5000)=2500\text{ ms}=2.5\text{ seconds}.}
+\]
+        </div>
+    </div>
+
+    <hr>
+    <div>
+        <h3>Question 3</h3>
+        <p>An algorithm with time complexity \(O(f(n))\) and processing time \(T(n)=cf(n)\), where \(f(n)\) is a known function of \(n\), spends \(10\) seconds to process \(1000\) data items. How much time will be spent to process \(100{,}000\) data items if (a) \(f(n)=n\) and (b) \(f(n)=n^2\)?</p>
+
+        <button onclick="toggleAnswer('answer3', this)">
+            Show Answer
+        </button>
+
+        <div id="answer3" style="display:none; margin-top:10px;">
+            Since \(T(n)=cf(n)\), and \(T(n_0)=cf(n_0)\), we have
+
+\[
+T(n)=T(n_0)\frac{f(n)}{f(n_0)}.
+\]
+
+Given
+
+\[
+n_0=1000,\qquad T(1000)=10\text{ s},
+\]
+
+we evaluate the two cases.
+
+\textbf{(a) Linear complexity: \(f(n)=n\)}
+
+\[
+T(100{,}000)
+=
+10\text{ s}\cdot
+\frac{100{,}000}{1000}
+=
+10\cdot 100
+=
+1000\text{ s}.
+\]
+
+Therefore,
+
+\[
+\boxed{T(100{,}000)=1000\text{ s}\approx 16.67\text{ min}.}
+\]
+
+\textbf{(b) Quadratic complexity: \(f(n)=n^2\)}
+
+\[
+T(100{,}000)
+=
+10\text{ s}\cdot
+\frac{(100{,}000)^2}{(1000)^2}
+=
+10\cdot 100^2
+=
+10\cdot 10{,}000
+=
+100{,}000\text{ s}.
+\]
+
+Therefore,
+
+\[
+\boxed{T(100{,}000)=100{,}000\text{ s}\approx 27.78\text{ h}\approx 1.16\text{ days}.}
+\]
+        </div>
+    </div>
+
+    <hr>
+    <hr>
+<div>
+    <h3>Question 4</h3>
+    <p>For each expression below giving the processing time \(T(n)\) of an algorithm, identify the dominant term(s) and specify the lowest Big-Oh complexity.</p>
+    <button onclick="toggleAnswer('answer4', this)">Show Answer</button>
+    <div id="answer4" style="display:none; margin-top:10px;">
+        <p>The dominant term is the one that grows fastest as \(n \to \infty\). Constants and lower-order terms are ignored.</p>
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Expression</th>
+                        <th>Dominant term(s)</th>
+                        <th>\(O(\cdot)\)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>\(5 + 0.001n^3 + 0.025n\)</td><td>\(0.001n^3\)</td><td>\(O(n^3)\)</td></tr>
+                    <tr><td>\(500n + 100n^{1.5} + 50n\log_{10} n\)</td><td>\(100n^{1.5}\)</td><td>\(O(n^{1.5})\)</td></tr>
+                    <tr><td>\(0.3n + 5n^{1.5} + 2.5 \cdot n^{1.75}\)</td><td>\(2.5n^{1.75}\)</td><td>\(O(n^{1.75})\)</td></tr>
+                    <tr><td>\(n^2\log_2 n + n(\log_2 n)^2\)</td><td>\(n^2\log_2 n\)</td><td>\(O(n^2\log n)\)</td></tr>
+                    <tr><td>\(n\log_3 n + n\log_2 n\)</td><td>Both terms, same order</td><td>\(O(n\log n)\)</td></tr>
+                    <tr><td>\(3\log_8 n + \log_2\log_2\log_2 n\)</td><td>\(3\log_8 n\)</td><td>\(O(\log n)\)</td></tr>
+                    <tr><td>\(100n + 0.01n^2\)</td><td>\(0.01n^2\)</td><td>\(O(n^2)\)</td></tr>
+                    <tr><td>\(0.01n + 100n^2\)</td><td>\(100n^2\)</td><td>\(O(n^2)\)</td></tr>
+                    <tr><td>\(2n + n^{0.5} + 0.5n^{1.25}\)</td><td>\(0.5n^{1.25}\)</td><td>\(O(n^{1.25})\)</td></tr>
+                    <tr><td>\(0.01n\log_2 n + n(\log_2 n)^2\)</td><td>\(n(\log_2 n)^2\)</td><td>\(O(n\log^2 n)\)</td></tr>
+                    <tr><td>\(100n\log_3 n + n^3 + 100n\)</td><td>\(n^3\)</td><td>\(O(n^3)\)</td></tr>
+                    <tr><td>\(0.003\log_4 n + \log_2\log_2 n\)</td><td>\(0.003\log_4 n\)</td><td>\(O(\log n)\)</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<hr>
+<div>
+    <h3>Question 5</h3>
+    <p>Determine whether each statement about Big-Oh notation is TRUE or FALSE, and correct the formula when it is false.</p>
+    <button onclick="toggleAnswer('answer5', this)">Show Answer</button>
+    <div id="answer5" style="display:none; margin-top:10px;">
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Statement</th>
+                        <th>TRUE / FALSE</th>
+                        <th>Correction</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>Rule of sums: \(O(f+g)=O(f)+O(g)\)</td><td>FALSE</td><td>\(O(f+g)=O(\max(f,g))\)</td></tr>
+                    <tr><td>Rule of products: \(O(f\cdot g)=O(f)\cdot O(g)\)</td><td>TRUE</td><td>As stated</td></tr>
+                    <tr><td>Transitivity: if \(g=O(f)\) and \(h=O(f)\) then \(g=O(h)\)</td><td>FALSE</td><td>Correct transitivity: if \(g=O(f)\) and \(f=O(h)\), then \(g=O(h)\)</td></tr>
+                    <tr><td>\(5n+8n^2+100n^3=O(n^4)\)</td><td>TRUE</td><td>Valid upper bound, though not tight</td></tr>
+                    <tr><td>\(5n+8n^2+100n^3=O(n^2\log n)\)</td><td>FALSE</td><td>Correct: \(5n+8n^2+100n^3=O(n^3)\)</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<hr>
+<div>
+    <h3>Question 6</h3>
+    <p>For each function \(f(n)\) and running time \(t\), determine the largest problem size \(n\) that can be solved in time \(t\), assuming the algorithm takes \(f(n)\) microseconds.</p>
+    <button onclick="toggleAnswer('answer6', this)">Show Answer</button>
+    <div id="answer6" style="display:none; margin-top:10px;">
+        <p>Convert the time limits to microseconds, then solve \(f(n) \le t\).</p>
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>\(f(n)\)</th>
+                        <th>1 second</th>
+                        <th>1 minute</th>
+                        <th>1 hour</th>
+                        <th>1 day</th>
+                        <th>1 month</th>
+                        <th>1 year</th>
+                        <th>1 century</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>\(\log n\)</td><td>\(2^{10^6}\)</td><td>\(2^{6\times10^7}\)</td><td>\(2^{3.6\times10^9}\)</td><td>\(2^{8.64\times10^{10}}\)</td><td>\(2^{2.592\times10^{12}}\)</td><td>\(2^{3.1536\times10^{13}}\)</td><td>\(2^{3.1536\times10^{15}}\)</td></tr>
+                    <tr><td>\(\sqrt{n}\)</td><td>\(10^{12}\)</td><td>\(3.6\times10^{15}\)</td><td>\(1.296\times10^{19}\)</td><td>\(7.46496\times10^{21}\)</td><td>\(6.718464\times10^{24}\)</td><td>\(9.94519296\times10^{26}\)</td><td>\(9.94519296\times10^{30}\)</td></tr>
+                    <tr><td>\(n\)</td><td>\(10^6\)</td><td>\(6\times10^7\)</td><td>\(3.6\times10^9\)</td><td>\(8.64\times10^{10}\)</td><td>\(2.592\times10^{12}\)</td><td>\(3.1536\times10^{13}\)</td><td>\(3.1536\times10^{15}\)</td></tr>
+                    <tr><td>\(n\log n\)</td><td>\(\approx 6.27\times10^4\)</td><td>\(\approx 2.80\times10^6\)</td><td>\(\approx 1.33\times10^8\)</td><td>\(\approx 2.76\times10^9\)</td><td>\(\approx 7.19\times10^{10}\)</td><td>\(\approx 7.98\times10^{11}\)</td><td>\(\approx 6.86\times10^{13}\)</td></tr>
+                    <tr><td>\(n^2\)</td><td>\(10^3\)</td><td>\(7.746\times10^3\)</td><td>\(6\times10^4\)</td><td>\(2.939\times10^5\)</td><td>\(1.610\times10^6\)</td><td>\(5.615\times10^6\)</td><td>\(5.615\times10^7\)</td></tr>
+                    <tr><td>\(n^3\)</td><td>100</td><td>391</td><td>1532</td><td>4420</td><td>13736</td><td>31593</td><td>146645</td></tr>
+                    <tr><td>\(2^n\)</td><td>19</td><td>25</td><td>31</td><td>36</td><td>41</td><td>44</td><td>51</td></tr>
+                    <tr><td>\(n!\)</td><td>9</td><td>11</td><td>12</td><td>13</td><td>15</td><td>16</td><td>17</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<hr>
+<div>
+    <h3>Question 7</h3>
+    <p>An algorithm with running time \(f_i(n)\) solves a problem of size \(n_i\) in 1 minute on today&apos;s computer. Determine the problem size solvable in the same minute on a 100-fold faster computer and on a 10 000-fold faster computer.</p>
+    <button onclick="toggleAnswer('answer7', this)">Show Answer</button>
+    <div id="answer7" style="display:none; margin-top:10px;">
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>\(f_i(n)\)</th>
+                        <th>today&apos;s computer</th>
+                        <th>100 times faster</th>
+                        <th>10 000 times faster</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>\(\log n\)</td><td>\(n_1\)</td><td>\(n_1^{100}\)</td><td>\(n_1^{10000}\)</td></tr>
+                    <tr><td>\(\sqrt{n}\)</td><td>\(n_2\)</td><td>\(10^4 n_2\)</td><td>\(10^8 n_2\)</td></tr>
+                    <tr><td>\(n\)</td><td>\(n_3\)</td><td>\(100n_3\)</td><td>\(10^4 n_3\)</td></tr>
+                    <tr><td>\(n\log n\)</td><td>\(n_4\)</td><td>solve \(N\log N = 100 n_4\log n_4\)</td><td>solve \(N\log N = 10^4 n_4\log n_4\)</td></tr>
+                    <tr><td>\(n^2\)</td><td>\(n_5\)</td><td>\(10n_5\)</td><td>\(100n_5\)</td></tr>
+                    <tr><td>\(n^3\)</td><td>\(n_6\)</td><td>\(100^{1/3}n_6\)</td><td>\((10^4)^{1/3}n_6\)</td></tr>
+                    <tr><td>\(2^n\)</td><td>\(n_7\)</td><td>\(n_7 + \log_2 100\)</td><td>\(n_7 + \log_2 10^4\)</td></tr>
+                    <tr><td>\(n!\)</td><td>\(n_8\)</td><td>largest \(N\) with \(N! \le 100\,n_8!\)</td><td>largest \(N\) with \(N! \le 10^4 n_8!\)</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<hr>
+<div>
+    <h3>Question 8</h3>
+    <p>Prove that \(T(n)=a_0+a_1n+a_2n^2+a_3n^3\) is \(O(n^3)\) using the formal definition of Big-Oh notation.</p>
+    <button onclick="toggleAnswer('answer8', this)">Show Answer</button>
+    <div id="answer8" style="display:none; margin-top:10px;">
+        <p>For \(n \ge 1\), we have \(1 \le n \le n^2 \le n^3\). Therefore,</p>
+        \[
+        T(n)=a_0+a_1n+a_2n^2+a_3n^3 \le (|a_0|+|a_1|+|a_2|+|a_3|)n^3.
+        \]
+        <p>Choose</p>
+        \[
+        c = |a_0|+|a_1|+|a_2|+|a_3|, \qquad n_0 = 1.
+        \]
+        <p>Then for all \(n \ge n_0\), \(T(n) \le cn^3\). Hence, by definition, \(T(n)=O(n^3)\).</p>
+    </div>
+</div>
+
+<hr>
+<div>
+    <h3>Question 9</h3>
+    <p>Algorithms A and B spend exactly \(T_A(n)=0.1n^2\log_{10}n\) and \(T_B(n)=2.5n^2\) microseconds, respectively. Which is better in the Big-Oh sense, when does it actually become faster, and what do you recommend for \(n \le 10^9\)?</p>
+    <button onclick="toggleAnswer('answer9', this)">Show Answer</button>
+    <div id="answer9" style="display:none; margin-top:10px;">
+        <p>In the Big-Oh sense, algorithm B is better because \(T_B(n)=O(n^2)\) while \(T_A(n)=O(n^2\log n)\).</p>
+        <p>Set the running times equal:</p>
+        \[
+        0.1n^2\log_{10}n = 2.5n^2 \Rightarrow \log_{10}n = 25 \Rightarrow n_0 = 10^{25}.
+        \]
+        <p>So A is actually faster for \(n < 10^{25}\), and B becomes faster only for \(n > 10^{25}\).</p>
+        <p>Since \(10^9 \ll 10^{25}\), the recommended choice for \(n \le 10^9\) is <strong>A</strong>.</p>
+    </div>
+</div>
+
+<hr>
+<div>
+    <h3>Question 10</h3>
+    <p>Algorithms A and B spend exactly \(T_A(n)=c_A n\log_2 n\) and \(T_B(n)=c_B n^2\) microseconds, respectively. Find the better algorithm for \(n=2^{20}\), given that A spends 10 microseconds and B spends 1 microsecond to process 1024 items.</p>
+    <button onclick="toggleAnswer('answer10', this)">Show Answer</button>
+    <div id="answer10" style="display:none; margin-top:10px;">
+        <p>Since \(1024=2^{10}\), for algorithm A:</p>
+        \[
+        10 = c_A\cdot 1024 \cdot 10 \Rightarrow c_A = \frac{1}{1024}.
+        \]
+        <p>For algorithm B:</p>
+        \[
+        1 = c_B\cdot 1024^2 \Rightarrow c_B = \frac{1}{1024^2}.
+        \]
+        <p>Now evaluate at \(n=2^{20}\):</p>
+        \[
+        T_A(2^{20}) = \frac{1}{1024}\cdot 2^{20}\cdot 20 = 20480 \text{ microseconds},
+        \]
+        \[
+        T_B(2^{20}) = \frac{1}{1024^2}\cdot 2^{40} = 2^{20} = 1{,}048{,}576 \text{ microseconds}.
+        \]
+        <p>Therefore, <strong>algorithm A</strong> is much faster.</p>
+    </div>
+</div>
+
+<hr>
+<div>
+    <h3>Question 11</h3>
+    <p>Algorithms A and B spend exactly \(T_A(n)=5n\log_{10}n\) and \(T_B(n)=25n\) microseconds, respectively. Which algorithm is better in the Big-Oh sense, and for which problem sizes does it outperform the other?</p>
+    <button onclick="toggleAnswer('answer11', this)">Show Answer</button>
+    <div id="answer11" style="display:none; margin-top:10px;">
+        <p>In the Big-Oh sense, B is better because \(O(n)\) grows slower than \(O(n\log n)\).</p>
+        <p>Set the two running times equal:</p>
+        \[
+        5n\log_{10}n = 25n \Rightarrow \log_{10}n = 5 \Rightarrow n_0 = 10^5.
+        \]
+        <p>So A is faster for \(n < 10^5\), both are equal at \(n=10^5\), and B is faster for \(n > 10^5\).</p>
+    </div>
+</div>
+
+<hr>
+<div>
+    <h3>Question 12</h3>
+    <p>Package A has average processing time \(T_A(n)=0.1n\log_2 n\) microseconds and package B has \(T_B(n)=5n\) microseconds. Which is better in the Big-Oh sense, and under what conditions does each package outperform the other for up to \(10^{12}\) records?</p>
+    <button onclick="toggleAnswer('answer12', this)">Show Answer</button>
+    <div id="answer12" style="display:none; margin-top:10px;">
+        <p>In the Big-Oh sense, B is better because \(O(n)\) is asymptotically better than \(O(n\log n)\).</p>
+        <p>Set the two running times equal:</p>
+        \[
+        0.1n\log_2 n = 5n \Rightarrow \log_2 n = 50 \Rightarrow n_0 = 2^{50} \approx 1.126\times10^{15}.
+        \]
+        <p>Thus, A is faster for \(n < 2^{50}\), and B is faster for \(n > 2^{50}\).</p>
+        <p>Since \(10^{12} < 2^{50}\), the recommended choice for the stated range is <strong>A</strong>.</p>
+    </div>
+</div>
+
+<hr>
+<div>
+    <h3>Question 13</h3>
+    <p>Package A has average processing time \(T_A(n)=0.001n\) milliseconds and package B has \(T_B(n)=500\sqrt{n}\) milliseconds. Which is better in the Big-Oh sense, and under what conditions does each package outperform the other for up to \(10^9\) records?</p>
+    <button onclick="toggleAnswer('answer13', this)">Show Answer</button>
+    <div id="answer13" style="display:none; margin-top:10px;">
+        <p>In the Big-Oh sense, B is better because \(O(\sqrt{n})\) grows slower than \(O(n)\).</p>
+        <p>Set the running times equal:</p>
+        \[
+        0.001n = 500\sqrt{n}.
+        \]
+        <p>Let \(x=\sqrt{n}\). Then \(0.001x^2 = 500x\), so \(x = 500000\), hence</p>
+        \[
+        n_0 = (500000)^2 = 2.5\times10^{11}.
+        \]
+        <p>Therefore, A is faster for \(n < 2.5\times10^{11}\), and B is faster for \(n > 2.5\times10^{11}\).</p>
+        <p>Since \(10^9 < 2.5\times10^{11}\), the recommended choice is <strong>A</strong>.</p>
+    </div>
+</div>
+
+<hr>
+<div>
+    <h3>Question 14</h3>
+    <p>Packages A and B of complexity \(O(n\log n)\) and \(O(n)\), respectively, spend exactly \(T_A(n)=c_A n\log_{10}n\) and \(T_B(n)=c_B n\) milliseconds. If both are tested on \(n=10^4\) items and take 100 ms and 500 ms respectively, determine when one outperforms the other, and recommend the best choice up to \(10^9\) items.</p>
+    <button onclick="toggleAnswer('answer14', this)">Show Answer</button>
+    <div id="answer14" style="display:none; margin-top:10px;">
+        <p>For A:</p>
+        \[
+        100 = c_A \cdot 10^4 \cdot 4 \Rightarrow c_A = 0.0025.
+        \]
+        <p>For B:</p>
+        \[
+        500 = c_B \cdot 10^4 \Rightarrow c_B = 0.05.
+        \]
+        <p>Set the times equal:</p>
+        \[
+        0.0025 n\log_{10}n = 0.05n \Rightarrow \log_{10}n = 20 \Rightarrow n_0 = 10^{20}.
+        \]
+        <p>Thus, A is faster for \(n < 10^{20}\), and B is faster for \(n > 10^{20}\).</p>
+        <p>Since \(10^9 \ll 10^{20}\), the recommended choice is <strong>A</strong>.</p>
+    </div>
+</div>
+
+<hr>
+<div>
+    <h3>Question 15</h3>
+    <p>Algorithms A, B, and C have time complexity \(O(n^2)\), \(O(n^{1.5})\), and \(O(n\log n)\), respectively. Each spends 10 seconds to process 100 data items. Derive the time each algorithm should spend to process 10,000 items.</p>
+    <button onclick="toggleAnswer('answer15', this)">Show Answer</button>
+    <div id="answer15" style="display:none; margin-top:10px;">
+        <p>Use proportional scaling with the corresponding complexity function.</p>
+        <p><strong>A:</strong></p>
+        \[
+        T_A(10000)=10\cdot\frac{10000^2}{100^2}=10\cdot10^4=100000 \text{ s}.
+        \]
+        <p><strong>B:</strong></p>
+        \[
+        T_B(10000)=10\cdot\frac{10000^{1.5}}{100^{1.5}}=10\cdot1000=10000 \text{ s}.
+        \]
+        <p><strong>C:</strong> using the same logarithm base in numerator and denominator,</p>
+        \[
+        T_C(10000)=10\cdot\frac{10000\log 10000}{100\log 100}=10\cdot\frac{10000\cdot4}{100\cdot2}=2000 \text{ s}.
+        \]
+        <p>So the times are:</p>
+        <ul>
+            <li>A: \(100000\) s \(\approx 27.78\) h</li>
+            <li>B: \(10000\) s \(\approx 2.78\) h</li>
+            <li>C: \(2000\) s \(\approx 33.33\) min</li>
+        </ul>
+    </div>
+</div>
+
+<hr>
+<div>
+    <h3>Question 16</h3>
+    <p>Software packages A and B have processing time exactly \(T_A(n)=3n^{1.5}\) and \(T_B(n)=0.03n^{1.75}\), respectively. For faster processing of up to \(n=10^8\) data items, which package should be chosen?</p>
+    <button onclick="toggleAnswer('answer16', this)">Show Answer</button>
+    <div id="answer16" style="display:none; margin-top:10px;">
+        <p>Set the running times equal:</p>
+        \[
+        3n^{1.5} = 0.03n^{1.75}.
+        \]
+        <p>For \(n>0\), divide by \(0.03n^{1.5}\):</p>
+        \[
+        100 = n^{0.25} \Rightarrow n = 100^4 = 10^8.
+        \]
+        <p>So:</p>
+        <ul>
+            <li>For \(n < 10^8\), package B is faster.</li>
+            <li>For \(n = 10^8\), both are equal.</li>
+            <li>For \(n > 10^8\), package A is faster.</li>
+        </ul>
+        <p>Therefore, for processing sizes up to \(10^8\), <strong>package B</strong> is the better practical choice, with a tie exactly at \(10^8\).</p>
+    </div>
+</div>
+<hr>
+
+    <div>
+        <h3>Question 2</h3>
+        <p>What is 2 + 2?</p>
+
+        <button onclick="toggleAnswer('answer2', this)">
+            Show Answer
+        </button>
+
+        <div id="answer2" style="display:none; margin-top:10px;">
+            4
+        </div>
+    </div>
+
+    <script>
+        function toggleAnswer(answerId, button) {
+            const answer = document.getElementById(answerId);
+
+            if (answer.style.display === 'none') {
+                answer.style.display = 'block';
+                button.textContent = 'Hide Answer';
+            } else {
+                answer.style.display = 'none';
+                button.textContent = 'Show Answer';
+            }
+        }
+    </script> 
+
+  </div>
+  <!-- ===== PAGE 1: Proofs ===== -->
+  <div id="page2" class="page">
     <h2>Proof Methods</h2>
     <p>Can you prove it?</p>
 
@@ -172,7 +725,7 @@ Disprove ∀x P(x)        One counterexample
   </div>
 
   <!-- ===== PAGE 2: Big Notation — Lectures 1, 2, 3 ===== -->
-  <div id="page2" class="page">
+  <div id="page3" class="page">
     <h2>Asymptotic Notation &amp; Sorting</h2>
     <p>Every concept, definition, formula, and proof from <strong>Lectures 1–3</strong>: InsertionSort, asymptotic notation, and MergeSort / Divide-and-Conquer.</p>
 
@@ -487,7 +1040,7 @@ Poly < Exp   : nᵏ = O(aⁿ) for any a>1, k>0
   </div>
 
   <!-- ===== PAGE 3: Graph Theory / Probability Axioms ===== -->
-  <div id="page3" class="page">
+  <div id="page4" class="page">
     
 
     <!-- ════ Lecture 4: Graph Theory Foundations ════ -->
@@ -932,7 +1485,7 @@ Poly < Exp   : nᵏ = O(aⁿ) for any a>1, k>0
   </div>
 
   <!-- ===== PAGE 4: Al-Kwariz ===== -->
-  <div id="page4" class="page">
+  <div id="page5" class="page">
     
      <!-- ════ Lecture 4: Graph Representations (Al-Kwariz) ════ -->
     <h2>Graph Representations</h2>
@@ -1321,7 +1874,7 @@ RUNTIMES
   </div>
 
   <!-- ===== PAGE 5: Permutation ===== -->
-  <div id="page5" class="page">
+  <div id="page6" class="page">
     <h2>Permutation &amp;&amp; Combinatorics</h2>
     <p>Formulas for: permutation with/without repetition, identical items, and combinations.</p>
 
