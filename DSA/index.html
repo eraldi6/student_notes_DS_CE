@@ -1378,11 +1378,28 @@ RUNTIMES
 
   // Parse browser/OS from user agent
   function getOS(ua) {
-    if (/Windows/.test(ua)) return "Windows";
-    if (/Mac/.test(ua)) return "macOS";
+    if (/iPhone/.test(ua)) {
+      const v = ua.match(/OS (\d+[_\d]*) like/)?.[1]?.replace(/_/g, ".");
+      return `iOS (iPhone)${v ? " " + v : ""}`;
+    }
+    if (/iPad/.test(ua)) {
+      const v = ua.match(/OS (\d+[_\d]*) like/)?.[1]?.replace(/_/g, ".");
+      return `iOS (iPad)${v ? " " + v : ""}`;
+    }
+    if (/Android/.test(ua)) {
+      const v = ua.match(/Android ([\d.]+)/)?.[1];
+      return `Android${v ? " " + v : ""}`;
+    }
+    if (/Windows/.test(ua)) {
+      const v = ua.match(/Windows NT ([\d.]+)/)?.[1];
+      const names = { "10.0": "10/11", "6.3": "8.1", "6.2": "8", "6.1": "7" };
+      return `Windows${v ? " " + (names[v] || v) : ""}`;
+    }
+    if (/Mac/.test(ua)) {
+      const v = ua.match(/Mac OS X ([\d_]+)/)?.[1]?.replace(/_/g, ".");
+      return `macOS${v ? " " + v : ""}`;
+    }
     if (/Linux/.test(ua)) return "Linux";
-    if (/Android/.test(ua)) return "Android";
-    if (/iPhone|iPad/.test(ua)) return "iOS";
     return "Unknown";
   }
 
