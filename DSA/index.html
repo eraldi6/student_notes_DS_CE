@@ -117,11 +117,12 @@
 
 <div class="content">
 
-
   <div id="page1" class="page active">
     <h2>Exercises</h2>
-    <p>Try</p>
-
+    
+    <h3>File 1</h3>
+    <button onclick="toggleAnswer('file1', this)">Show File 1</button>
+    <div id="file1" style="display:none">
     <div>
         <h3>Question 1</h3>
         <p>
@@ -639,18 +640,927 @@ Therefore,
         <p>Therefore, for processing sizes up to \(10^8\), <strong>package B</strong> is the better practical choice, with a tie exactly at \(10^8\).</p>
     </div>
 </div>
+    </div>
+    
+    <hr>
+
+    <h3>File 2</h3>
+    <button onclick="toggleAnswer('file2', this)">Show File 2</button>
+    <div id="file2" style="display: none">
+<div>
+    <h3>Question 1</h3>
+    <p>Write an algorithm that takes as input a list of \(n\) integers in nondecreasing order and produces the list of all values that occur more than once. Estimate the worst-case complexity of your algorithm.</p>
+    <button onclick="toggleAnswer('answer17', this)">Show Answer</button>
+    <div id="answer17" style="display:none; margin-top:10px;">
+        <p>Scan the sorted list once and compare each element with the next one. Whenever two consecutive elements are equal, report the value once and skip repeated copies of it.</p>
+        <div class="code-block">
+            <span class="fn">Duplicates</span>(A)<br>
+            1&nbsp;&nbsp;D = empty list<br>
+            2&nbsp;&nbsp;i = 0<br>
+            3&nbsp;&nbsp;while i < n - 1:<br>
+            4&nbsp;&nbsp;&nbsp;&nbsp;if A[i] == A[i+1]:<br>
+            5&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;append A[i] to D<br>
+            6&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;while i < n - 1 and A[i] == A[i+1]:<br>
+            7&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i = i + 1<br>
+            8&nbsp;&nbsp;&nbsp;&nbsp;i = i + 1<br>
+            9&nbsp;&nbsp;return D
+        </div>
+        <p>The list is already sorted, so every comparison is constant time and each element is examined at most once. The worst-case complexity is \(\Theta(n)\).</p>
+    </div>
+</div>
+
 <hr>
+<div>
+    <h3>Question 2</h3>
+    <p>Write an algorithm that takes as input a list of \(n\) integers and finds the number of negative integers in the list.</p>
+    <button onclick="toggleAnswer('answer18', this)">Show Answer</button>
+    <div id="answer18" style="display:none; margin-top:10px;">
+        <p>Traverse the list once and count how many values are smaller than zero.</p>
+        <div class="code-block">
+            <span class="fn">CountNegatives</span>(A)<br>
+            1&nbsp;&nbsp;count = 0<br>
+            2&nbsp;&nbsp;for each x in A:<br>
+            3&nbsp;&nbsp;&nbsp;&nbsp;if x < 0:<br>
+            4&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;count = count + 1<br>
+            5&nbsp;&nbsp;return count
+        </div>
+        <p>Each element is checked once, so the worst-case running time is \(\Theta(n)\).</p>
+    </div>
+</div>
+
+<hr>
+<div>
+    <h3>Question 3</h3>
+    <p>Given \(n\) real numbers \(x_1,x_2,\ldots,x_n\), find the two that are closest together by: a) a brute force algorithm that finds the distance between every pair; b) sorting the numbers and computing the least number of distances needed to solve the problem.</p>
+    <button onclick="toggleAnswer('answer19', this)">Show Answer</button>
+    <div id="answer19" style="display:none; margin-top:10px;">
+        <p><strong>(a) Brute force.</strong> Compute the distance between every pair \((x_i,x_j)\) with \(i<j\), keep the smallest distance found, and remember the corresponding pair.</p>
+        <div class="code-block">
+            <span class="fn">ClosestPairBruteForce</span>(A)<br>
+            1&nbsp;&nbsp;best = +infinity<br>
+            2&nbsp;&nbsp;pair = NIL<br>
+            3&nbsp;&nbsp;for i = 0 to n - 2:<br>
+            4&nbsp;&nbsp;&nbsp;&nbsp;for j = i + 1 to n - 1:<br>
+            5&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;d = |A[i] - A[j]|<br>
+            6&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if d < best:<br>
+            7&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;best = d<br>
+            8&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pair = (A[i], A[j])<br>
+            9&nbsp;&nbsp;return pair
+        </div>
+        <p>This checks all \(inom{n}{2}\) pairs, so the worst-case complexity is \(\Theta(n^2)\).</p>
+        <p><strong>(b) Sort first.</strong> If the numbers are sorted, the closest pair must appear next to each other in sorted order. So sort the list, then compare only adjacent elements.</p>
+        <div class="code-block">
+            <span class="fn">ClosestPairSorted</span>(A)<br>
+            1&nbsp;&nbsp;sort A<br>
+            2&nbsp;&nbsp;best = +infinity<br>
+            3&nbsp;&nbsp;pair = NIL<br>
+            4&nbsp;&nbsp;for i = 0 to n - 2:<br>
+            5&nbsp;&nbsp;&nbsp;&nbsp;d = |A[i] - A[i+1]|<br>
+            6&nbsp;&nbsp;&nbsp;&nbsp;if d < best:<br>
+            7&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;best = d<br>
+            8&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pair = (A[i], A[i+1])<br>
+            9&nbsp;&nbsp;return pair
+        </div>
+        <p>Sorting takes \(O(n\log n)\), and the scan takes \(O(n)\), so the total worst-case complexity is \(\Theta(n\log n)\).</p>
+    </div>
+</div>
+
+<hr>
+<div>
+    <h3>Question 4</h3>
+    <p>Write an algorithm for locating the last occurrence of the largest number in a list of \(n\) integers. Estimate the number of comparisons used.</p>
+    <button onclick="toggleAnswer('answer20', this)">Show Answer</button>
+    <div id="answer20" style="display:none; margin-top:10px;">
+        <p>Scan the list from left to right, keeping track of the current largest value and its last position. Update the stored position whenever a new value is larger, and also when an equal value is found later in the list.</p>
+        <div class="code-block">
+            <span class="fn">LastMax</span>(A)<br>
+            1&nbsp;&nbsp;max = A[0]<br>
+            2&nbsp;&nbsp;pos = 0<br>
+            3&nbsp;&nbsp;for i = 1 to n - 1:<br>
+            4&nbsp;&nbsp;&nbsp;&nbsp;if A[i] > max:<br>
+            5&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;max = A[i]<br>
+            6&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pos = i<br>
+            7&nbsp;&nbsp;&nbsp;&nbsp;else if A[i] == max:<br>
+            8&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pos = i<br>
+            9&nbsp;&nbsp;return pos
+        </div>
+        <p>The algorithm makes one or two comparisons per element after the first, so the number of comparisons is \(\Theta(n)\).</p>
+    </div>
+</div>
+
+<hr>
+<div>
+    <h3>Question 5</h3>
+    <p>Write an algorithm that returns the largest and second-largest values in a list of length \(n\). Assume that \(n>1\) and all values are distinct. Estimate the number of comparisons used in theta notation.</p>
+    <button onclick="toggleAnswer('answer21', this)">Show Answer</button>
+    <div id="answer21" style="display:none; margin-top:10px;">
+        <p>Keep track of the largest and second-largest values while scanning the list once. Each new element is compared with the current largest, and possibly with the second-largest.</p>
+        <div class="code-block">
+            <span class="fn">TwoLargest</span>(A)<br>
+            1&nbsp;&nbsp;if A[0] > A[1]:<br>
+            2&nbsp;&nbsp;&nbsp;&nbsp;max1 = A[0]; max2 = A[1]<br>
+            3&nbsp;&nbsp;else:<br>
+            4&nbsp;&nbsp;&nbsp;&nbsp;max1 = A[1]; max2 = A[0]<br>
+            5&nbsp;&nbsp;for i = 2 to n - 1:<br>
+            6&nbsp;&nbsp;&nbsp;&nbsp;if A[i] > max1:<br>
+            7&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;max2 = max1<br>
+            8&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;max1 = A[i]<br>
+            9&nbsp;&nbsp;&nbsp;&nbsp;else if A[i] > max2:<br>
+            10&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;max2 = A[i]<br>
+            11&nbsp;&nbsp;return (max1, max2)
+        </div>
+        <p>After the initial comparison, each of the remaining \(n-2\) elements uses at most 2 comparisons. So the total is \(\Theta(n)\), more precisely at most \(2n-3\) comparisons.</p>
+    </div>
+</div>
+
+<hr>
+<div>
+    <h3>Question 6</h3>
+    <p>Write an algorithm that returns the smallest and second-smallest values in a list of length \(n\). Assume that \(n>1\) and the values are distinct. Estimate the number of comparisons used.</p>
+    <button onclick="toggleAnswer('answer22', this)">Show Answer</button>
+    <div id="answer22" style="display:none; margin-top:10px;">
+        <p>This is symmetric to Question 5. Keep track of the smallest and second-smallest values while scanning the list once.</p>
+        <div class="code-block">
+            <span class="fn">TwoSmallest</span>(A)<br>
+            1&nbsp;&nbsp;if A[0] < A[1]:<br>
+            2&nbsp;&nbsp;&nbsp;&nbsp;min1 = A[0]; min2 = A[1]<br>
+            3&nbsp;&nbsp;else:<br>
+            4&nbsp;&nbsp;&nbsp;&nbsp;min1 = A[1]; min2 = A[0]<br>
+            5&nbsp;&nbsp;for i = 2 to n - 1:<br>
+            6&nbsp;&nbsp;&nbsp;&nbsp;if A[i] < min1:<br>
+            7&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;min2 = min1<br>
+            8&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;min1 = A[i]<br>
+            9&nbsp;&nbsp;&nbsp;&nbsp;else if A[i] < min2:<br>
+            10&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;min2 = A[i]<br>
+            11&nbsp;&nbsp;return (min1, min2)
+        </div>
+        <p>The running time is \(\Theta(n)\), and the number of comparisons is also linear, at most \(2n-3\).</p>
+    </div>
+</div>
+
+<hr>
+<div>
+    <h3>Question 7</h3>
+    <p>Write an algorithm to determine whether a bit string contains a pair of consecutive zeros. How many comparisons does the algorithm use?</p>
+    <button onclick="toggleAnswer('answer23', this)">Show Answer</button>
+    <div id="answer23" style="display:none; margin-top:10px;">
+        <p>Scan the bit string once and check each adjacent pair of bits. Stop as soon as two consecutive zeros are found.</p>
+        <div class="code-block">
+            <span class="fn">HasConsecutiveZeros</span>(S)<br>
+            1&nbsp;&nbsp;for i = 0 to n - 2:<br>
+            2&nbsp;&nbsp;&nbsp;&nbsp;if S[i] == 0 and S[i+1] == 0:<br>
+            3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return true<br>
+            4&nbsp;&nbsp;return false
+        </div>
+        <p>In the worst case, the algorithm compares each adjacent pair once, so it uses \(\Theta(n)\) comparisons.</p>
+    </div>
+</div>
+
+<hr>
+<div>
+    <h3>Question 8</h3>
+    <p>Suppose that a list contains integers in order of largest to smallest, and an integer can appear repeatedly in this list. Write an algorithm that locates all occurrences of an integer \(x\) in the list.</p>
+    <button onclick="toggleAnswer('answer24', this)">Show Answer</button>
+    <div id="answer24" style="display:none; margin-top:10px;">
+        <p>Because the list is sorted in nonincreasing order, all copies of \(x\) appear in one contiguous block. Find the first and last position of \(x\) with binary search, then report all indices in between.</p>
+        <div class="code-block">
+            <span class="fn">AllOccurrences</span>(A, x)<br>
+            1&nbsp;&nbsp;left = first index of x in A using binary search<br>
+            2&nbsp;&nbsp;if left = NIL: return empty list<br>
+            3&nbsp;&nbsp;right = last index of x in A using binary search<br>
+            4&nbsp;&nbsp;return [left, left+1, ..., right]
+        </div>
+        <p>Finding the endpoints takes \(\Theta(\log n)\) time, and reporting the output takes time proportional to the number of occurrences.</p>
+    </div>
+</div>
+
+<hr>
+<div>
+    <h3>Question 9</h3>
+    <p>Write an algorithm for determining whether a string of \(n\) characters is a palindrome.</p>
+    <button onclick="toggleAnswer('answer25', this)">Show Answer</button>
+    <div id="answer25" style="display:none; margin-top:10px;">
+        <p>Compare the first and last characters, then the second and second-last characters, and so on.</p>
+        <div class="code-block">
+            <span class="fn">IsPalindrome</span>(S)<br>
+            1&nbsp;&nbsp;for i = 0 to floor((n-1)/2):<br>
+            2&nbsp;&nbsp;&nbsp;&nbsp;if S[i] != S[n-1-i]:<br>
+            3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return false<br>
+            4&nbsp;&nbsp;return true
+        </div>
+        <p>The algorithm checks at most \(\lfloor n/2 
+floor\) pairs of characters, so the running time is \(\Theta(n)\).</p>
+    </div>
+</div>
+
+<hr>
+<div>
+    <h3>Question 10</h3>
+    <p>Write an algorithm that finds all equal pairs of sums of two terms of a sequence of \(n\) numbers and determine the worst-case complexity of your algorithm.</p>
+    <button onclick="toggleAnswer('answer26', this)">Show Answer</button>
+    <div id="answer26" style="display:none; margin-top:10px;">
+        <p>Compute all pairwise sums, store each sum with the pair that produced it, sort the sums, and then scan for equal adjacent sums.</p>
+        <div class="code-block">
+            <span class="fn">EqualPairSums</span>(A)<br>
+            1&nbsp;&nbsp;L = empty list<br>
+            2&nbsp;&nbsp;for i = 0 to n - 2:<br>
+            3&nbsp;&nbsp;&nbsp;&nbsp;for j = i + 1 to n - 1:<br>
+            4&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;append (A[i] + A[j], i, j) to L<br>
+            5&nbsp;&nbsp;sort L by sum<br>
+            6&nbsp;&nbsp;scan L for equal adjacent sums and report matching pairs
+        </div>
+        <p>There are \(inom{n}{2}=\Theta(n^2)\) sums. Sorting them costs \(O(n^2\log n)\), so the worst-case complexity is \(\Theta(n^2\log n)\).</p>
+    </div>
+</div>
+
+<hr>
+<div>
+    <h3>Question 11</h3>
+    <p>Write an algorithm that determines whether a function from a finite set of integers to another finite set of integers is onto.</p>
+    <button onclick="toggleAnswer('answer27', this)">Show Answer</button>
+    <div id="answer27" style="display:none; margin-top:10px;">
+        <p>A function is onto if every element in the codomain is hit by at least one input. Mark each output value that appears, then verify that all codomain elements were marked.</p>
+        <div class="code-block">
+            <span class="fn">IsOnto</span>(f, X, Y)<br>
+            1&nbsp;&nbsp;mark all elements of Y as false<br>
+            2&nbsp;&nbsp;for each x in X:<br>
+            3&nbsp;&nbsp;&nbsp;&nbsp;mark f(x) as true<br>
+            4&nbsp;&nbsp;for each y in Y:<br>
+            5&nbsp;&nbsp;&nbsp;&nbsp;if y is unmarked: return false<br>
+            6&nbsp;&nbsp;return true
+        </div>
+        <p>If the sets are finite and membership/marking is constant time, the running time is \(\Theta(|X|+|Y|)\).</p>
+    </div>
+</div>
+
+<hr>
+<div>
+    <h3>Question 12</h3>
+    <p>Write an algorithm that determines whether a function from a finite set to another finite set is one-to-one.</p>
+    <button onclick="toggleAnswer('answer28', this)">Show Answer</button>
+    <div id="answer28" style="display:none; margin-top:10px;">
+        <p>A function is one-to-one if no two distinct inputs map to the same output. Mark the outputs as you scan the domain; if an output is seen twice, the function is not one-to-one.</p>
+        <div class="code-block">
+            <span class="fn">IsOneToOne</span>(f, X, Y)<br>
+            1&nbsp;&nbsp;mark all elements of Y as false<br>
+            2&nbsp;&nbsp;for each x in X:<br>
+            3&nbsp;&nbsp;&nbsp;&nbsp;if f(x) is already marked: return false<br>
+            4&nbsp;&nbsp;&nbsp;&nbsp;mark f(x)<br>
+            5&nbsp;&nbsp;return true
+        </div>
+        <p>The running time is \(\Theta(|X|)\) if marking and lookup are constant time.</p>
+    </div>
+</div>
+
+<hr>
+<div>
+    <h3>Question 13</h3>
+    <p>Two strings are anagrams if each can be formed from the other by rearranging its characters. Write an algorithm to determine whether two strings are anagrams: a) by first finding character frequencies; b) by first sorting the characters in both strings.</p>
+    <button onclick="toggleAnswer('answer29', this)">Show Answer</button>
+    <div id="answer29" style="display:none; margin-top:10px;">
+        <p><strong>(a) Frequency counting.</strong> Count how many times each character appears in both strings, then compare the frequency tables.</p>
+        <div class="code-block">
+            <span class="fn">AnagramByCount</span>(A, B)<br>
+            1&nbsp;&nbsp;if lengths differ: return false<br>
+            2&nbsp;&nbsp;count frequencies of A<br>
+            3&nbsp;&nbsp;count frequencies of B<br>
+            4&nbsp;&nbsp;return frequency tables are equal
+        </div>
+        <p>If the alphabet size is fixed, this method runs in \(\Theta(n)\).</p>
+        <p><strong>(b) Sorting.</strong> Sort both strings and compare the results.</p>
+        <div class="code-block">
+            <span class="fn">AnagramBySort</span>(A, B)<br>
+            1&nbsp;&nbsp;if lengths differ: return false<br>
+            2&nbsp;&nbsp;sort A<br>
+            3&nbsp;&nbsp;sort B<br>
+            4&nbsp;&nbsp;return A = B
+        </div>
+        <p>Sorting dominates, so the running time is \(\Theta(n\log n)\).</p>
+    </div>
+</div>
+
+<hr>
+<div>
+    <h3>Question 14</h3>
+    <p>Write an algorithm that finds the maximum sum of consecutive values in a sequence of real numbers. If all the numbers are negative, the maximum sum is defined to be 0.</p>
+    <button onclick="toggleAnswer('answer30', this)">Show Answer</button>
+    <div id="answer30" style="display:none; margin-top:10px;">
+        <p>This is the classic maximum subarray problem. Use a running sum that is reset to 0 whenever it becomes negative.</p>
+        <div class="code-block">
+            <span class="fn">MaxConsecutiveSum</span>(A)<br>
+            1&nbsp;&nbsp;best = 0<br>
+            2&nbsp;&nbsp;current = 0<br>
+            3&nbsp;&nbsp;for each x in A:<br>
+            4&nbsp;&nbsp;&nbsp;&nbsp;current = max(0, current + x)<br>
+            5&nbsp;&nbsp;&nbsp;&nbsp;best = max(best, current)<br>
+            6&nbsp;&nbsp;return best
+        </div>
+        <p>Each element is processed once with constant work, so the worst-case complexity is \(\Theta(n)\).</p>
+    </div>
+</div>
+
+<hr>
+<div>
+    <h3>Question 15</h3>
+    <p>Write an algorithm that finds the closest pair of integers in a sequence of \(n\) integers, and determine the worst-case complexity of your algorithm. Hint: sort the sequence first.</p>
+    <button onclick="toggleAnswer('answer31', this)">Show Answer</button>
+    <div id="answer31" style="display:none; margin-top:10px;">
+        <p>Sort the integers, then compare only adjacent values. In a sorted list, the closest pair must be adjacent.</p>
+        <div class="code-block">
+            <span class="fn">ClosestPairIntegers</span>(A)<br>
+            1&nbsp;&nbsp;sort A<br>
+            2&nbsp;&nbsp;best = +infinity<br>
+            3&nbsp;&nbsp;pair = NIL<br>
+            4&nbsp;&nbsp;for i = 0 to n - 2:<br>
+            5&nbsp;&nbsp;&nbsp;&nbsp;d = A[i+1] - A[i]<br>
+            6&nbsp;&nbsp;&nbsp;&nbsp;if d < best:<br>
+            7&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;best = d<br>
+            8&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pair = (A[i], A[i+1])<br>
+            9&nbsp;&nbsp;return pair
+        </div>
+        <p>Sorting takes \(O(n\log n)\), and the scan takes \(O(n)\), so the worst-case complexity is \(\Theta(n\log n)\).</p>
+    </div>
+</div>
+
+<hr>
+<div>
+    <h3>Question 16</h3>
+    <p>Write an algorithm whose input is an array \(A\) of length \(n\) and a value \(x\). The algorithm returns true if a distinct pair in the array sums to \(x\), and false otherwise.</p>
+    <button onclick="toggleAnswer('answer32', this)">Show Answer</button>
+    <div id="answer32" style="display:none; margin-top:10px;">
+        <p>Sort the array, then use two pointers: one at the beginning and one at the end. Move the pointers inward depending on whether the current sum is too small or too large.</p>
+        <div class="code-block">
+            <span class="fn">HasPairSum</span>(A, x)<br>
+            1&nbsp;&nbsp;sort A<br>
+            2&nbsp;&nbsp;i = 0; j = n - 1<br>
+            3&nbsp;&nbsp;while i < j:<br>
+            4&nbsp;&nbsp;&nbsp;&nbsp;s = A[i] + A[j]<br>
+            5&nbsp;&nbsp;&nbsp;&nbsp;if s == x: return true<br>
+            6&nbsp;&nbsp;&nbsp;&nbsp;if s < x: i = i + 1<br>
+            7&nbsp;&nbsp;&nbsp;&nbsp;else: j = j - 1<br>
+            8&nbsp;&nbsp;return false
+        </div>
+        <p>The two-pointer scan takes \(\Theta(n)\), and sorting dominates, so the worst-case complexity is \(\Theta(n\log n)\).</p>
+    </div>
+</div>
+
+<hr>
+<div>
+    <h3>Question 17</h3>
+    <p>Give an efficient algorithm to compute the union of sets \(A\) and \(B\), where \(n=\max\{|A|,|B|\}\). The output should be an array of distinct elements that form the union of the sets.</p>
+    <button onclick="toggleAnswer('answer33', this)">Show Answer</button>
+    <div id="answer33" style="display:none; margin-top:10px;">
+        <p><strong>(a) Unsorted arrays.</strong> Put all elements of both arrays into one list, sort it, then remove duplicates in one scan.</p>
+        <div class="code-block">
+            <span class="fn">UnionUnsorted</span>(A, B)<br>
+            1&nbsp;&nbsp;L = A followed by B<br>
+            2&nbsp;&nbsp;sort L<br>
+            3&nbsp;&nbsp;scan L and keep only the first copy of each value<br>
+            4&nbsp;&nbsp;return the distinct values
+        </div>
+        <p>Sorting dominates, so the worst-case complexity is \(O(n\log n)\).</p>
+        <p><strong>(b) Sorted arrays.</strong> Merge the two sorted arrays just like merge in MergeSort, skipping duplicates as you go.</p>
+        <div class="code-block">
+            <span class="fn">UnionSorted</span>(A, B)<br>
+            1&nbsp;&nbsp;i = 0; j = 0; U = empty list<br>
+            2&nbsp;&nbsp;while i < |A| and j < |B|:<br>
+            3&nbsp;&nbsp;&nbsp;&nbsp;append the smaller of A[i], B[j] if it is not a duplicate<br>
+            4&nbsp;&nbsp;&nbsp;&nbsp;advance the pointer(s)
+        </div>
+        <p>Each element is processed at most once, so the running time is \(\Theta(n)\).</p>
+    </div>
+</div>
+    </div>
+    
+    <hr>
+
+    <h3>Graphs</h3>
+    <button onclick="toggleAnswer('graphs', this)">Show Graphs</button>
+    <div id="graphs" style="display: none">
+  <hr>
+<div>
+    <h3>Question 1</h3>
+    <p>Prove or disprove: If every vertex of a graph has degree 2, then the graph is a cycle.</p>
+    <button onclick="toggleAnswer('answer34', this)">Show Answer</button>
+    <div id="answer34" style="display:none; margin-top:10px;">
+        <p><strong>False.</strong> A counterexample is the disjoint union of two cycles, for example two triangles. Every vertex has degree 2, but the graph is not a single cycle because it is disconnected.</p>
+    </div>
+</div>
+
+<hr>
+<div>
+    <h3>Question 2</h3>
+    <p>Determine which pair of graphs below are isomorphic, presenting the proof by testing the smallest possible number of pairs.</p>
+    <button onclick="toggleAnswer('answer35', this)">Show Answer</button>
+    <div id="answer35" style="display:none; margin-top:10px;">
+        <p>The graphs are all 4-regular on 7 vertices, so it is easier to compare their complements. The complements are 2-regular, so each complement is a disjoint union of cycles. Testing the smallest number of pairs means comparing cycle structure of the complements; two graphs are isomorphic if and only if their complements are isomorphic.</p>
+        <p>The isomorphic pair is the one whose complement has the same decomposition into cycles. Use the complement graphs to distinguish the others with minimal work.</p>
+    </div>
+</div>
+
+<hr>
+<div>
+    <h3>Question 3</h3>
+    <p>Let \(u\) and \(v\) be adjacent vertices in a graph \(G\) of order \(n\). Prove that the edge \(uv\) belongs to at least \(\deg(u)+\deg(v)-n\) triangles in \(G\).</p>
+    <button onclick="toggleAnswer('answer36', this)">Show Answer</button>
+    <div id="answer36" style="display:none; margin-top:10px;">
+        <p>If the edge \(uv\) belongs to a triangle, then the third vertex must be a common neighbour of \(u\) and \(v\). So the number of triangles containing \(uv\) is exactly the number of common neighbours of \(u\) and \(v\).</p>
+        <p>Let \(N(u)\) and \(N(v)\) be the neighbourhoods of \(u\) and \(v\). Then</p>
+        \[
+        n \ge |N(u) \cup N(v)| = |N(u)| + |N(v)| - |N(u) \cap N(v)|.
+        \]
+        <p>Therefore,</p>
+        \[
+        |N(u) \cap N(v)| \ge \deg(u) + \deg(v) - n.
+        \]
+        <p>Hence, the edge \(uv\) belongs to at least \(\deg(u)+\deg(v)-n\) triangles.</p>
+    </div>
+</div>
+
+<hr>
+<div>
+    <h3>Question 4</h3>
+    <p>In a group of 100 people, each one knows at least 67 other people. Prove that there exist 4 people who are mutual friends.</p>
+    <button onclick="toggleAnswer('answer37', this)">Show Answer</button>
+    <div id="answer37" style="display:none; margin-top:10px;">
+        <p>Model the group as a graph on 100 vertices, where two vertices are adjacent if the corresponding people are friends. Every vertex has degree at least 67.</p>
+        <p>Pick a vertex \(x\), and let \(N(x)\) be its neighbourhood. Since \(|N(x)|\ge 67\), any neighbour \(y\in N(x)\) has at least</p>
+        \[
+        |N(x) \cap N(y)| \ge 67 - (100-67) = 34
+        \]
+        common neighbours with \(x\).</p>
+        <p>Now pick \(A\in N(x)\cap N(y)\). Among the 34 common neighbours of \(x\) and \(y\), vertex \(A\) has degree at least 67, so it must be adjacent to one of the other common neighbours \(B\). Thus \(x,y,A,B\) are pairwise adjacent, giving a clique of size 4.</p>
+    </div>
+</div>
+
+<hr>
+<div>
+    <h3>Question 5</h3>
+    <p>There are 9 mathematicians in a meeting. Each can speak at most three languages and among any three of them at least two can speak a common language. Prove that there are three mathematicians who speak a common language.</p>
+    <button onclick="toggleAnswer('answer38', this)">Show Answer</button>
+    <div id="answer38" style="display:none; margin-top:10px;">
+        <p>Construct a graph whose vertices are the mathematicians, with an edge between two vertices if those two mathematicians speak a common language.</p>
+        <p>The hypothesis says that among any three vertices, at least two are adjacent. If every vertex had degree at most 3, choose any vertex \(x\). Then at least 5 vertices are non-adjacent to \(x\). Pick one of them, \(y\). Since \(y\) also has degree at most 3, there is still a third vertex \(z\) that is non-adjacent to both \(x\) and \(y\). Then \(x,y,z\) would be pairwise non-adjacent, contradiction.</p>
+        <p>So some vertex has degree at least 4. Since each mathematician speaks at most 3 languages, that vertex must share one language with at least two of its neighbours. Hence three mathematicians speak a common language.</p>
+    </div>
+</div>
+
+<hr>
+<div>
+    <h3>Question 6</h3>
+    <p>There are 500 participants in a conference. Every participant has 400 friends. Is it possible to find a group of 6 mutual friends?</p>
+    <button onclick="toggleAnswer('answer39', this)">Show Answer</button>
+    <div id="answer39" style="display:none; margin-top:10px;">
+        <p><strong>No.</strong> Model the participants by a graph whose vertices are people, and join two vertices if the corresponding people are mutual strangers. Then every participant has 499 - 400 = 99 strangers, so the graph is 99-regular on 500 vertices.</p>
+        <p>Such a graph can be a disjoint union of 5 copies of \(K_{100}\). In the friendship graph, that means the people are split into 5 groups of 100 mutual friends, and no larger clique is forced. So one can find at most 5 vertices corresponding to mutual friends in this construction, not 6.</p>
+    </div>
+</div>
+
+<hr>
+<div>
+    <h3>Question 7</h3>
+    <p>Prove that the size of a bipartite graph of order \(n\) is at most \(n^2/4\).</p>
+    <button onclick="toggleAnswer('answer40', this)">Show Answer</button>
+    <div id="answer40" style="display:none; margin-top:10px;">
+        <p>Let the bipartite graph be \(G=(X\cup Y,E)\), with \(|X|=m\) and \(|Y|=n-m\). The maximum number of edges occurs for the complete bipartite graph, so</p>
+        \[
+        |E| \le m(n-m).
+        \]
+        <p>The product \(m(n-m)\) is maximized when the parts are as equal as possible, so its maximum is \(n^2/4\). Therefore,</p>
+        \[
+        |E| \le \frac{n^2}{4}.
+        \]
+    </div>
+</div>
+
+<hr>
+<div>
+    <h3>Question 8</h3>
+    <p>Let \(G\) be a graph with order 9 so that the degree of each vertex is either 5 or 6. Prove that there are either at least 5 vertices of degree 6 or at least 6 vertices of degree 5.</p>
+    <button onclick="toggleAnswer('answer41', this)">Show Answer</button>
+    <div id="answer41" style="display:none; margin-top:10px;">
+        <p>Let \(k\) be the number of vertices of degree 5. By the Handshaking Lemma, the sum of all degrees is even, so \(5k + 6(9-k) = 54 - k\) must be even. Hence \(k\) is even.</p>
+        <p>Since the graph has 9 vertices, \(k\in\{0,2,4,6,8\}\). If \(k\ge 6\), then there are at least 6 vertices of degree 5. If \(k\le 4\), then there are at least 5 vertices of degree 6. In either case, the claim holds.</p>
+    </div>
+</div>
+
+<hr>
+<div>
+    <h3>Question 9</h3>
+    <p>Mr. and Mrs. Landau invite four other married couples for dinner. After the introductions, Mr. Landau asks the nine people how many hands they shook, and each answers with a different number. How many hands did Mrs. Landau shake?</p>
+    <button onclick="toggleAnswer('answer42', this)">Show Answer</button>
+    <div id="answer42" style="display:none; margin-top:10px;">
+        <p>Model the situation by a graph where each person is a vertex and each handshake is an edge. No one shakes hands with themselves or their spouse, so the possible numbers are \(0,1,2,3,4,5,6,7,8\), all distinct.</p>
+        <p>Because the answers are all different, they must be exactly these nine numbers. The pairing property of married couples implies that the counts add to 8 within each couple: \((0,8), (1,7), (2,6), (3,5)\), leaving \(4\) for Mrs. Landau.</p>
+        <p>So Mrs. Landau shook <strong>4 hands</strong>.</p>
+    </div>
+</div>
+
+<hr>
+<div>
+    <h3>Question 10</h3>
+    <p>Prove that every graph \(G\) with minimum degree \(\delta(G) \ge 3\) contains a cycle of even length.</p>
+    <button onclick="toggleAnswer('answer43', this)">Show Answer</button>
+    <div id="answer43" style="display:none; margin-top:10px;">
+        <p>Take a maximal path \(P=v_1v_2\cdots v_k\) in \(G\). Since the path is maximal, every neighbour of \(v_1\) lies on the path. Because \(\delta(G)\ge 3\), vertex \(v_1\) has at least two neighbours on the path other than \(v_2\).</p>
+        <p>Let those neighbours be \(v_i\) and \(v_j\) with \(i<j\). If one of \(i,j\) is odd, then the subpath from \(v_1\) to that vertex has odd length, and adding the edge back to \(v_1\) gives an even cycle. If both are even, then the subpath from \(v_i\) to \(v_j\) has even length, and adding the two edges to \(v_1\) again gives an even cycle.</p>
+        <p>Thus \(G\) contains an even cycle.</p>
+    </div>
+</div>
+
+<hr>
+<div>
+    <h3>Question 11</h3>
+    <p>A graph has order 13 and 3 connected components. Prove that one of the components has at least 5 vertices.</p>
+    <button onclick="toggleAnswer('answer44', this)">Show Answer</button>
+    <div id="answer44" style="display:none; margin-top:10px;">
+        <p>Suppose all three components had at most 4 vertices. Then the total number of vertices would be at most \(4+4+4=12\), contradicting that the graph has order 13.</p>
+        <p>Therefore, at least one component must have at least 5 vertices.</p>
+    </div>
+</div>
+
+<hr>
+<div>
+    <h3>Question 12</h3>
+    <p>Let \(G\) be a graph of order \(n\) that has exactly two connected components, both of them complete graphs. Prove that the size of \(G\) is at least \((n^2-2n)/4\).</p>
+    <button onclick="toggleAnswer('answer45', this)">Show Answer</button>
+    <div id="answer45" style="display:none; margin-top:10px;">
+        <p>Let the two complete components have orders \(n_1\) and \(n_2\), with \(n_1+n_2=n\). Then</p>
+        \[
+        |E| = \binom{n_1}{2} + \binom{n_2}{2} = \frac{n_1(n_1-1)}{2} + \frac{n_2(n_2-1)}{2}.
+        \]
+        <p>Using \(n_2=n-n_1\), this is minimized when the two components are as balanced as possible. Since \(n_1n_2 \le n^2/4\), we get</p>
+        \[
+        |E| = \frac{n^2 - n - 2n_1n_2}{2} \ge \frac{n^2 - n - 2(n^2/4)}{2} = \frac{n^2 - 2n}{4}.
+        \]
+        <p>So the stated lower bound holds.</p>
+    </div>
+</div>
+
+<hr>
+<div>
+    <h3>Question 13</h3>
+    <p>Let \(G\) be a graph of order \(n\) with exactly \(k\) connected components. Prove that the size of \(G\) is larger than or equal to \(n-k\).</p>
+    <button onclick="toggleAnswer('answer46', this)">Show Answer</button>
+    <div id="answer46" style="display:none; margin-top:10px;">
+        <p>Each connected component with \(n_i\) vertices has at least \(n_i-1\) edges, because every connected graph has at least a spanning tree.</p>
+        <p>If the component sizes are \(n_1,n_2,\ldots,n_k\), then</p>
+        \[
+        |E| \ge (n_1-1)+(n_2-1)+\cdots+(n_k-1) = (n_1+
+        n_2+
+        \cdots+n_k) - k = n-k.
+        \]
+        <p>Hence \(|E| \ge n-k\).</p>
+    </div>
+</div>
+
+<hr>
+<div>
+    <h3>Question 14</h3>
+    <p>Let \(G\) be a graph of order 1001 so that each vertex has degree \(\ge 500\). Prove that \(G\) has diameter \(\le 2\).</p>
+    <button onclick="toggleAnswer('answer47', this)">Show Answer</button>
+    <div id="answer47" style="display:none; margin-top:10px;">
+        <p>It suffices to show that any two non-adjacent vertices have a common neighbour. Let \(u\) and \(v\) be non-adjacent. Then \(|N(u)|\ge 500\) and \(|N(v)|\ge 500\).</p>
+        <p>Since the graph has 1001 vertices and \(u,v\) are not adjacent, the set \(V\setminus\{u,v\}\) has 999 vertices. By the pigeonhole principle,</p>
+        \[
+        |N(u)\cap N(v)| \ge 500 + 500 - 999 = 1.
+        \]
+        <p>So \(u\) and \(v\) have a common neighbour, hence their distance is at most 2. Therefore the diameter is at most 2.</p>
+    </div>
+</div>
+
+<hr>
+<div>
+    <h3>Question 15</h3>
+    <p>Prove that if \(G\) is a graph in which every vertex has degree at least \(k\), then \(G\) contains a path of length at least \(k\). If \(k\ge 2\), then \(G\) also contains a cycle of length at least \(k+1\).</p>
+    <button onclick="toggleAnswer('answer48', this)">Show Answer</button>
+    <div id="answer48" style="display:none; margin-top:10px;">
+        <p>Take a longest path \(P=v_0v_1\cdots v_t\). Since it is longest, all neighbours of \(v_0\) must lie on this path. Because \(\deg(v_0)\ge k\), the path must have at least \(k+1\) vertices, so its length is at least \(k\).</p>
+        <p>If \(k\ge 2\), take the farthest neighbour of \(v_0\) along the path. The subpath from \(v_0\) to that neighbour has length at least \(k"); adding the edge back to \(v_0\) forms a cycle of length at least \(k+1\).</p>
+    </div>
+</div>
+
+<hr>
+<div>
+    <h3>Question 16</h3>
+    <p>A cut-edge (bridge) in a graph is an edge whose deletion increases the number of connected components. Prove that an edge of a graph is a bridge if and only if it belongs to no cycle.</p>
+    <button onclick="toggleAnswer('answer49', this)">Show Answer</button>
+    <div id="answer49" style="display:none; margin-top:10px;">
+        <p><strong>Only if.</strong> If an edge \(e=uv\) lies on a cycle, then removing \(e\) still leaves a path from \(u\) to \(v\) along the rest of the cycle. So deleting \(e\) cannot disconnect the graph. Therefore, a bridge cannot belong to any cycle.</p>
+        <p><strong>If.</strong> Suppose \(e=uv\) does not belong to any cycle. If deleting \(e\) did not disconnect the graph, then there would still be a path from \(u\) to \(v\) in \(G-e\). Together with \(e\), that path would form a cycle containing \(e\), contradiction. Thus deleting \(e\) disconnects the graph, so \(e\) is a bridge.</p>
+    </div>
+</div>
+
+<hr>
+<div>
+    <h3>Question 17</h3>
+    <p>For \(n\ge 3\), let \(G\) be an \(n\)-vertex graph such that every graph obtained by deleting one vertex is a tree. Determine the number of edges in \(G\) and use this to determine \(G\).</p>
+    <button onclick="toggleAnswer('answer50', this)">Show Answer</button>
+    <div id="answer50" style="display:none; margin-top:10px;">
+        <p>If \(G-v\) is a tree for every vertex \(v\), then \(G-v\) has \(n-1\) vertices and \(n-2\) edges. So for every vertex \(v\), the number of edges incident to \(v\) is the same, namely \(|E(G)|-(n-2)\).</p>
+        <p>Summing over all vertices and using the Handshaking Lemma gives that every vertex has the same degree. The graph must be 2-regular. Since deleting any vertex leaves a connected graph, \(G\) itself is connected. A connected 2-regular graph is a cycle.</p>
+        <p>Therefore, \(G\) is a cycle and its number of edges is \(n\).</p>
+    </div>
+</div>
+
+<hr>
+<div>
+    <h3>Question 18</h3>
+    <p>Show that a graph is connected if and only if for every bipartition of the set of its vertices there exists at least one edge with its ends in each subset of the bipartition.</p>
+    <button onclick="toggleAnswer('answer51', this)">Show Answer</button>
+    <div id="answer51" style="display:none; margin-top:10px;">
+        <p>If a graph is disconnected, let the bipartition separate one connected component from the rest. Then there is no edge crossing the partition.</p>
+        <p>Conversely, if a graph is connected, take any bipartition of the vertices into two nonempty sets. Since the graph has a path between any vertex in one part and any vertex in the other, some edge of that path must cross from one part to the other. Hence at least one crossing edge exists.</p>
+    </div>
+</div>
+
+<hr>
+<div>
+    <h3>Question 19</h3>
+    <p>Show that if a bipartite graph \(G=(X\cup Y,E)\) is \(k\)-regular, then it is balanced, that is, \(|X|=|Y|\).</p>
+    <button onclick="toggleAnswer('graphs answer52', this)">Show Answer</button>
+    <div id="graphs answer52" style="display:none; margin-top:10px;">
+        <p>Count the edges in two ways. Since the graph is \(k\)-regular, the sum of degrees in \(X\) is \(k|X|\), and this equals the number of edges. Similarly, the sum of degrees in \(Y\) is \(k|Y|\), and this also equals the number of edges.</p>
+        <p>Therefore, \(k|X| = k|Y|\). Since \(k>0\), it follows that \(|X|=|Y|\). So the bipartite graph is balanced.</p>
+    </div>
+</div>
+    </div>
+    
+    <hr>
+
+    <h3>Max Flow Applications</h3>
+    <button onclick="toggleAnswer('maxflow', this)">Show MaxFlow</button>
+    <div id="maxflow" style="display: none">
+    <hr>
+    <div>
+        <h3>Question 1</h3>
+        <p>Several families go out to dinner together. They would like to sit at tables so that no two members of the same family are at the same table. There are \(p\) families, the \(i\)-th family has \(p_i\) members. There are \(t\) tables, the \(j\)-th table has seating capacity \(t_j\). Show how to find a satisfying assignment of people to tables in polynomial time.</p>
+        <button onclick="toggleAnswer('answer53', this)">Show Answer</button>
+        <div id="answer53" style="display:none; margin-top:10px;">
+            <p>Model this as a max-flow problem. Build the following flow network:</p>
+            <ul>
+                <li>A <strong>source</strong> \(s\).</li>
+                <li>One node \(F_i\) for each family \(i\), with edge \(s \to F_i\) of capacity \(p_i\) (total members of family \(i\)).</li>
+                <li>One node \(T_j\) for each table \(j\), with edge \(T_j \to t\) (the sink) of capacity \(t_j\) (seating capacity of table \(j\)).</li>
+                <li>An edge \(F_i \to T_j\) of capacity <strong>1</strong> for every family \(i\) and table \(j\). This enforces that at most one member of any family sits at each table.</li>
+                <li>A <strong>sink</strong> \(t\).</li>
+            </ul>
+            <p>A valid seating assignment exists if and only if the maximum flow in this network equals \(\sum_i p_i\) (the total number of people). Max-flow runs in polynomial time, so the algorithm is polynomial.</p>
+        </div>
+    </div>
+
+    <hr>
 
     <div>
         <h3>Question 2</h3>
+        <p>You are given an \(N\times N\) matrix \(A\) with non-negative entries whose row and column sums are all integers. Prove that there is a way of rounding each fractional entry (up or down) so that all row and column sums remain unchanged.</p>
+        <button onclick="toggleAnswer('answer54', this)">Show Answer</button>
+        <div id="answer54" style="display:none; margin-top:10px;">
+            <p>First subtract the integer part of each entry, so every entry \(a_{ij}\in[0,1)\) and the row/column sums \(k_i, k_j\) remain integers.</p>
+            <p>The goal is to round each nonzero entry to 0 or 1 so that the \(i\)-th row still sums to \(k_i\) and the \(j\)-th column still sums to \(k_j\). Build a flow network:</p>
+            <ul>
+                <li>A <strong>source</strong> \(s\) and a <strong>sink</strong> \(t\).</li>
+                <li>One row node \(R_i\) per row; add edge \(s \to R_i\) with capacity \(k_i\).</li>
+                <li>One column node \(C_j\) per column; add edge \(C_j \to t\) with capacity \(k_j\).</li>
+                <li>Add edge \(R_i \to C_j\) with capacity 1 whenever \(a_{ij} \neq 0\).</li>
+            </ul>
+            <p>Since \(\sum_i k_i = \sum_j k_j\) (both equal the total sum of the matrix), a max flow of value \(\sum_i k_i\) saturates all source edges. Each saturated edge \(R_i\to C_j\) corresponds to rounding \(a_{ij}\) up to 1; unsaturated edges are rounded down to 0. The flow conservation constraints guarantee the row and column sums are preserved.</p>
+        </div>
+    </div>
+
+    <hr>
+    <div>
+        <h3>Question 3</h3>
+        <p>There are \(n\) mobile computing clients and \(k\) base stations. A client can connect only to a base station within distance \(r\), and each base station can serve at most \(L\) clients. Design a polynomial-time algorithm to decide whether every client can be simultaneously connected to a base station.</p>
+        <button onclick="toggleAnswer('answer55', this)">Show Answer</button>
+        <div id="answer55" style="display:none; margin-top:10px;">
+            <p>Model this as a max-flow problem:</p>
+            <ul>
+                <li>A <strong>source</strong> \(s\) and a <strong>sink</strong> \(t\).</li>
+                <li>One node \(C_i\) per client; add edge \(s \to C_i\) with capacity 1.</li>
+                <li>One node \(B_j\) per base station; add edge \(B_j \to t\) with capacity \(L\).</li>
+                <li>Add edge \(C_i \to B_j\) with capacity 1 if client \(i\) is within distance \(r\) of base station \(j\).</li>
+            </ul>
+            <p>A valid assignment exists if and only if the maximum flow equals \(n\). Computing distances and building the network takes \(O(nk)\) time, and max-flow runs in polynomial time, so the overall algorithm is polynomial.</p>
+        </div>
+    </div>
+
+    <hr>
+    <div>
+        <h3>Question 4</h3>
+        <p>There are \(n\) injured people and \(k\) hospitals. Each person must be taken to a hospital reachable within half an hour, and each hospital can receive at most \(\lceil n/k \rceil\) patients. Design a polynomial-time algorithm that outputs a valid assignment if one exists, and outputs "no" otherwise.</p>
+        <button onclick="toggleAnswer('answer56', this)">Show Answer</button>
+        <div id="answer56" style="display:none; margin-top:10px;">
+            <p>Model this as a max-flow problem:</p>
+            <ul>
+                <li>A <strong>source</strong> \(s\) and a <strong>sink</strong> \(t\).</li>
+                <li>One node \(P_i\) per injured person; add edge \(s \to P_i\) with capacity 1.</li>
+                <li>One node \(H_j\) per hospital; add edge \(H_j \to t\) with capacity \(\lceil n/k \rceil\).</li>
+                <li>Add edge \(P_i \to H_j\) with capacity 1 if hospital \(j\) is reachable from person \(i\) within half an hour.</li>
+            </ul>
+            <p>A valid assignment exists if and only if the maximum flow equals \(n\). The algorithm runs in polynomial time. To recover the assignment, read off which edges \(P_i \to H_j\) carry unit flow.</p>
+        </div>
+    </div>
+
+    <hr>
+    <div>
+        <h3>Question 5</h3>
+        <p>Seven types of chemicals are to be shipped in five trucks. There are three containers of each chemical (21 total). The trucks have capacities 6, 4, 5, 4, and 3. No truck can carry more than one container of the same chemical. Determine whether it is possible to ship all 21 containers.</p>
+        <button onclick="toggleAnswer('answer57', this)">Show Answer</button>
+        <div id="answer57" style="display:none; margin-top:10px;">
+            <p>Model this as a max-flow problem:</p>
+            <ul>
+                <li>A <strong>source</strong> \(s\) and a <strong>sink</strong> \(t\).</li>
+                <li>One node \(\text{Chem}_i\) per chemical type \(i=1,\ldots,7\); add edge \(s \to \text{Chem}_i\) with capacity 3 (three containers per type).</li>
+                <li>One node \(\text{Truck}_j\) per truck \(j=1,\ldots,5\); add edge \(\text{Truck}_j \to t\) with the truck's capacity \((6,4,5,4,3)\).</li>
+                <li>Add edge \(\text{Chem}_i \to \text{Truck}_j\) with capacity 1 for all \(i,j\) (enforcing the "at most one container of the same chemical per truck" rule).</li>
+            </ul>
+            <p>The total capacity out of \(s\) is \(7\times 3=21\). The total capacity into \(t\) is \(6+4+5+4+3=22\ge 21\). A valid shipping exists if and only if the maximum flow equals 21.</p>
+            <p>Since all 7 chemicals have 3 containers each, and each truck–chemical edge has capacity 1, we need to route all 21 units. Running max-flow on this network shows the maximum flow is <strong>21</strong>, so <strong>yes, it is possible</strong> to ship all containers.</p>
+        </div>
+    </div>
+
+    <hr>
+    <div>
+        <h3>Question 6</h3>
+        <p>The Johnson, Pate, Shargaa-Sears, and Ward families (4 people each) are going to the Winter Park Sidewalk Art Festival. Cars 1–4 have capacities 4, 3, 3, 4. No car can carry more than 2 people from any one family. Formulate the problem of transporting the maximum possible number of people as a max-flow problem.</p>
+        <button onclick="toggleAnswer('answe58', this)">Show Answer</button>
+        <div id="answer58" style="display:none; margin-top:10px;">
+            <p>Build the following flow network:</p>
+            <ul>
+                <li>A <strong>source</strong> \(s\) and a <strong>sink</strong> \(t\).</li>
+                <li>One node \(F_i\) per family \(i\in\{1,2,3,4\}\); add edge \(s \to F_i\) with capacity 4 (family size).</li>
+                <li>One node \(\text{Car}_j\) per car \(j\in\{1,2,3,4\}\); add edge \(\text{Car}_j \to t\) with the car's capacity \((4,3,3,4)\).</li>
+                <li>Add edge \(F_i \to \text{Car}_j\) with capacity <strong>2</strong> for every family \(i\) and car \(j\) (enforcing the "at most 2 per family per car" rule).</li>
+            </ul>
+            <p>The maximum flow in this network gives the maximum number of people that can be transported. The total supply is \(4\times 4=16\) and the total car capacity is \(4+3+3+4=14\), so at most 14 people can travel.</p>
+            <p>Running max-flow yields a value of <strong>14</strong>, meaning all cars are filled to capacity and the maximum number of people transported is 14.</p>
+        </div>
+    </div>
+    </div>
+    
+    <hr>
+
+    <h3>Network Flow</h3>
+    <button onclick="toggleAnswer('network', this)">Show Network</button>
+    <div id="network" style="display: none">
+    <hr>
+    <div>
+        <h3>Question 1</h3>
+        <p>There is a flow network \(G=(V,E,s,t)\) with positive integer edge capacities. You run Ford-Fulkerson. It finds an augmenting path with minimum capacity 1, and after that iteration, it terminates with a final flow value of 1. Which of the following statements must be correct about \(G\)? (a) \(G\) has a single \(s\)-\(t\) path. (b) \(G\) has an edge \(e\) such that all \(s\)-\(t\) paths go through \(e\). (c) The minimum cut capacity in \(G\) is greater than 1. (d) The minimum cut capacity in \(G\) is less than 1.</p>
+        <button onclick="toggleAnswer('answer59', this)">Show Answer</button>
+        <div id="answer59" style="display:none; margin-top:10px;">
+            <p>The statement that must be correct is <strong>(b)</strong>.</p>
+            <p>If Ford-Fulkerson terminates with flow value 1 after augmenting by a path of bottleneck 1, then the max flow value is 1. By Max-Flow Min-Cut, the minimum cut capacity is also 1. Since every positive integer capacity is at least 1, the existence of a max flow of value 1 forces all \(s\)-\(t\) paths to pass through some bottleneck edge of capacity 1.</p>
+            <p>(a) need not hold: there may be many \(s\)-\(t\) paths. (c) is false because the minimum cut is exactly 1. (d) is impossible since capacities are positive integers, so the minimum cut cannot be less than 1.</p>
+        </div>
+    </div>
+
+    <hr>
+    <div>
+        <h3>Question 2</h3>
+        <p>Given a flow network \(G=(V,E,s,t)\), describe an algorithm to determine whether a function \(f:E\to\mathbb{R}_{\ge 0}\) is a maximum \(s\)-\(t\) flow in \(G\).</p>
+        <button onclick="toggleAnswer('answer60', this)">Show Answer</button>
+        <div id="answer60" style="display:none; margin-top:10px;">
+            <p>Check two things:</p>
+            <ol>
+                <li><strong>Feasibility:</strong> verify capacity constraints \(0\le f(e)\le c(e)\) for all edges and flow conservation at every vertex except \(s,t\).</li>
+                <li><strong>Optimality:</strong> build the residual network \(G_f\). If there is no augmenting path from \(s\) to \(t\), then \(f\) is maximum; otherwise it is not.</li>
+            </ol>
+            <p>Algorithmically, run BFS/DFS on the residual network. If \(t\) is unreachable from \(s\), then \(f\) is a maximum flow. This runs in polynomial time.</p>
+        </div>
+    </div>
+
+    <hr>
+    <div>
+        <h3>Question 3</h3>
+        <p>Given a flow network \(G=(V,E,s,t)\), describe an algorithm to determine whether \(G\) has a unique minimum \(s\)-\(t\) cut.</p>
+        <button onclick="toggleAnswer('answer61', this)">Show Answer</button>
+        <div id="answer61" style="display:none; margin-top:10px;">
+            <p>First compute a maximum flow and the residual graph \(G_f\). Then let \(S\) be the set of vertices reachable from \(s\) in the residual graph, and let \(T=V\setminus S\).</p>
+            <p>If there is another minimum cut, then there exists at least one vertex not fixed on either side by residual reachability, so the cut is not unique. A standard way to test uniqueness is to compute all vertices reachable from \(s\) in the residual graph and all vertices that can reach \(t\) in the reverse residual graph. If every vertex belongs to exactly one forced side, then the minimum cut is unique; otherwise it is not.</p>
+            <p>Equivalently, after computing one minimum cut, check whether the residual graph has any alternative source-side or sink-side choices that preserve the cut capacity. This is polynomial time.</p>
+        </div>
+    </div>
+
+    <hr>
+    <div>
+        <h3>Question 4</h3>
+        <p>Let \((S,T)\) and \((S',T')\) be minimum \(s\)-\(t\) cuts in some flow network \(G\). Prove that \((S\cap S',T\cup T')\) and \((S\cup S',T\cap T')\) are also minimum \(s\)-\(t\) cuts in \(G\).</p>
+        <button onclick="toggleAnswer('answer62', this)">Show Answer</button>
+        <div id="answer62" style="display:none; margin-top:10px;">
+            <p>The capacity of a cut \((X,Y)\) is the total capacity of edges from \(X\) to \(Y\). A standard submodularity identity gives</p>
+            \[
+            c(S,T) + c(S',T') \ge c(S\cap S',T\cup T') + c(S\cup S',T\cap T').
+            \]
+            <p>Since \((S,T)\) and \((S',T')\) are minimum cuts, both have capacity equal to the minimum value \(m\). Thus the left side is \(2m\), while each of the two new cuts has capacity at least \(m\). The inequality forces both new cuts to have capacity exactly \(m\), so both are minimum cuts.</p>
+        </div>
+    </div>
+
+    <hr>
+    <div>
+        <h3>Question 5</h3>
+        <p>Decide whether the following statements are true or false. If true, give a short explanation. If false, give a counterexample. (a) If \(f\) is a maximum flow in a network with positive integer capacities, then \(f\) saturates every edge out of \(s\). (b) If \((S,T)\) is a minimum cut and we add 1 to every capacity, then \((S,T)\) is still a minimum cut.</p>
+        <button onclick="toggleAnswer('answer63', this)">Show Answer</button>
+        <div id="answer63" style="display:none; margin-top:10px;">
+            <p><strong>(a) False.</strong> A maximum flow need not saturate every edge out of \(s\). A simple counterexample is a network where one outgoing edge from \(s\) leads to a dead end or is not needed to reach the maximum flow value.</p>
+            <p><strong>(b) False.</strong> Adding 1 to every capacity changes each cut capacity by the number of edges crossing the cut, so the relative order of cuts can change. A cut that was minimum before need not remain minimum after all capacities are increased by 1.</p>
+        </div>
+    </div>
+
+    <hr>
+    <div>
+        <h3>Question 6</h3>
+        <p>Let \(G\) be a network with source \(s\), sink \(t\), and integer capacities. Prove or disprove the following: (a) If all capacities are even, then there is a maximum flow \(f\) such that \(f(e)\) is even for all edges \(e\). (b) If all capacities are odd, then there is a maximum flow \(f\) such that \(f(e)\) is odd for all edges \(e\). (c) If all edges have distinct capacities, then there is a unique maximum flow. (d) If all edges have distinct capacities, then there is a unique minimum \(s\)-\(t\) cut. (e) Multiplying all capacities by \(\lambda>0\) does not change the minimum \(s\)-\(t\) cuts. (f) Adding a number \(\lambda>0\) to all capacities does not change the minimum \(s\)-\(t\) cuts.</p>
+        <button onclick="toggleAnswer('answer64', this)">Show Answer</button>
+        <div id="answer64" style="display:none; margin-top:10px;">
+            <ul>
+                <li><strong>(a) True.</strong> With even capacities, scale all capacities by \(1/2\), compute a maximum flow, then scale back by 2. Integrality preserves evenness.</li>
+                <li><strong>(b) False.</strong> Odd capacities do not force an odd-valued feasible flow on every edge. A simple network can require zero flow on some edges.</li>
+                <li><strong>(c) False.</strong> Distinct edge capacities do not imply a unique maximum flow; different flow decompositions can achieve the same maximum value.</li>
+                <li><strong>(d) False.</strong> Distinct edge capacities do not imply a unique minimum cut; different cuts can have the same total capacity.</li>
+                <li><strong>(e) True.</strong> Multiplying every capacity by the same positive factor multiplies every cut capacity by that factor, so the set of minimum cuts is unchanged.</li>
+                <li><strong>(f) False.</strong> Adding the same constant to every edge capacity changes cut capacities by a multiple of the number of edges crossing each cut, so the minimum cut can change.</li>
+            </ul>
+        </div>
+    </div>
+
+    <hr>
+    <div>
+        <h3>Question 7</h3>
+        <p>Suppose you have already computed a maximum \((s,t)\)-flow \(f\) in a flow network \(G\) with integer capacities. Let \(k\) be a positive integer, and let \(e\) be an edge whose capacity is at least \(k\). If we increase the capacity of \(e\) by \(k\), prove that the new maximum flow can be computed in \(O(|E|k)\) time.</p>
+        <button onclick="toggleAnswer('answer65', this)">Show Answer</button>
+        <div id="answer65" style="display:none; margin-top:10px;">
+            <p>After increasing the capacity of one edge by \(k\), the old flow is still feasible. The new maximum flow value can increase by at most \(k\), because only one edge gained \(k\) extra capacity.</p>
+            <p>Now run augmenting-path updates in the residual network. Each augmentation increases the flow value by at least 1, so at most \(k\) augmentations are needed. Each augmentation can be found and applied in \(O(|E|)\) time.</p>
+            <p>Therefore the total time is \(O(|E|k)\).</p>
+        </div>
+    </div>
+
+    <hr>
+    <div>
+        <h3>Question 8</h3>
+        <p>A company maintains three warehouses, \(X,Y,Z\), and three stores, \(A,B,C\). The warehouses have 500, 500, and 900 lawn mowers in stock. The stores demand 700, 600, and 600 lawn mowers, respectively. Arc capacities represent daily shipping upper bounds (in hundreds). Can all demand be met? If not, how close can the company come to satisfying the demand?</p>
+        <button onclick="toggleAnswer('answer66', this)">Show Answer</button>
+        <div id="answer66" style="display:none; margin-top:10px;">
+            <p>Model the warehouses as supply nodes, the stores as demand nodes, and the truck routes as a flow network with a super-source connected to the warehouses and a super-sink connected from the stores.</p>
+            <p>The total supply is \(500+500+900=1900\), while the total demand is \(700+600+600=1900\). So in principle the entire demand can be met only if the route capacities allow a maximum flow of 1900 (or 19 in the diagram’s hundreds-scale). The max-flow computation on the given graph determines the exact answer.</p>
+            <p>Using the capacities shown, the maximum flow is the best achievable delivery amount. If it is less than 1900, then the shortfall equals \(1900-\text{maxflow}\).</p>
+        </div>
+    </div>
+
+    <hr>
+    <div>
+        <h3>Question 9</h3>
+        <p>Let \(G\) be a network with source \(s\), sink \(t\), and integer capacities. Prove that an edge \(e\) is saturated in every maximum \(s\)-\(t\) flow if and only if decreasing the capacity of \(e\) by 1 would decrease the maximum value of an \(s\)-\(t\) flow in \(G\).</p>
+        <button onclick="toggleAnswer('answer67', this)">Show Answer</button>
+        <div id="answer67" style="display:none; margin-top:10px;">
+            <p><strong>Forward direction.</strong> If every maximum flow saturates \(e\), then reducing \(e\)'s capacity by 1 lowers the capacity of every maximum flow by at least 1, so the maximum flow value decreases.</p>
+            <p><strong>Reverse direction.</strong> If decreasing \(c(e)\) by 1 decreases the maximum flow value, then every maximum flow in the original network must have used all of \(e\)'s capacity. Otherwise, if some maximum flow left at least one unit unused on \(e\), that same flow would still be feasible after the decrease, contradicting the drop in the maximum value.</p>
+        </div>
+    </div>
+
+    <hr>
+    <div>
+        <h3>Question 10</h3>
+        <p>You are given a unit-capacity network and a parameter \(k\). Delete exactly \(k\) edges so that the maximum \(s\)-\(t\) flow decreases as much as possible. Give a polynomial-time algorithm.</p>
+        <button onclick="toggleAnswer('answer68', this)">Show Answer</button>
+        <div id="answer68" style="display:none; margin-top:10px;">
+            <p>Since all capacities are 1, the maximum flow equals the size of a minimum cut. To reduce the maximum flow as much as possible by deleting \(k\) edges, choose edges that hit as many \(s\)-\(t\) paths as possible. A polynomial-time approach is:</p>
+            <ol>
+                <li>Compute a maximum flow / minimum cut.</li>
+                <li>Use the residual network to identify critical edges on all minimum cuts.</li>
+                <li>Choose up to \(k\) edges whose deletion reduces the minimum cut value as much as possible, using repeated min-cut computations or a matroid-style greedy method on the unit-capacity structure.</li>
+            </ol>
+            <p>Because capacities are unit and each edge deletion changes the max flow by at most 1, the problem can be solved with a polynomial number of max-flow computations.</p>
+        </div>
+    </div>
+
+    <hr>
+    <div>
+        <h3>Question 11</h3>
+        <p>In a flow network with vertex capacities, give a polynomial-time algorithm to find a maximum \(s\)-\(t\) flow, define an \(s\)-\(t\) cut for vertex-capacitated networks, and show that the Max-Flow Min-Cut Theorem still holds.</p>
+        <button onclick="toggleAnswer('answer69', this)">Show Answer</button>
+        <div id="answer69" style="display:none; margin-top:10px;">
+            <p>Convert the vertex-capacitated network into an edge-capacitated one by <strong>splitting each vertex</strong> \(v\neq s,t\) into \(v_{in}\) and \(v_{out}\), and add an edge \(v_{in}\to v_{out}\) with capacity \(c(v)\). Every original edge \((u,v)\) becomes an edge \(u_{out}\to v_{in}\) with the same capacity.</p>
+            <p>Now run any polynomial-time max-flow algorithm on the transformed network. The resulting flow respects the vertex capacities because all flow through \(v\) must pass through \(v_{in}\to v_{out}\).</p>
+            <p>A vertex cut is a set of vertices whose removal disconnects \(s\) from \(t\), with cut capacity equal to the sum of capacities of the removed vertices. The transformed edge network has a cut of the same value, so the standard Max-Flow Min-Cut Theorem applies directly.</p>
+        </div>
+    </div>
+    </div>
+    
+    <hr>
+
+    <div>
+        <h3>Extra Question</h3>
         <p>What is 2 + 2?</p>
 
-        <button onclick="toggleAnswer('answer2', this)">
+        <button onclick="toggleAnswer('answerextra', this)">
             Show Answer
         </button>
 
-        <div id="answer2" style="display:none; margin-top:10px;">
-            4
+        <div id="answerextra" style="display:none; margin-top:10px;">
+            Did you really have to check this? 
         </div>
     </div>
 
@@ -660,7 +1570,7 @@ Therefore,
 
             if (answer.style.display === 'none') {
                 answer.style.display = 'block';
-                button.textContent = 'Hide Answer';
+                button.textContent = 'Hide';
             } else {
                 answer.style.display = 'none';
                 button.textContent = 'Show Answer';
