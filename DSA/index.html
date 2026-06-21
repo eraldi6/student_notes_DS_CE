@@ -1570,10 +1570,11 @@ floor\) pairs of characters, so the running time is \(\Theta(n)\).</p>
 
             if (answer.style.display === 'none') {
                 answer.style.display = 'block';
+                temp = button.textContent
                 button.textContent = 'Hide';
             } else {
                 answer.style.display = 'none';
-                button.textContent = 'Show Answer';
+                button.textContent = temp;
             }
         }
     </script> 
