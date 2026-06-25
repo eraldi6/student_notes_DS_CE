@@ -1,0 +1,1612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Data Structures — Study Guide</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg:#f5e8e8; --surface:#fdf5f0; --header-bg:#1e1a18; --header-fg:#e3e4b6;
+  --accent:#5a1a1a; --a2:#2c5f4a; --a3:#1a3a5c; --a4:#5c3d1a;
+  --border:#d4b8b8; --muted:#7a6060; --text:#1c1410;
+  --code-bg:#1e1e2e; --code-border:#3a3a5a;
+  --def-bg:#f8e8e8; --def-border:#5a1a1a;
+  --fix-bg:#1a2a1a; --fix-border:#3a7a3a;
+  --tab-active:#f7f3f0; --tab-bar:#d6ccca; --pre-bg:#efe0df;
+}
+html { scroll-behavior:smooth; scroll-padding-top:60px; -webkit-text-size-adjust:none; }
+body { font-family:system-ui,-apple-system,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; overflow-x:hidden; }
+/* PROGRESS */
+.progress { position:fixed;top:0;left:0;height:2px;background:#c4904a;width:0;z-index:999;transition:width .08s linear; }
+/* HEADER */
+header { background:var(--header-bg);color:var(--header-fg);padding:.65rem 1.1rem;font-size:1.15rem;font-weight:600;letter-spacing:-.01em;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100; }
+.hbadge { font-size:.78rem;font-weight:500;background:#5a1a1a;color:#f0d8a0;padding:.2rem .65rem;border-radius:20px; }
+/* TABS */
+.tabs { display:flex;background:var(--tab-bar);overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;border-bottom:1px solid #c4a8a8; }
+.tabs::-webkit-scrollbar{display:none}
+.tabs button { flex:0 0 auto;padding:.6rem 1.1rem;border:none;background:transparent;cursor:pointer;font-size:.9rem;white-space:nowrap;color:#4a3030;font-family:inherit;border-bottom:3px solid transparent;transition:background .12s,border-color .12s; }
+.tabs button.active { background:var(--tab-active);border-bottom:3px solid var(--accent);font-weight:600;color:var(--accent); }
+/* CONTENT */
+.content { padding:1.5rem 1.1rem 3rem;background:var(--surface);min-height:calc(100dvh - 100px);max-width:880px;margin:0 auto; }
+.page { display:none; }
+.page.active { display:block; }
+/* TYPOGRAPHY */
+h2 { font-size:1.7rem;font-weight:700;margin:0 0 .5rem;letter-spacing:-.02em;color:var(--accent);border-bottom:2px solid #d4b8b8;padding-bottom:.4rem; }
+h3 { font-size:1.15rem;font-weight:700;margin:1.4rem 0 .3rem;color:#2e1a10; }
+h4 { font-size:1rem;font-weight:700;margin:.9rem 0 .2rem;color:#2e1a10; }
+p { font-size:1rem;line-height:1.65;margin-top:.5rem;max-width:72ch; }
+ul,ol { padding-left:1.4rem;margin-top:.4rem; }
+li { margin-bottom:.3rem;font-size:1rem;line-height:1.6; }
+code { font-family:'Courier New',monospace;font-size:.88em;background:#ede0d4;padding:.1em .35em;border-radius:3px;color:#5a1a1a; }
+hr { border:none;border-top:1px solid var(--border);margin:1.5rem 0; }
+.label { display:inline-block;font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin:1.3rem 0 .5rem; }
+/* BOXES */
+.def-box { background:var(--def-bg);border-left:4px solid var(--def-border);border-radius:0 4px 4px 0;padding:.75rem 1rem;margin:.75rem 0; }
+.def-box.green  { border-left-color:var(--a2);background:#e8f3ed; }
+.def-box.blue   { border-left-color:var(--a3);background:#e8eef8; }
+.def-box.orange { border-left-color:var(--a4);background:#f5ede0; }
+.def-box .box-label { font-weight:700;font-size:.78rem;text-transform:uppercase;letter-spacing:.05em;color:#4b1a1a;margin-bottom:.3rem; }
+.def-box.green  .box-label { color:var(--a2); }
+.def-box.blue   .box-label { color:var(--a3); }
+.def-box.orange .box-label { color:var(--a4); }
+.def-box p,.def-box li { max-width:none; }
+/* CORRECTION BOX */
+.fix-box { background:#fffdf7;border:1px solid #d7c9a0;border-left:4px solid #b08a2e;border-radius:4px;padding:.75rem 1rem;margin:.75rem 0; }
+.fix-box .fix-label { font-weight:700;font-size:.78rem;text-transform:uppercase;letter-spacing:.05em;color:#8a6512;margin-bottom:.4rem; }
+.fix-box p,.fix-box li { color:#2d2418 !important;max-width:none; } .fix-box code { background:#f4ead1;color:#5d4310 !important; }
+.fix-box code { background:#1a3a1a;color:#a0e0a0 !important; }
+/* CODE BLOCK – dark editor style */
+.code-block { background:#1e1e2e;border:1px solid #3a3a5a;border-radius:6px;padding:.85rem 1rem .85rem 1rem;margin:.65rem 0;font-family:'Courier New',monospace;font-size:.85rem;line-height:1.7;overflow-x:auto;-webkit-overflow-scrolling:touch;position:relative;color:#cdd6f4; }
+.code-block pre { margin:0;white-space:pre; }
+.kw  { color:#89b4fa; }   /* blue  – keywords */
+.fn  { color:#a6e3a1; }   /* green – functions */
+.cl  { color:#f9e2af; }   /* yellow – class names */
+.st  { color:#a6e3a1; }   /* green – strings */
+.nb  { color:#fab387; }   /* peach – numbers */
+.cm  { color:#6c7086;font-style:italic; }   /* grey  – comments */
+.de  { color:#cba6f7; }   /* mauve – decorators/builtins */
+.op  { color:#89dceb; }   /* sky   – operators / punctuation */
+.code-label { font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6c7086;margin-bottom:.4rem; }
+.copy-btn { position:absolute;top:.55rem;right:.6rem;font-size:.7rem;font-weight:600;font-family:inherit;background:#313244;border:1px solid #45475a;border-radius:4px;padding:.15rem .5rem;cursor:pointer;color:#a6adc8;transition:background .12s; }
+.copy-btn:hover { background:#45475a; }
+.copy-btn.ok { color:#a6e3a1; }
+/* STACK VIS */
+.stack { font-family:'Courier New',monospace;font-size:.83rem;background:var(--pre-bg);border-radius:6px;padding:.75rem 1rem;margin:.65rem 0;overflow-x:auto; }
+.stack-row { display:flex;align-items:center;gap:.5rem;padding:.2rem 0;border-bottom:1px solid #d8c8c8;flex-wrap:wrap; }
+.stack-row:last-child { border-bottom:none; }
+.stack-row.ret { opacity:.6; }
+.si { padding-left:1.2rem; }
+.arr { color:var(--muted);font-size:.8rem; }
+/* STEPS */
+.steps { list-style:none;padding:0;margin:.65rem 0; }
+.steps li { display:flex;gap:.75rem;padding:.4rem 0;border-bottom:1px solid var(--border);align-items:flex-start;margin:0; }
+.steps li:last-child { border-bottom:none; }
+.step-n { flex-shrink:0;width:24px;height:24px;background:#e8d0d0;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:700;color:var(--accent); }
+.step-body strong { display:block;font-size:.95rem; }
+.step-body span { font-size:.9rem;color:var(--muted); }
+/* INHERIT */
+
+.ll-diagram { display:flex; flex-direction:column; gap:.6rem; background:#f7f1e6; border:1px solid #d7c9a0; border-radius:8px; padding:1rem; }
+.ll-title { font-weight:700; color:#5a1a1a; font-size:.95rem; }
+.ll-row { display:flex; flex-wrap:wrap; align-items:center; gap:.55rem; }
+.ll-node { background:#fff; border:1px solid #c8b89c; border-radius:8px; padding:.45rem .7rem; min-width:155px; box-shadow:0 1px 0 rgba(0,0,0,.03); }
+.ll-small { display:block; font-size:.68rem; text-transform:uppercase; letter-spacing:.06em; color:#7b6750; margin-bottom:.1rem; }
+.ll-big { display:block; font-family:'Courier New',monospace; font-weight:700; color:#362b1f; }
+.ll-arrow { font-weight:700; color:#8a6512; white-space:nowrap; }
+.ll-note { font-size:.92rem; color:#4b3d2c; background:#fffaf0; border-left:3px solid #c9ad65; padding:.45rem .65rem; border-radius:4px; }
+.inherit { display:flex;flex-direction:column;align-items:center;gap:0;background:var(--pre-bg);border-radius:6px;padding:1.2rem 1rem;margin:.65rem 0; }
+.ibox { border:2px solid var(--border);border-radius:6px;padding:.5rem 1.4rem;text-align:center;background:#fff8f4;min-width:140px; }
+.ibox .ilab { font-size:.72rem;text-transform:uppercase;letter-spacing:.05em;color:var(--muted); }
+.ibox .inm  { font-family:'Courier New',monospace;font-weight:700;font-size:.95rem; }
+.ibox.parent { border-color:var(--a4); }
+.ibox.parent .inm { color:var(--a4); }
+.ibox.child  { border-color:var(--a2); }
+.ibox.child  .inm { color:var(--a2); }
+.iconn { display:flex;flex-direction:column;align-items:center; }
+.iline { width:2px;height:18px;background:var(--border); }
+.ichrow { display:flex;flex-wrap:wrap;gap:.75rem;justify-content:center; }
+/* TABLE */
+.table-wrap { overflow-x:auto;-webkit-overflow-scrolling:touch;margin:.65rem 0; }
+table { border-collapse:collapse;width:100%;min-width:260px;font-size:.93rem; }
+th,td { padding:.35rem .65rem;text-align:left;vertical-align:top; }
+thead th { background:#e8d0d0;border-bottom:2px solid #c4a0a0;font-weight:700; }
+tr:nth-child(even) td { background:rgba(0,0,0,.025); }
+/* PLACEHOLDER */
+.placeholder { display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:3rem 1.5rem;gap:.75rem;color:var(--muted);border:2px dashed var(--border);border-radius:8px;margin-top:1rem; }
+/* FOOTER */
+footer { background:#c8b8b0;text-align:center;padding:.75rem;font-size:.88rem;color:#2e1a10; }
+@media(max-width:600px){ .content{padding:1rem .7rem 3rem} }
+</style>
+</head>
+<body>
+<div class="progress" id="prog"></div>
+<header>
+  <span>Data Structures</span>
+  <span class="hbadge">Lectures 1 – 8</span>
+</header>
+
+<div class="tabs" role="tablist">
+  <button class="tab active" data-target="p1">Tab 1 — Foundations</button>
+  <button class="tab" data-target="p2">Tab 2 — Linked Lists</button>
+  <button class="tab" data-target="p3">Tab 3 — OOP, Modules &amp; Files</button>
+  <button class="tab" data-target="p4">Tab 4 — Stacks, Queues &amp; Hash Tables</button>
+</div>
+
+<div class="content">
+
+<!-- ═══════════════════════════════════════════
+     TAB 1 — FOUNDATIONS (Lectures 1, 2)
+════════════════════════════════════════════ -->
+<div id="p1" class="page active">
+<h2>Foundations — DSA &amp; Recursion</h2>
+<p>Lectures 1 &amp; 2 — Data structures, algorithms, recursion basics, Fibonacci, recursion on lists &amp; matrices.</p>
+<hr>
+
+<p class="label">Core Concepts</p>
+
+<div class="def-box">
+  <div class="box-label">Data Structure</div>
+  <p>The way data is <strong>stored</strong>, <strong>organised</strong>, and <strong>accessed</strong>. Programming imitates real-life organisation — a list of students' names is a list data structure.</p>
+</div>
+<div class="def-box">
+  <div class="box-label">Algorithm</div>
+  <p>A set of step-by-step instructions to solve a problem. Like a recipe — each step is clearly defined. In CS, algorithms operate on data structures.</p>
+</div>
+<div class="def-box green">
+  <div class="box-label">Primitive Data Structures</div>
+  <p>Basic language-provided types for single values: <code>int</code>, <code>float</code>, <code>char</code>, <code>bool</code>.</p>
+</div>
+<div class="def-box blue">
+  <div class="box-label">Abstract Data Structures</div>
+  <p>Higher-level structures built from primitives: <strong>arrays, linked lists, stacks, queues, trees, graphs</strong>.</p>
+</div>
+<div class="def-box orange">
+  <div class="box-label">Recursion</div>
+  <p>A function that calls itself to break a problem into smaller sub-problems. Two essential parts:</p>
+  <ul>
+    <li><strong>Base case</strong> — stops the recursion</li>
+    <li><strong>Recursive case</strong> — calls itself with a smaller input</li>
+  </ul>
+</div>
+
+<h3>DSA is used in:</h3>
+<ul>
+  <li>Operating systems, databases, web apps, ML, games</li>
+  <li>GPS route optimisation, search engines, scheduling, cryptography</li>
+</ul>
+
+<hr>
+<p class="label">Recursion Call Stack — factorial(4)</p>
+<div class="stack">
+  <div class="stack-row"><span>factorial(4)</span><span class="arr">→</span><span>4 × factorial(3)</span></div>
+  <div class="stack-row si"><span>factorial(3)</span><span class="arr">→</span><span>3 × factorial(2)</span></div>
+  <div class="stack-row si"><span>factorial(2)</span><span class="arr">→</span><span>2 × factorial(1)</span></div>
+  <div class="stack-row si"><span>factorial(1)</span><span class="arr">→</span><span><strong>BASE CASE</strong>: returns 1</span></div>
+  <div class="stack-row ret"><span class="arr">← unwind:</span><span>1×2=2, 2×3=6, 6×4 = <strong>24 ✓</strong></span></div>
+</div>
+
+<hr>
+<p class="label">Code Snippets</p>
+
+<div class="code-block">
+  <div class="def-box"><div class="box-label">Why this snippet matters</div><p>This is the simplest recursion pattern from the lectures. The important part is that the function stops on a base case and otherwise calls itself on a smaller input.</p></div>
+<div class="code-label">Factorial — Recursion</div>
+  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+<pre><span class="kw">def</span> <span class="fn">factorial</span>(n):
+    <span class="kw">if</span> n == <span class="nb">0</span> <span class="kw">or</span> n == <span class="nb">1</span>:          <span class="cm"># base case</span>
+        <span class="kw">return</span> <span class="nb">1</span>
+    <span class="kw">return</span> n <span class="op">*</span> <span class="fn">factorial</span>(n <span class="op">-</span> <span class="nb">1</span>)    <span class="cm"># recursive case</span>
+
+<span class="fn">print</span>(<span class="fn">factorial</span>(<span class="nb">4</span>))  <span class="cm"># → 24 (factorial of 4)</span></pre>
+</div>
+
+<div class="code-block">
+  <div class="code-label">Fibonacci — Recursion (0-indexed)</div>
+  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+<pre><span class="kw">def</span> <span class="fn">F</span>(n):
+    <span class="kw">if</span> n <span class="op">&lt;=</span> <span class="nb">1</span>:               <span class="cm"># base cases: F(0)=0, F(1)=1</span>
+        <span class="kw">return</span> n
+    <span class="kw">return</span> <span class="fn">F</span>(n <span class="op">-</span> <span class="nb">1</span>) <span class="op">+</span> <span class="fn">F</span>(n <span class="op">-</span> <span class="nb">2</span>)
+
+<span class="fn">print</span>(<span class="fn">F</span>(<span class="nb">7</span>))  <span class="cm"># → 13 (next Fibonacci value)</span></pre>
+</div>
+
+<div class="code-block">
+  <div class="code-label">Fibonacci — For Loop (iterative, more efficient)</div>
+  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+<pre>prev1, prev2 <span class="op">=</span> <span class="nb">1</span>, <span class="nb">0</span>
+<span class="fn">print</span>(<span class="nb">0</span>)
+<span class="fn">print</span>(<span class="nb">1</span>)
+
+<span class="kw">for</span> _ <span class="kw">in</span> <span class="fn">range</span>(<span class="nb">18</span>):
+    new_fib <span class="op">=</span> prev1 <span class="op">+</span> prev2
+    <span class="fn">print</span>(new_fib)
+    prev2 <span class="op">=</span> prev1
+    prev1 <span class="op">=</span> new_fib</pre>
+</div>
+
+<hr>
+<p class="label">Recursion on Lists &amp; Matrices</p>
+
+<div class="def-box blue">
+  <div class="box-label">Recursion with Lists — General Template</div>
+  <div class="code-block" style="margin-top:.5rem;">
+<pre><span class="kw">def</span> <span class="fn">function_name</span>(lst):
+    <span class="kw">if</span> lst <span class="op">==</span> []:                          <span class="cm"># base case</span>
+        <span class="kw">return</span> base_result
+    <span class="kw">return</span> <span class="fn">operation</span>(lst[<span class="nb">0</span>], <span class="fn">function_name</span>(lst[<span class="nb">1</span>:]))</pre>
+  </div>
+</div>
+
+<div class="code-block">
+  <div class="code-label">Sum of List</div>
+  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+<pre><span class="kw">def</span> <span class="fn">sum_list</span>(lst):
+    <span class="kw">if</span> lst <span class="op">==</span> []:          <span class="cm"># base case</span>
+        <span class="kw">return</span> <span class="nb">0</span>
+    <span class="kw">return</span> lst[<span class="nb">0</span>] <span class="op">+</span> <span class="fn">sum_list</span>(lst[<span class="nb">1</span>:])
+
+<span class="fn">print</span>(<span class="fn">sum_list</span>([<span class="nb">3</span>, <span class="nb">7</span>, <span class="nb">2</span>, <span class="nb">5</span>]))  <span class="cm"># → 17</span></pre>
+</div>
+
+<div class="code-block">
+  <div class="code-label">Length of List (no len())</div>
+  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+<pre><span class="kw">def</span> <span class="fn">list_length</span>(lst):
+    <span class="kw">if</span> lst <span class="op">==</span> []:
+        <span class="kw">return</span> <span class="nb">0</span>
+    <span class="kw">return</span> <span class="nb">1</span> <span class="op">+</span> <span class="fn">list_length</span>(lst[<span class="nb">1</span>:])
+
+<span class="fn">print</span>(<span class="fn">list_length</span>([<span class="nb">4</span>, <span class="nb">8</span>, <span class="nb">6</span>, <span class="nb">1</span>]))  <span class="cm"># → 4</span></pre>
+</div>
+
+<div class="code-block">
+  <div class="code-label">Find Maximum in List</div>
+  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+<pre><span class="kw">def</span> <span class="fn">find_max</span>(lst):
+    <span class="kw">if</span> <span class="fn">len</span>(lst) <span class="op">==</span> <span class="nb">1</span>:          <span class="cm"># base case</span>
+        <span class="kw">return</span> lst[<span class="nb">0</span>]
+    rest_max <span class="op">=</span> <span class="fn">find_max</span>(lst[<span class="nb">1</span>:])
+    <span class="kw">return</span> lst[<span class="nb">0</span>] <span class="kw">if</span> lst[<span class="nb">0</span>] <span class="op">&gt;</span> rest_max <span class="kw">else</span> rest_max
+
+<span class="fn">print</span>(<span class="fn">find_max</span>([<span class="nb">3</span>, <span class="nb">9</span>, <span class="nb">1</span>, <span class="nb">7</span>]))  <span class="cm"># → 9</span></pre>
+</div>
+
+<div class="code-block">
+  <div class="code-label">Reverse a List</div>
+  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+<pre><span class="kw">def</span> <span class="fn">reverse_list</span>(lst):
+    <span class="kw">if</span> lst <span class="op">==</span> []:
+        <span class="kw">return</span> []
+    <span class="kw">return</span> <span class="fn">reverse_list</span>(lst[<span class="nb">1</span>:]) <span class="op">+</span> [lst[<span class="nb">0</span>]]
+
+<span class="fn">print</span>(<span class="fn">reverse_list</span>([<span class="nb">1</span>, <span class="nb">2</span>, <span class="nb">3</span>, <span class="nb">4</span>]))  <span class="cm"># → [4, 3, 2, 1]</span></pre>
+</div>
+
+<div class="code-block">
+  <div class="code-label">Matrix Traversal — Recursion</div>
+  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+<pre><span class="kw">def</span> <span class="fn">recursive_matrix</span>(matrix, i<span class="op">=</span><span class="nb">0</span>, j<span class="op">=</span><span class="nb">0</span>):
+    <span class="kw">if</span> i <span class="op">==</span> <span class="fn">len</span>(matrix):              <span class="cm"># all rows done → base case</span>
+        <span class="kw">return</span>
+    <span class="kw">if</span> j <span class="op">==</span> <span class="fn">len</span>(matrix[i]):           <span class="cm"># end of row → next row</span>
+        <span class="fn">recursive_matrix</span>(matrix, i <span class="op">+</span> <span class="nb">1</span>, <span class="nb">0</span>)
+        <span class="kw">return</span>
+    <span class="fn">print</span>(matrix[i][j], end<span class="op">=</span><span class="st">" "</span>)
+    <span class="fn">recursive_matrix</span>(matrix, i, j <span class="op">+</span> <span class="nb">1</span>)
+
+m <span class="op">=</span> [[<span class="nb">1</span>, <span class="nb">2</span>, <span class="nb">3</span>], [<span class="nb">4</span>, <span class="nb">5</span>, <span class="nb">6</span>], [<span class="nb">7</span>, <span class="nb">8</span>, <span class="nb">9</span>]]
+<span class="fn">recursive_matrix</span>(m)  <span class="cm"># → 1 2 3 4 5 6 7 8 9</span></pre>
+</div>
+
+<div class="fix-box">
+  <div class="fix-label">⚠ Correction from Sonnet — Matrix Traversal</div>
+  <p>The lecture's version used <code>return recursive_matrix(...)</code> for the row-advance case. Removing the <code>return</code> before the recursive call is fine, but the original also had no explicit <code>return</code> after the recursive call which could cause duplicate execution in some interpretations. The version above uses <code>return</code> after the recursive call to be safe and clear.</p>
+</div>
+
+<hr>
+<p class="label">Practice Exercises</p>
+<div class="def-box orange">
+  <div class="box-label">Exercises — Lectures 1 &amp; 2</div>
+  <ol>
+    <li>Write recursive <code>sum(5)</code> → <code>1+2+3+4+5 = 15</code></li>
+    <li>Write recursive function that prints numbers from n down to 1</li>
+    <li>Write recursive <code>power(x, n)</code> → xⁿ, base case: <code>n == 0 → return 1</code></li>
+    <li>Write recursive <code>list_length(lst)</code> without using <code>len()</code></li>
+    <li>Write recursive function that finds the number of digits of a number. E.g. <code>1256 → 4</code></li>
+    <li>Write recursive function that checks if a number is even by subtracting 2 each time</li>
+    <li>Print the secondary diagonal of a matrix using recursion</li>
+    <li>Count even numbers in a matrix using recursion</li>
+  </ol>
+</div>
+</div><!-- /p1 -->
+
+
+<!-- ═══════════════════════════════════════════
+     TAB 2 — LINKED LISTS (Lectures 5, 6)
+════════════════════════════════════════════ -->
+<div id="p2" class="page">
+<h2>Linked Lists</h2>
+<p>Lectures 5 &amp; 6 — Pointers, Singly Linked Lists, Doubly Linked Lists, Circular Lists.</p>
+<div class="def-box">
+  <div class="box-label">What to notice</div>
+  <p>The lectures explain linked lists as nodes connected by references. Before the code, check the schematic: <code>head</code> is the entry point, <code>tail</code> is the end marker, <code>next</code> moves forward, and in doubly linked lists <code>prev</code> lets you move backward too.</p>
+</div>
+<hr>
+
+<p class="label">Core Concepts</p>
+
+<div class="def-box">
+  <div class="box-label">What is a Linked List?</div>
+  <p>A sequence of nodes where each node holds <strong>data</strong> and a <strong>reference (pointer)</strong> to the next node. Unlike Python lists, elements do not need to be stored in sequential memory.</p>
+</div>
+<div class="def-box green">
+  <div class="box-label">Advantages</div>
+  <ul>
+    <li>No sequential storage space required</li>
+    <li>Can grow arbitrarily as nodes are added</li>
+    <li>Efficient insertions and deletions (no element shifting)</li>
+  </ul>
+</div>
+<div class="def-box orange">
+  <div class="box-label">Disadvantages</div>
+  <ul>
+    <li>No direct index access (no <code>lst[3]</code>)</li>
+    <li>Each node needs extra space for the pointer</li>
+    <li>Search is always O(n) — must traverse from head</li>
+  </ul>
+</div>
+
+<hr>
+<p class="label">Time Complexity</p>
+<div class="table-wrap">
+  <table>
+    <thead><tr><th>Operation</th><th>Singly</th><th>Doubly</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td>Traversal</td><td>O(n)</td><td>O(n)</td><td>Visit every node</td></tr>
+      <tr><td>Search</td><td>O(n)</td><td>O(n)</td><td>Linear scan</td></tr>
+      <tr><td>Append</td><td>O(n) or O(1)</td><td>O(1)</td><td>O(1) if tail pointer stored</td></tr>
+      <tr><td>Delete</td><td>O(n)</td><td>O(n)</td><td>Must find node first</td></tr>
+      <tr><td>Size</td><td>O(n) or O(1)</td><td>O(1)</td><td>O(1) if size attribute stored</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<hr>
+<p class="label">Singly Linked List</p>
+<div class="def-box">
+  <div class="box-label">Linked list diagram</div>
+  <div class="ll-diagram">
+    <div class="ll-title">Singly linked list</div>
+    <div class="ll-row">
+      <div class="ll-node"><span class="ll-small">head</span><span class="ll-big">[ data | next ]</span></div>
+      <div class="ll-arrow">→ next</div>
+      <div class="ll-node"><span class="ll-small">node</span><span class="ll-big">[ data | next ]</span></div>
+      <div class="ll-arrow">→ next</div>
+      <div class="ll-node"><span class="ll-small">node</span><span class="ll-big">[ data | None ]</span></div>
+    </div>
+    <div class="ll-note">The data lives in each node. The <code>next</code> field points to the following node, and the last node points to <code>None</code>.</div>
+
+    <div class="ll-title" style="margin-top:1rem;">Doubly linked list</div>
+    <div class="ll-row">
+      <div class="ll-node"><span class="ll-small">None</span><span class="ll-big">[ prev | data | next ]</span></div>
+      <div class="ll-arrow">← prev</div>
+      <div class="ll-node"><span class="ll-small">node</span><span class="ll-big">[ prev | data | next ]</span></div>
+      <div class="ll-arrow">→ next</div>
+      <div class="ll-node"><span class="ll-small">node</span><span class="ll-big">[ prev | data | None ]</span></div>
+    </div>
+    <div class="ll-note"><code>prev</code> points to the previous node, <code>next</code> points to the next node, so you can move in both directions.</div>
+
+    <div class="ll-title" style="margin-top:1rem;">Circular linked list</div>
+    <div class="ll-row">
+      <div class="ll-node"><span class="ll-small">head</span><span class="ll-big">[ data | next ]</span></div>
+      <div class="ll-arrow">→ next</div>
+      <div class="ll-node"><span class="ll-small">node</span><span class="ll-big">[ data | next ]</span></div>
+      <div class="ll-arrow">→ next</div>
+      <div class="ll-node"><span class="ll-small">last</span><span class="ll-big">[ data | next ]</span></div>
+      <div class="ll-arrow">↺ back to head</div>
+    </div>
+    <div class="ll-note">There is no <code>None</code> at the end; the last node links back to the first node.</div>
+  </div>
+</div>
+
+<hr>
+<p class="label">Singly Linked List</p>et="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Data Structures — Study Guide</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg:#f5e8e8; --surface:#fdf5f0; --header-bg:#1e1a18; --header-fg:#e3e4b6;
+  --accent:#5a1a1a; --a2:#2c5f4a; --a3:#1a3a5c; --a4:#5c3d1a;
+  --border:#d4b8b8; --muted:#7a6060; --text:#1c1410;
+  --code-bg:#1e1e2e; --code-border:#3a3a5a;
+  --def-bg:#f8e8e8; --def-border:#5a1a1a;
+  --fix-bg:#1a2a1a; --fix-border:#3a7a3a;
+  --tab-active:#f7f3f0; --tab-bar:#d6ccca; --pre-bg:#efe0df;
+}
+html { scroll-behavior:smooth; scroll-padding-top:60px; -webkit-text-size-adjust:none; }
+body { font-family:system-ui,-apple-system,sans-serif; background:var(--bg); color:var(--text); line-height:1.6; overflow-x:hidden; }
+/* PROGRESS */
+.progress { position:fixed;top:0;left:0;height:2px;background:#c4904a;width:0;z-index:999;transition:width .08s linear; }
+/* HEADER */
+header { background:var(--header-bg);color:var(--header-fg);padding:.65rem 1.1rem;font-size:1.15rem;font-weight:600;letter-spacing:-.01em;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100; }
+.hbadge { font-size:.78rem;font-weight:500;background:#5a1a1a;color:#f0d8a0;padding:.2rem .65rem;border-radius:20px; }
+/* TABS */
+.tabs { display:flex;background:var(--tab-bar);overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;border-bottom:1px solid #c4a8a8; }
+.tabs::-webkit-scrollbar{display:none}
+.tabs button { flex:0 0 auto;padding:.6rem 1.1rem;border:none;background:transparent;cursor:pointer;font-size:.9rem;white-space:nowrap;color:#4a3030;font-family:inherit;border-bottom:3px solid transparent;transition:background .12s,border-color .12s; }
+.tabs button.active { background:var(--tab-active);border-bottom:3px solid var(--accent);font-weight:600;color:var(--accent); }
+/* CONTENT */
+.content { padding:1.5rem 1.1rem 3rem;background:var(--surface);min-height:calc(100dvh - 100px);max-width:880px;margin:0 auto; }
+.page { display:none; }
+.page.active { display:block; }
+/* TYPOGRAPHY */
+h2 { font-size:1.7rem;font-weight:700;margin:0 0 .5rem;letter-spacing:-.02em;color:var(--accent);border-bottom:2px solid #d4b8b8;padding-bottom:.4rem; }
+h3 { font-size:1.15rem;font-weight:700;margin:1.4rem 0 .3rem;color:#2e1a10; }
+h4 { font-size:1rem;font-weight:700;margin:.9rem 0 .2rem;color:#2e1a10; }
+p { font-size:1rem;line-height:1.65;margin-top:.5rem;max-width:72ch; }
+ul,ol { padding-left:1.4rem;margin-top:.4rem; }
+li { margin-bottom:.3rem;font-size:1rem;line-height:1.6; }
+code { font-family:'Courier New',monospace;font-size:.88em;background:#ede0d4;padding:.1em .35em;border-radius:3px;color:#5a1a1a; }
+hr { border:none;border-top:1px solid var(--border);margin:1.5rem 0; }
+.label { display:inline-block;font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--muted);margin:1.3rem 0 .5rem; }
+/* BOXES */
+.def-box { background:var(--def-bg);border-left:4px solid var(--def-border);border-radius:0 4px 4px 0;padding:.75rem 1rem;margin:.75rem 0; }
+.def-box.green  { border-left-color:var(--a2);background:#e8f3ed; }
+.def-box.blue   { border-left-color:var(--a3);background:#e8eef8; }
+.def-box.orange { border-left-color:var(--a4);background:#f5ede0; }
+.def-box .box-label { font-weight:700;font-size:.78rem;text-transform:uppercase;letter-spacing:.05em;color:#4b1a1a;margin-bottom:.3rem; }
+.def-box.green  .box-label { color:var(--a2); }
+.def-box.blue   .box-label { color:var(--a3); }
+.def-box.orange .box-label { color:var(--a4); }
+.def-box p,.def-box li { max-width:none; }
+/* CORRECTION BOX */
+.fix-box { background:#fffdf7;border:1px solid #d7c9a0;border-left:4px solid #b08a2e;border-radius:4px;padding:.75rem 1rem;margin:.75rem 0; }
+.fix-box .fix-label { font-weight:700;font-size:.78rem;text-transform:uppercase;letter-spacing:.05em;color:#8a6512;margin-bottom:.4rem; }
+.fix-box p,.fix-box li { color:#2d2418 !important;max-width:none; } .fix-box code { background:#f4ead1;color:#5d4310 !important; }
+.fix-box code { background:#1a3a1a;color:#a0e0a0 !important; }
+/* CODE BLOCK – dark editor style */
+.code-block { background:#1e1e2e;border:1px solid #3a3a5a;border-radius:6px;padding:.85rem 1rem .85rem 1rem;margin:.65rem 0;font-family:'Courier New',monospace;font-size:.85rem;line-height:1.7;overflow-x:auto;-webkit-overflow-scrolling:touch;position:relative;color:#cdd6f4; }
+.code-block pre { margin:0;white-space:pre; }
+.kw  { color:#89b4fa; }   /* blue  – keywords */
+.fn  { color:#a6e3a1; }   /* green – functions */
+.cl  { color:#f9e2af; }   /* yellow – class names */
+.st  { color:#a6e3a1; }   /* green – strings */
+.nb  { color:#fab387; }   /* peach – numbers */
+.cm  { color:#6c7086;font-style:italic; }   /* grey  – comments */
+.de  { color:#cba6f7; }   /* mauve – decorators/builtins */
+.op  { color:#89dceb; }   /* sky   – operators / punctuation */
+.code-label { font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#6c7086;margin-bottom:.4rem; }
+.copy-btn { position:absolute;top:.55rem;right:.6rem;font-size:.7rem;font-weight:600;font-family:inherit;background:#313244;border:1px solid #45475a;border-radius:4px;padding:.15rem .5rem;cursor:pointer;color:#a6adc8;transition:background .12s; }
+.copy-btn:hover { background:#45475a; }
+.copy-btn.ok { color:#a6e3a1; }
+/* STACK VIS */
+.stack { font-family:'Courier New',monospace;font-size:.83rem;background:var(--pre-bg);border-radius:6px;padding:.75rem 1rem;margin:.65rem 0;overflow-x:auto; }
+.stack-row { display:flex;align-items:center;gap:.5rem;padding:.2rem 0;border-bottom:1px solid #d8c8c8;flex-wrap:wrap; }
+.stack-row:last-child { border-bottom:none; }
+.stack-row.ret { opacity:.6; }
+.si { padding-left:1.2rem; }
+.arr { color:var(--muted);font-size:.8rem; }
+/* STEPS */
+.steps { list-style:none;padding:0;margin:.65rem 0; }
+.steps li { display:flex;gap:.75rem;padding:.4rem 0;border-bottom:1px solid var(--border);align-items:flex-start;margin:0; }
+.steps li:last-child { border-bottom:none; }
+.step-n { flex-shrink:0;width:24px;height:24px;background:#e8d0d0;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.75rem;font-weight:700;color:var(--accent); }
+.step-body strong { display:block;font-size:.95rem; }
+.step-body span { font-size:.9rem;color:var(--muted); }
+/* INHERIT */
+.inherit { display:flex;flex-direction:column;align-items:center;gap:0;background:var(--pre-bg);border-radius:6px;padding:1.2rem 1rem;margin:.65rem 0; }
+.ibox { border:2px solid var(--border);border-radius:6px;padding:.5rem 1.4rem;text-align:center;background:#fff8f4;min-width:140px; }
+.ibox .ilab { font-size:.72rem;text-transform:uppercase;letter-spacing:.05em;color:var(--muted); }
+.ibox .inm  { font-family:'Courier New',monospace;font-weight:700;font-size:.95rem; }
+.ibox.parent { border-color:var(--a4); }
+.ibox.parent .inm { color:var(--a4); }
+.ibox.child  { border-color:var(--a2); }
+.ibox.child  .inm { color:var(--a2); }
+.iconn { display:flex;flex-direction:column;align-items:center; }
+.iline { width:2px;height:18px;background:var(--border); }
+.ichrow { display:flex;flex-wrap:wrap;gap:.75rem;justify-content:center; }
+/* TABLE */
+.table-wrap { overflow-x:auto;-webkit-overflow-scrolling:touch;margin:.65rem 0; }
+table { border-collapse:collapse;width:100%;min-width:260px;font-size:.93rem; }
+th,td { padding:.35rem .65rem;text-align:left;vertical-align:top; }
+thead th { background:#e8d0d0;border-bottom:2px solid #c4a0a0;font-weight:700; }
+tr:nth-child(even) td { background:rgba(0,0,0,.025); }
+/* PLACEHOLDER */
+.placeholder { display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:3rem 1.5rem;gap:.75rem;color:var(--muted);border:2px dashed var(--border);border-radius:8px;margin-top:1rem; }
+/* FOOTER */
+footer { background:#c8b8b0;text-align:center;padding:.75rem;font-size:.88rem;color:#2e1a10; }
+@media(max-width:600px){ .content{padding:1rem .7rem 3rem} }
+</style>
+</head>
+<body>
+<div class="progress" id="prog"></div>
+<header>
+  <span>Data Structures</span>
+  <span class="hbadge">Lectures 1 – 8</span>
+</header>
+
+<div class="tabs" role="tablist">
+  <button class="tab active" data-target="p1">Tab 1 — Foundations</button>
+  <button class="tab" data-target="p2">Tab 2 — Linked Lists</button>
+  <button class="tab" data-target="p3">Tab 3 — OOP, Modules &amp; Files</button>
+  <button class="tab" data-target="p4">Tab 4 — Stacks, Queues &amp; Hash Tables</button>
+</div>
+
+<div class="content">
+
+<!-- ═══════════════════════════════════════════
+     TAB 1 — FOUNDATIONS (Lectures 1, 2)
+════════════════════════════════════════════ -->
+<div id="p1" class="page active">
+<h2>Foundations — DSA &amp; Recursion</h2>
+<p>Lectures 1 &amp; 2 — Data structures, algorithms, recursion basics, Fibonacci, recursion on lists &amp; matrices.</p>
+<hr>
+
+<p class="label">Core Concepts</p>
+
+<div class="def-box">
+  <div class="box-label">Data Structure</div>
+  <p>The way data is <strong>stored</strong>, <strong>organised</strong>, and <strong>accessed</strong>. Programming imitates real-life organisation — a list of students' names is a list data structure.</p>
+</div>
+<div class="def-box">
+  <div class="box-label">Algorithm</div>
+  <p>A set of step-by-step instructions to solve a problem. Like a recipe — each step is clearly defined. In CS, algorithms operate on data structures.</p>
+</div>
+<div class="def-box green">
+  <div class="box-label">Primitive Data Structures</div>
+  <p>Basic language-provided types for single values: <code>int</code>, <code>float</code>, <code>char</code>, <code>bool</code>.</p>
+</div>
+<div class="def-box blue">
+  <div class="box-label">Abstract Data Structures</div>
+  <p>Higher-level structures built from primitives: <strong>arrays, linked lists, stacks, queues, trees, graphs</strong>.</p>
+</div>
+<div class="def-box orange">
+  <div class="box-label">Recursion</div>
+  <p>A function that calls itself to break a problem into smaller sub-problems. Two essential parts:</p>
+  <ul>
+    <li><strong>Base case</strong> — stops the recursion</li>
+    <li><strong>Recursive case</strong> — calls itself with a smaller input</li>
+  </ul>
+</div>
+
+<h3>DSA is used in:</h3>
+<ul>
+  <li>Operating systems, databases, web apps, ML, games</li>
+  <li>GPS route optimisation, search engines, scheduling, cryptography</li>
+</ul>
+
+<hr>
+<p class="label">Recursion Call Stack — factorial(4)</p>
+<div class="stack">
+  <div class="stack-row"><span>factorial(4)</span><span class="arr">→</span><span>4 × factorial(3)</span></div>
+  <div class="stack-row si"><span>factorial(3)</span><span class="arr">→</span><span>3 × factorial(2)</span></div>
+  <div class="stack-row si"><span>factorial(2)</span><span class="arr">→</span><span>2 × factorial(1)</span></div>
+  <div class="stack-row si"><span>factorial(1)</span><span class="arr">→</span><span><strong>BASE CASE</strong>: returns 1</span></div>
+  <div class="stack-row ret"><span class="arr">← unwind:</span><span>1×2=2, 2×3=6, 6×4 = <strong>24 ✓</strong></span></div>
+</div>
+
+<hr>
+<p class="label">Code Snippets</p>
+
+<div class="code-block">
+  <div class="def-box"><div class="box-label">Why this snippet matters</div><p>This is the simplest recursion pattern from the lectures. The important part is that the function stops on a base case and otherwise calls itself on a smaller input.</p></div>
+<div class="code-label">Factorial — Recursion</div>
+  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+<pre><span class="kw">def</span> <span class="fn">factorial</span>(n):
+    <span class="kw">if</span> n == <span class="nb">0</span> <span class="kw">or</span> n == <span class="nb">1</span>:          <span class="cm"># base case</span>
+        <span class="kw">return</span> <span class="nb">1</span>
+    <span class="kw">return</span> n <span class="op">*</span> <span class="fn">factorial</span>(n <span class="op">-</span> <span class="nb">1</span>)    <span class="cm"># recursive case</span>
+
+<span class="fn">print</span>(<span class="fn">factorial</span>(<span class="nb">4</span>))  <span class="cm"># → 24 (factorial of 4)</span></pre>
+</div>
+
+<div class="code-block">
+  <div class="code-label">Fibonacci — Recursion (0-indexed)</div>
+  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+<pre><span class="kw">def</span> <span class="fn">F</span>(n):
+    <span class="kw">if</span> n <span class="op">&lt;=</span> <span class="nb">1</span>:               <span class="cm"># base cases: F(0)=0, F(1)=1</span>
+        <span class="kw">return</span> n
+    <span class="kw">return</span> <span class="fn">F</span>(n <span class="op">-</span> <span class="nb">1</span>) <span class="op">+</span> <span class="fn">F</span>(n <span class="op">-</span> <span class="nb">2</span>)
+
+<span class="fn">print</span>(<span class="fn">F</span>(<span class="nb">7</span>))  <span class="cm"># → 13 (next Fibonacci value)</span></pre>
+</div>
+
+<div class="code-block">
+  <div class="code-label">Fibonacci — For Loop (iterative, more efficient)</div>
+  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+<pre>prev1, prev2 <span class="op">=</span> <span class="nb">1</span>, <span class="nb">0</span>
+<span class="fn">print</span>(<span class="nb">0</span>)
+<span class="fn">print</span>(<span class="nb">1</span>)
+
+<span class="kw">for</span> _ <span class="kw">in</span> <span class="fn">range</span>(<span class="nb">18</span>):
+    new_fib <span class="op">=</span> prev1 <span class="op">+</span> prev2
+    <span class="fn">print</span>(new_fib)
+    prev2 <span class="op">=</span> prev1
+    prev1 <span class="op">=</span> new_fib</pre>
+</div>
+
+<hr>
+<p class="label">Recursion on Lists &amp; Matrices</p>
+
+<div class="def-box blue">
+  <div class="box-label">Recursion with Lists — General Template</div>
+  <div class="code-block" style="margin-top:.5rem;">
+<pre><span class="kw">def</span> <span class="fn">function_name</span>(lst):
+    <span class="kw">if</span> lst <span class="op">==</span> []:                          <span class="cm"># base case</span>
+        <span class="kw">return</span> base_result
+    <span class="kw">return</span> <span class="fn">operation</span>(lst[<span class="nb">0</span>], <span class="fn">function_name</span>(lst[<span class="nb">1</span>:]))</pre>
+  </div>
+</div>
+
+<div class="code-block">
+  <div class="code-label">Sum of List</div>
+  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+<pre><span class="kw">def</span> <span class="fn">sum_list</span>(lst):
+    <span class="kw">if</span> lst <span class="op">==</span> []:          <span class="cm"># base case</span>
+        <span class="kw">return</span> <span class="nb">0</span>
+    <span class="kw">return</span> lst[<span class="nb">0</span>] <span class="op">+</span> <span class="fn">sum_list</span>(lst[<span class="nb">1</span>:])
+
+<span class="fn">print</span>(<span class="fn">sum_list</span>([<span class="nb">3</span>, <span class="nb">7</span>, <span class="nb">2</span>, <span class="nb">5</span>]))  <span class="cm"># → 17</span></pre>
+</div>
+
+<div class="code-block">
+  <div class="code-label">Length of List (no len())</div>
+  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+<pre><span class="kw">def</span> <span class="fn">list_length</span>(lst):
+    <span class="kw">if</span> lst <span class="op">==</span> []:
+        <span class="kw">return</span> <span class="nb">0</span>
+    <span class="kw">return</span> <span class="nb">1</span> <span class="op">+</span> <span class="fn">list_length</span>(lst[<span class="nb">1</span>:])
+
+<span class="fn">print</span>(<span class="fn">list_length</span>([<span class="nb">4</span>, <span class="nb">8</span>, <span class="nb">6</span>, <span class="nb">1</span>]))  <span class="cm"># → 4</span></pre>
+</div>
+
+<div class="code-block">
+  <div class="code-label">Find Maximum in List</div>
+  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+<pre><span class="kw">def</span> <span class="fn">find_max</span>(lst):
+    <span class="kw">if</span> <span class="fn">len</span>(lst) <span class="op">==</span> <span class="nb">1</span>:          <span class="cm"># base case</span>
+        <span class="kw">return</span> lst[<span class="nb">0</span>]
+    rest_max <span class="op">=</span> <span class="fn">find_max</span>(lst[<span class="nb">1</span>:])
+    <span class="kw">return</span> lst[<span class="nb">0</span>] <span class="kw">if</span> lst[<span class="nb">0</span>] <span class="op">&gt;</span> rest_max <span class="kw">else</span> rest_max
+
+<span class="fn">print</span>(<span class="fn">find_max</span>([<span class="nb">3</span>, <span class="nb">9</span>, <span class="nb">1</span>, <span class="nb">7</span>]))  <span class="cm"># → 9</span></pre>
+</div>
+
+<div class="code-block">
+  <div class="code-label">Reverse a List</div>
+  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+<pre><span class="kw">def</span> <span class="fn">reverse_list</span>(lst):
+    <span class="kw">if</span> lst <span class="op">==</span> []:
+        <span class="kw">return</span> []
+    <span class="kw">return</span> <span class="fn">reverse_list</span>(lst[<span class="nb">1</span>:]) <span class="op">+</span> [lst[<span class="nb">0</span>]]
+
+<span class="fn">print</span>(<span class="fn">reverse_list</span>([<span class="nb">1</span>, <span class="nb">2</span>, <span class="nb">3</span>, <span class="nb">4</span>]))  <span class="cm"># → [4, 3, 2, 1]</span></pre>
+</div>
+
+<div class="code-block">
+  <div class="code-label">Matrix Traversal — Recursion</div>
+  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+<pre><span class="kw">def</span> <span class="fn">recursive_matrix</span>(matrix, i<span class="op">=</span><span class="nb">0</span>, j<span class="op">=</span><span class="nb">0</span>):
+    <span class="kw">if</span> i <span class="op">==</span> <span class="fn">len</span>(matrix):              <span class="cm"># all rows done → base case</span>
+        <span class="kw">return</span>
+    <span class="kw">if</span> j <span class="op">==</span> <span class="fn">len</span>(matrix[i]):           <span class="cm"># end of row → next row</span>
+        <span class="fn">recursive_matrix</span>(matrix, i <span class="op">+</span> <span class="nb">1</span>, <span class="nb">0</span>)
+        <span class="kw">return</span>
+    <span class="fn">print</span>(matrix[i][j], end<span class="op">=</span><span class="st">" "</span>)
+    <span class="fn">recursive_matrix</span>(matrix, i, j <span class="op">+</span> <span class="nb">1</span>)
+
+m <span class="op">=</span> [[<span class="nb">1</span>, <span class="nb">2</span>, <span class="nb">3</span>], [<span class="nb">4</span>, <span class="nb">5</span>, <span class="nb">6</span>], [<span class="nb">7</span>, <span class="nb">8</span>, <span class="nb">9</span>]]
+<span class="fn">recursive_matrix</span>(m)  <span class="cm"># → 1 2 3 4 5 6 7 8 9</span></pre>
+</div>
+
+<div class="fix-box">
+  <div class="fix-label">⚠ Correction from Sonnet — Matrix Traversal</div>
+  <p>The lecture's version used <code>return recursive_matrix(...)</code> for the row-advance case. Removing the <code>return</code> before the recursive call is fine, but the original also had no explicit <code>return</code> after the recursive call which could cause duplicate execution in some interpretations. The version above uses <code>return</code> after the recursive call to be safe and clear.</p>
+</div>
+
+<hr>
+<p class="label">Practice Exercises</p>
+<div class="def-box orange">
+  <div class="box-label">Exercises — Lectures 1 &amp; 2</div>
+  <ol>
+    <li>Write recursive <code>sum(5)</code> → <code>1+2+3+4+5 = 15</code></li>
+    <li>Write recursive function that prints numbers from n down to 1</li>
+    <li>Write recursive <code>power(x, n)</code> → xⁿ, base case: <code>n == 0 → return 1</code></li>
+    <li>Write recursive <code>list_length(lst)</code> without using <code>len()</code></li>
+    <li>Write recursive function that finds the number of digits of a number. E.g. <code>1256 → 4</code></li>
+    <li>Write recursive function that checks if a number is even by subtracting 2 each time</li>
+    <li>Print the secondary diagonal of a matrix using recursion</li>
+    <li>Count even numbers in a matrix using recursion</li>
+  </ol>
+</div>
+</div><!-- /p1 -->
+
+
+<!-- ═══════════════════════════════════════════
+     TAB 2 — LINKED LISTS (Lectures 5, 6)
+════════════════════════════════════════════ -->
+<div id="p2" class="page">
+<h2>Linked Lists</h2>
+<p>Lectures 5 &amp; 6 — Pointers, Singly Linked Lists, Doubly Linked Lists, Circular Lists.</p>
+<div class="def-box">
+  <div class="box-label">What to notice</div>
+  <p>The lectures explain linked lists as nodes connected by references. Before the code, check the schematic: <code>head</code> is the entry point, <code>tail</code> is the end marker, <code>next</code> moves forward, and in doubly linked lists <code>prev</code> lets you move backward too.</p>
+</div>
+<hr>
+
+<p class="label">Core Concepts</p>
+
+<div class="def-box">
+  <div class="box-label">What is a Linked List?</div>
+  <p>A sequence of nodes where each node holds <strong>data</strong> and a <strong>reference (pointer)</strong> to the next node. Unlike Python lists, elements do not need to be stored in sequential memory.</p>
+</div>
+<div class="def-box green">
+  <div class="box-label">Advantages</div>
+  <ul>
+    <li>No sequential storage space required</li>
+    <li>Can grow arbitrarily as nodes are added</li>
+    <li>Efficient insertions and deletions (no element shifting)</li>
+  </ul>
+</div>
+<div class="def-box orange">
+  <div class="box-label">Disadvantages</div>
+  <ul>
+    <li>No direct index access (no <code>lst[3]</code>)</li>
+    <li>Each node needs extra space for the pointer</li>
+    <li>Search is always O(n) — must traverse from head</li>
+  </ul>
+</div>
+
+<hr>
+<p class="label">Time Complexity</p>
+<div class="table-wrap">
+  <table>
+    <thead><tr><th>Operation</th><th>Singly</th><th>Doubly</th><th>Notes</th></tr></thead>
+    <tbody>
+      <tr><td>Traversal</td><td>O(n)</td><td>O(n)</td><td>Visit every node</td></tr>
+      <tr><td>Search</td><td>O(n)</td><td>O(n)</td><td>Linear scan</td></tr>
+      <tr><td>Append</td><td>O(n) or O(1)</td><td>O(1)</td><td>O(1) if tail pointer stored</td></tr>
+      <tr><td>Delete</td><td>O(n)</td><td>O(n)</td><td>Must find node first</td></tr>
+      <tr><td>Size</td><td>O(n) or O(1)</td><td>O(1)</td><td>O(1) if size attribute stored</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<hr>
+<p class="label">Singly Linked List</p>
+<div class="def-box blue">
+  <div class="box-label">Linked list schematic</div>
+  <div class="stack">
+    <div><strong>Singly linked list</strong></div>
+    <div>head → [ data | next ] → [ data | next ] → [ data | None ]</div>
+    <div style="margin-top:.35rem;">↑ data  &nbsp;&nbsp;↓ next  &nbsp;&nbsp;→ points to the next node</div>
+    <div style="margin-top:.75rem;"><strong>Doubly linked list</strong></div>
+    <div>None ← [ prev | data | next ] ⇄ [ prev | data | next ] ⇄ [ prev | data | None ]</div>
+    <div style="margin-top:.35rem;">↑ prev points backward &nbsp;&nbsp;↓ next points forward</div>
+    <div style="margin-top:.75rem;"><strong>Circular list</strong></div>
+    <div>head → [ data | next ] → [ data | next ] → [ data | next ] ↺ back to head</div>
+    <div style="margin-top:.35rem;">The last node does not end with None; it links back to the first node.</div>
+  </div>
+</div>
+
+<div class="code-block">
+  <div class="def-box"><div class="box-label">Before you read the code</div><p>A node is the basic building block of linked structures. Each node stores the data and the reference to the next node.</p></div>
+<div class="code-label">Node class</div>
+  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+<pre><span class="kw">class</span> <span class="cl">Node</span>:
+    <span class="kw">def</span> <span class="fn">__init__</span>(self, data<span class="op">=</span><span class="kw">None</span>):
+        self.data <span class="op">=</span> data
+        self.next <span class="op">=</span> <span class="kw">None</span></pre>
+</div>
+
+<div class="code-block">
+  <div class="code-label">SinglyLinkedList — Full Implementation</div>
+  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+<pre><span class="kw">class</span> <span class="cl">SinglyLinkedList</span>:
+    <span class="kw">def</span> <span class="fn">__init__</span>(self):
+        self.tail <span class="op">=</span> <span class="kw">None</span>
+        self.head <span class="op">=</span> <span class="kw">None</span>
+        self.size <span class="op">=</span> <span class="nb">0</span>
+
+    <span class="kw">def</span> <span class="fn">append</span>(self, data):
+        node <span class="op">=</span> <span class="cl">Node</span>(data)
+        <span class="kw">if</span> self.head:
+            self.head.next <span class="op">=</span> node
+            self.head <span class="op">=</span> node
+        <span class="kw">else</span>:
+            self.tail <span class="op">=</span> node
+            self.head <span class="op">=</span> node
+        self.size <span class="op">+=</span> <span class="nb">1</span>
+
+    <span class="kw">def</span> <span class="fn">iter</span>(self):                    <span class="cm"># generator for clean traversal</span>
+        current <span class="op">=</span> self.tail
+        <span class="kw">while</span> current:
+            val <span class="op">=</span> current.data
+            current <span class="op">=</span> current.next
+            <span class="kw">yield</span> val
+
+    <span class="kw">def</span> <span class="fn">search</span>(self, data):
+        <span class="kw">for</span> node <span class="kw">in</span> self.<span class="fn">iter</span>():
+            <span class="kw">if</span> data <span class="op">==</span> node:
+                <span class="kw">return</span> <span class="kw">True</span>
+        <span class="kw">return</span> <span class="kw">False</span>
+
+    <span class="kw">def</span> <span class="fn">delete</span>(self, data):
+        current <span class="op">=</span> self.tail
+        prev <span class="op">=</span> <span class="kw">None</span>
+        <span class="kw">while</span> current:
+            <span class="kw">if</span> current.data <span class="op">==</span> data:
+                <span class="kw">if</span> prev <span class="kw">is</span> <span class="kw">None</span>:           <span class="cm"># deleting the tail (first) node</span>
+                    self.tail <span class="op">=</span> current.next
+                <span class="kw">else</span>:
+                    prev.next <span class="op">=</span> current.next
+                self.size <span class="op">-=</span> <span class="nb">1</span>
+                <span class="kw">return</span>
+            prev <span class="op">=</span> current
+            current <span class="op">=</span> current.next
+
+    <span class="kw">def</span> <span class="fn">clear</span>(self):
+        self.tail <span class="op">=</span> <span class="kw">None</span>
+        self.head <span class="op">=</span> <span class="kw">None</span>
+
+<span class="cm"># --- Usage ---</span>
+words <span class="op">=</span> <span class="cl">SinglyLinkedList</span>()
+words.<span class="fn">append</span>(<span class="st">"eggs"</span>)
+words.<span class="fn">append</span>(<span class="st">"ham"</span>)
+words.<span class="fn">append</span>(<span class="st">"spam"</span>)
+<span class="kw">for</span> w <span class="kw">in</span> words.<span class="fn">iter</span>():
+    <span class="fn">print</span>(w)</pre>
+</div>
+
+<div class="fix-box">
+  <div class="fix-label">⚠ Correction from Sonnet — delete() method</div>
+  <p>The lecture's <code>delete()</code> initialised <code>prev = self.tail</code> (same as <code>current</code>), which means when deleting the tail node the condition <code>current == self.tail</code> fires correctly, but for the <em>next</em> node the <code>prev.next = current.next</code> also works only by accident. The corrected version above uses <code>prev = None</code> and checks <code>if prev is None</code> — this is the standard and correct pattern that handles all cases clearly.</p>
+</div>
+
+<hr>
+<p class="label">Doubly Linked List (Lecture 6)</p>
+
+<div class="code-block">
+  <div class="code-label">Node class — Doubly Linked</div>
+  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+<pre><span class="kw">class</span> <span class="cl">Node</span>:
+    <span class="kw">def</span> <span class="fn">__init__</span>(self, data<span class="op">=</span><span class="kw">None</span>, next<span class="op">=</span><span class="kw">None</span>, prev<span class="op">=</span><span class="kw">None</span>):
+        self.data <span class="op">=</span> data
+        self.next <span class="op">=</span> next
+        self.prev <span class="op">=</span> prev</pre>
+</div>
+
+<div class="code-block">
+  <div class="code-label">DoublyLinkedList — Full Implementation</div>
+  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+<pre><span class="kw">class</span> <span class="cl">DoublyLinkedList</span>:
+    <span class="kw">def</span> <span class="fn">__init__</span>(self):
+        self.head <span class="op">=</span> <span class="kw">None</span>
+        self.tail <span class="op">=</span> <span class="kw">None</span>
+        self.count <span class="op">=</span> <span class="nb">0</span>
+
+    <span class="kw">def</span> <span class="fn">append</span>(self, data):
+        new_node <span class="op">=</span> <span class="cl">Node</span>(data)
+        <span class="kw">if</span> self.head <span class="kw">is</span> <span class="kw">None</span>:
+            self.head <span class="op">=</span> new_node
+            self.tail <span class="op">=</span> new_node
+        <span class="kw">else</span>:
+            new_node.prev <span class="op">=</span> self.tail
+            self.tail.next <span class="op">=</span> new_node
+            self.tail <span class="op">=</span> new_node
+        self.count <span class="op">+=</span> <span class="nb">1</span>
+
+    <span class="kw">def</span> <span class="fn">delete</span>(self, data):
+        current <span class="op">=</span> self.head
+        <span class="kw">while</span> current:
+            <span class="kw">if</span> current.data <span class="op">==</span> data:
+                <span class="kw">if</span> current <span class="op">==</span> self.head:
+                    self.head <span class="op">=</span> current.next
+                    <span class="kw">if</span> self.head:
+                        self.head.prev <span class="op">=</span> <span class="kw">None</span>
+                <span class="kw">elif</span> current <span class="op">==</span> self.tail:
+                    self.tail <span class="op">=</span> current.prev
+                    self.tail.next <span class="op">=</span> <span class="kw">None</span>
+                <span class="kw">else</span>:
+                    current.prev.next <span class="op">=</span> current.next
+                    current.next.prev <span class="op">=</span> current.prev
+                self.count <span class="op">-=</span> <span class="nb">1</span>
+                <span class="kw">return</span>
+            current <span class="op">=</span> current.next
+
+    <span class="kw">def</span> <span class="fn">contain</span>(self, data):
+        current <span class="op">=</span> self.head
+        <span class="kw">while</span> current:
+            <span class="kw">if</span> current.data <span class="op">==</span> data:
+                <span class="kw">return</span> <span class="kw">True</span>
+            current <span class="op">=</span> current.next
+        <span class="kw">return</span> <span class="kw">False</span>
+
+    <span class="kw">def</span> <span class="fn">display_forward</span>(self):
+        current <span class="op">=</span> self.head
+        <span class="kw">while</span> current:
+            <span class="fn">print</span>(current.data, end<span class="op">=</span><span class="st">" → "</span>)
+            current <span class="op">=</span> current.next
+        <span class="fn">print</span>(<span class="st">"None"</span>)
+
+    <span class="kw">def</span> <span class="fn">display_backward</span>(self):
+        current <span class="op">=</span> self.tail
+        <span class="kw">while</span> current:
+            <span class="fn">print</span>(current.data, end<span class="op">=</span><span class="st">" → "</span>)
+            current <span class="op">=</span> current.prev
+        <span class="fn">print</span>(<span class="st">"None"</span>)</pre>
+</div>
+
+<div class="fix-box">
+  <div class="fix-label">⚠ Correction from Sonnet — contain() method (Lecture 6, slide 9)</div>
+  <p>The lecture's <code>contain()</code> used <code>yield</code> inside a <code>while</code> loop and then <code>return True/False</code> after the loop, which is <strong>broken</strong>: once you use <code>yield</code>, the function becomes a generator and can never reach the <code>return True/False</code> statements. The corrected version above removes the generator pattern and uses a direct comparison loop — this is the correct and working approach.</p>
+</div>
+
+<hr>
+<p class="label">Circular List (Lecture 6)</p>
+
+<div class="code-block">
+  <div class="code-label">CircularList — Append and Iterate</div>
+  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+<pre><span class="kw">class</span> <span class="cl">CircularList</span>:
+    <span class="kw">def</span> <span class="fn">__init__</span>(self):
+        self.head <span class="op">=</span> <span class="kw">None</span>
+        self.tail <span class="op">=</span> <span class="kw">None</span>
+        self.size <span class="op">=</span> <span class="nb">0</span>
+
+    <span class="kw">def</span> <span class="fn">append</span>(self, data):
+        node <span class="op">=</span> <span class="cl">Node</span>(data)
+        <span class="kw">if</span> self.head:
+            self.head.next <span class="op">=</span> node
+            self.head <span class="op">=</span> node
+        <span class="kw">else</span>:
+            self.head <span class="op">=</span> node
+            self.tail <span class="op">=</span> node
+        self.head.next <span class="op">=</span> self.tail     <span class="cm"># circular link: last → first</span>
+        self.size <span class="op">+=</span> <span class="nb">1</span>
+
+    <span class="kw">def</span> <span class="fn">iter</span>(self):
+        current <span class="op">=</span> self.tail
+        <span class="kw">while</span> current:
+            val <span class="op">=</span> current.data
+            current <span class="op">=</span> current.next
+            <span class="kw">yield</span> val
+            <span class="kw">if</span> current <span class="op">==</span> self.tail:   <span class="cm"># stop when we loop back</span>
+                <span class="kw">break</span>
+
+<span class="cm"># --- Usage (safe iteration with counter) ---</span>
+words <span class="op">=</span> <span class="cl">CircularList</span>()
+words.<span class="fn">append</span>(<span class="st">'eggs'</span>)
+words.<span class="fn">append</span>(<span class="st">'ham'</span>)
+words.<span class="fn">append</span>(<span class="st">'spam'</span>)
+counter <span class="op">=</span> <span class="nb">0</span>
+<span class="kw">for</span> word <span class="kw">in</span> words.<span class="fn">iter</span>():
+    <span class="fn">print</span>(word)
+    counter <span class="op">+=</span> <span class="nb">1</span>
+    <span class="kw">if</span> counter <span class="op">&gt;</span> <span class="nb">1000</span>:
+        <span class="kw">break</span></pre>
+</div>
+
+<div class="fix-box">
+  <div class="fix-label">⚠ Correction from Sonnet — CircularList append() (Lecture 6, slide 12)</div>
+  <p>The lecture's <code>append()</code> sets <code>self.head.prev = self.tail</code> which implies a doubly-circular structure, but the class was defined as singly-circular (only <code>next</code>). The <code>.prev</code> assignment would cause an <code>AttributeError</code> with a basic <code>Node(data)</code> that has no <code>prev</code>. The corrected version only sets <code>self.head.next = self.tail</code> for the circular link, which is correct for a singly-circular list. If you want doubly-circular, use the doubly <code>Node</code> class with a <code>prev</code> attribute.</p>
+</div>
+
+<hr>
+<p class="label">Practice Exercises — Lectures 5 &amp; 6</p>
+<div class="def-box orange">
+  <div class="box-label">Exercises</div>
+  <ol>
+    <li>Create a linked list with 5 numbers and display all elements</li>
+    <li>Add a <code>prepend()</code> method that inserts an element at the beginning</li>
+    <li>Create a <code>count_even()</code> method that counts even numbers in the list</li>
+    <li>Implement <code>MusicPlayer</code> using DoublyLinkedList: <code>add_song</code>, <code>play_next</code>, <code>play_prev</code>, <code>current_song</code>, <code>delete_song</code></li>
+    <li>Create a <code>CircularScheduler</code> with: <code>add_process</code>, <code>run_next</code>, <code>current_process</code>, <code>delete_process</code></li>
+  </ol>
+</div>
+</div><!-- /p2 -->
+
+
+<!-- ═══════════════════════════════════════════
+     TAB 3 — OOP, MODULES & FILES (Lectures 3, 4)
+════════════════════════════════════════════ -->
+<div id="p3" class="page">
+<h2>OOP, Modules &amp; Files</h2>
+<p>Lecture 3 — Classes &amp; OOP. Lecture 4 — Modules, imports, file I/O.</p>
+<div class="def-box">
+  <div class="box-label">What to notice</div>
+  <p>The lectures focus on how classes bundle data and behavior together, and how modules/files let code be reused. When reading the snippets, pay attention to <code>self</code>, constructor setup in <code>__init__</code>, and how attributes are changed through methods rather than directly.</p>
+</div>
+<hr>
+
+<p class="label">Object-Oriented Programming</p>
+
+<div class="def-box">
+  <div class="box-label">OOP Terminology</div>
+  <div class="table-wrap" style="margin-top:.5rem;">
+    <table>
+      <thead><tr><th>Term</th><th>Definition</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Class</strong></td><td>Blueprint / abstract description of an object</td></tr>
+        <tr><td><strong>Object / Instance</strong></td><td>A concrete object created from a class (instantiation)</td></tr>
+        <tr><td><strong>Attribute</strong></td><td>A variable bound to an instance via <code>self.x = x</code></td></tr>
+        <tr><td><strong>Method</strong></td><td>A function inside a class — always takes <code>self</code> first</td></tr>
+        <tr><td><strong>__init__()</strong></td><td>Called automatically when a new instance is created</td></tr>
+        <tr><td><strong>__str__()</strong></td><td>Defines how the object appears as text. Called by <code>print(obj)</code>. Must return a string.</td></tr>
+        <tr><td><strong>Inheritance</strong></td><td>A child class inherits all attributes and methods of its parent</td></tr>
+        <tr><td><strong>super()</strong></td><td>Calls the parent class constructor from inside the child</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<p class="label">Inheritance Diagram</p>
+<div class="inherit">
+  <div class="ibox parent"><div class="ilab">Parent class</div><div class="inm">Person</div></div>
+  <div class="iconn"><div class="iline"></div><div style="color:var(--muted)">▼ inherits</div><div class="iline"></div></div>
+  <div class="ichrow">
+    <div class="ibox child"><div class="ilab">Child</div><div class="inm">Student</div></div>
+    <div class="ibox child"><div class="ilab">Child</div><div class="inm">Admin</div></div>
+  </div>
+</div>
+
+<div class="def-box blue">
+  <div class="box-label">Method Override Rules</div>
+  <div class="table-wrap" style="margin-top:.4rem;">
+    <table>
+      <thead><tr><th>Case</th><th>Which __str__ runs?</th></tr></thead>
+      <tbody>
+        <tr><td>Only <em>Person</em> has <code>__str__</code></td><td>Parent's method used</td></tr>
+        <tr><td>Both have <code>__str__</code></td><td>Child's method wins (override)</td></tr>
+        <tr><td>Only <em>Student</em> has <code>__str__</code></td><td>Child's method used</td></tr>
+        <tr><td>Neither has <code>__str__</code></td><td>Default Python object string</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<p class="label">Code Snippets — OOP</p>
+<div class="def-box"><div class="box-label">Code check</div><p>All Python snippets below are formatted to preserve indentation. The examples use standard Python syntax and should run as intended after you paste them into a Python file or notebook.</p></div>
+
+<div class="code-block">
+  <div class="code-label">Dog class — basic class example</div>
+  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+<pre><span class="kw">class</span> <span class="cl">Dog</span>:
+    <span class="kw">def</span> <span class="fn">__init__</span>(self, name, age):
+        self.name <span class="op">=</span> name
+        self.age  <span class="op">=</span> age
+
+    <span class="kw">def</span> <span class="fn">__str__</span>(self):
+        <span class="kw">return</span> <span class="st">f"Dog: {self.name}, age {self.age}"</span>
+
+    <span class="kw">def</span> <span class="fn">sit</span>(self):
+        <span class="fn">print</span>(<span class="st">f"{self.name} is sitting."</span>)
+
+my_dog <span class="op">=</span> <span class="cl">Dog</span>(<span class="st">"Willie"</span>, <span class="nb">6</span>)
+<span class="fn">print</span>(my_dog.name)   <span class="cm"># → Willie</span>
+my_dog.<span class="fn">sit</span>()         <span class="cm"># → Willie is sitting.</span>
+<span class="fn">print</span>(my_dog)        <span class="cm"># → Dog: Willie, age 6</span></pre>
+</div>
+
+<div class="code-block">
+  <div class="code-label">Car class — default attribute + setter + increment</div>
+  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+<pre><span class="kw">class</span> <span class="cl">Car</span>:
+    <span class="kw">def</span> <span class="fn">__init__</span>(self, make, model, year):
+        self.make  <span class="op">=</span> make
+        self.model <span class="op">=</span> model
+        self.year  <span class="op">=</span> year
+        self.odometer_reading <span class="op">=</span> <span class="nb">0</span>    <span class="cm"># default value</span>
+
+    <span class="kw">def</span> <span class="fn">update_odometer</span>(self, mileage):
+        <span class="kw">if</span> mileage <span class="op">&gt;=</span> self.odometer_reading:
+            self.odometer_reading <span class="op">=</span> mileage
+
+    <span class="kw">def</span> <span class="fn">increment_odometer</span>(self, miles):
+        self.odometer_reading <span class="op">+=</span> miles
+
+my_car <span class="op">=</span> <span class="cl">Car</span>(<span class="st">"Toyota"</span>, <span class="st">"Corolla"</span>, <span class="nb">2022</span>)
+my_car.<span class="fn">update_odometer</span>(<span class="nb">15000</span>)
+my_car.<span class="fn">increment_odometer</span>(<span class="nb">500</span>)
+<span class="fn">print</span>(my_car.odometer_reading)  <span class="cm"># → 15500</span></pre>
+</div>
+
+<div class="code-block">
+  <div class="code-label">Inheritance — Person → Student with super()</div>
+  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+<pre><span class="kw">class</span> <span class="cl">Person</span>:
+    <span class="kw">def</span> <span class="fn">__init__</span>(self, name, age):
+        self.name <span class="op">=</span> name
+        self.age  <span class="op">=</span> age
+
+    <span class="kw">def</span> <span class="fn">greet</span>(self):
+        <span class="fn">print</span>(<span class="st">f"Hello, I am {self.name}."</span>)
+
+
+<span class="kw">class</span> <span class="cl">Student</span>(<span class="cl">Person</span>):              <span class="cm"># inherits Person</span>
+    <span class="kw">def</span> <span class="fn">__init__</span>(self, name, age, student_id):
+        <span class="fn">super</span>().<span class="fn">__init__</span>(name, age)   <span class="cm"># call parent __init__</span>
+        self.student_id <span class="op">=</span> student_id
+
+    <span class="kw">def</span> <span class="fn">study</span>(self):
+        <span class="fn">print</span>(<span class="st">f"{self.name} is studying."</span>)
+
+s <span class="op">=</span> <span class="cl">Student</span>(<span class="st">"Erald"</span>, <span class="nb">22</span>, <span class="st">"CS-042"</span>)
+s.<span class="fn">greet</span>()   <span class="cm"># inherited from Person → Hello, I am Erald.</span>
+s.<span class="fn">study</span>()   <span class="cm"># Student's own method → Erald is studying.</span></pre>
+</div>
+
+<hr>
+<p class="label">Modules (Lecture 4)</p>
+
+<div class="def-box">
+  <div class="box-label">What is a Module?</div>
+  <p>A <code>.py</code> file that contains functions, variables and classes that can be reused. You import it using the <code>import</code> instruction.</p>
+</div>
+
+<div class="code-block">
+  <div class="code-label">Module Import Patterns</div>
+  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+<pre><span class="kw">import</span> veprimet <span class="kw">as</span> v           <span class="cm"># import whole module with alias</span>
+<span class="fn">print</span>(v.<span class="fn">shuma</span>(<span class="nb">2</span>, <span class="nb">3</span>))
+
+<span class="kw">from</span> veprimet <span class="kw">import</span> shuma      <span class="cm"># import specific function</span>
+<span class="fn">shuma</span>(<span class="nb">2</span>, <span class="nb">3</span>)
+
+<span class="kw">from</span> veprimet <span class="kw">import</span> <span class="op">*</span>         <span class="cm"># import everything (not recommended)</span>
+
+<span class="cm"># Standard aliases</span>
+<span class="kw">import</span> numpy <span class="kw">as</span> np
+<span class="kw">import</span> pandas <span class="kw">as</span> pd
+<span class="kw">import</span> matplotlib.pyplot <span class="kw">as</span> plt</pre>
+</div>
+
+<div class="code-block">
+  <div class="code-label">random module — sample() and choice()</div>
+  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+<pre><span class="kw">import</span> random
+
+items <span class="op">=</span> [<span class="nb">1</span>, <span class="nb">2</span>, <span class="nb">3</span>, <span class="nb">4</span>, <span class="nb">5</span>, <span class="st">'a'</span>, <span class="st">'b'</span>, <span class="st">'c'</span>]
+
+ticket <span class="op">=</span> random.<span class="fn">sample</span>(items, <span class="nb">4</span>)    <span class="cm"># pick 4 unique items</span>
+<span class="fn">print</span>(ticket)
+
+winner <span class="op">=</span> random.<span class="fn">choice</span>(items)        <span class="cm"># pick 1 random item</span>
+<span class="fn">print</span>(winner)</pre>
+</div>
+
+<hr>
+<p class="label">File I/O (Lecture 4)</p>
+
+<div class="def-box green">
+  <div class="box-label">File Types</div>
+  <ul>
+    <li><code>.txt</code> — plain text</li>
+    <li><code>.csv</code> — tabular data (widely used in data science)</li>
+    <li><code>.json</code> — dictionary-like structure</li>
+  </ul>
+</div>
+
+<div class="code-block">
+  <div class="code-label">Reading a file — pathlib (modern Python)</div>
+  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+<pre><span class="kw">from</span> pathlib <span class="kw">import</span> <span class="cl">Path</span>
+
+path <span class="op">=</span> <span class="cl">Path</span>(<span class="st">'learning_python.txt'</span>)
+contents <span class="op">=</span> path.<span class="fn">read_text</span>()         <span class="cm"># read entire file as string</span>
+<span class="fn">print</span>(contents)
+
+lines <span class="op">=</span> contents.<span class="fn">splitlines</span>()       <span class="cm"># split into list of rows</span>
+<span class="kw">for</span> line <span class="kw">in</span> lines:
+    <span class="fn">print</span>(line)</pre>
+</div>
+
+<div class="code-block">
+  <div class="code-label">Writing to a file — pathlib</div>
+  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+<pre><span class="kw">from</span> pathlib <span class="kw">import</span> <span class="cl">Path</span>
+
+path <span class="op">=</span> <span class="cl">Path</span>(<span class="st">'guest.txt'</span>)
+name <span class="op">=</span> <span class="fn">input</span>(<span class="st">"Enter your name: "</span>)
+path.<span class="fn">write_text</span>(name)             <span class="cm"># writes string to file</span>
+
+<span class="cm"># Writing multiple lines</span>
+lines <span class="op">=</span> <span class="st">"Line 1\nLine 2\nLine 3\n"</span>
+path.<span class="fn">write_text</span>(lines)
+
+<span class="cm"># Numbers must be converted to string first</span>
+x <span class="op">=</span> <span class="nb">42</span>
+path.<span class="fn">write_text</span>(<span class="fn">str</span>(x))</pre>
+</div>
+
+<div class="code-block">
+  <div class="code-label">Reading line-by-line — open() (classic style)</div>
+  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+<pre><span class="kw">with</span> <span class="fn">open</span>(<span class="st">'learning_python.txt'</span>) <span class="kw">as</span> f:
+    <span class="kw">for</span> line <span class="kw">in</span> f:
+        <span class="fn">print</span>(line.rstrip())         <span class="cm"># remove trailing newline</span></pre>
+</div>
+
+<div class="fix-box">
+  <div class="fix-label">⚠ Correction from Sonnet — write_text() behaviour</div>
+  <p><code>path.write_text()</code> <strong>overwrites</strong> the file each time — it does not append. To append multiple lines across multiple calls, use <code>open(path, 'a')</code> (append mode) instead, or build the full string first and call <code>write_text()</code> once. The lecture does not make this distinction explicit, but it is important to know.</p>
+</div>
+
+<hr>
+<p class="label">Practice Exercises — Lectures 3 &amp; 4</p>
+<div class="def-box orange">
+  <div class="box-label">Exercises</div>
+  <ol>
+    <li>Create <code>class User</code> with <code>first_name</code>, <code>last_name</code>, <code>describe_user()</code>, <code>greet_user()</code>, <code>login_attempts</code>, <code>increment_login_attempts()</code>, <code>reset_login_attempts()</code></li>
+    <li>Create <code>class Admin(User)</code> with <code>privileges</code> list and <code>show_privileges()</code></li>
+    <li>Create <code>class IceCreamStand(Restaurant)</code> with <code>flavors</code> list and <code>show_flavors()</code></li>
+    <li>Create a lottery program: list of 10 numbers + 5 letters, randomly select 4 with <code>random.sample()</code></li>
+    <li>Write a program that reads <code>learning_python.txt</code> and replaces "Python" with "C"</li>
+    <li>Write a <code>while</code> loop asking users for names and appending each to <code>guest_book.txt</code></li>
+  </ol>
+</div>
+</div><!-- /p3 -->
+
+
+<!-- ═══════════════════════════════════════════
+     TAB 4 — STACKS, QUEUES & HASH TABLES (Lectures 7, 8)
+════════════════════════════════════════════ -->
+<div id="p4" class="page">
+<h2>Stacks, Queues &amp; Hash Tables</h2>
+<p>Lecture 7 — Stacks &amp; Queues. Lecture 8 — Hashing &amp; Hash Tables.</p>
+<div class="def-box">
+  <div class="box-label">What to notice</div>
+  <p>The lectures build each ADT from its rule: stacks use LIFO, queues use FIFO, and hash tables trade direct search for fast average lookup. Before each snippet, look for the operation the structure is designed to make fast.</p>
+</div>
+<hr>
+
+<p class="label">Stacks (Lecture 7)</p>
+
+<div class="def-box">
+  <div class="box-label">Stack — LIFO</div>
+  <p>A <strong>Last-In, First-Out</strong> structure. The last element added is the first one removed. Think of a stack of plates — you can only access the top one.</p>
+</div>
+
+<div class="def-box blue">
+  <div class="box-label">Stack Operations</div>
+  <div class="table-wrap" style="margin-top:.4rem;">
+    <table>
+      <thead><tr><th>Method</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td><code>S.push(e)</code></td><td>Add element e to top</td></tr>
+        <tr><td><code>S.pop()</code></td><td>Remove &amp; return top element</td></tr>
+        <tr><td><code>S.top()</code></td><td>Return top element without removing</td></tr>
+        <tr><td><code>S.is_empty()</code></td><td>Return <code>True</code> if stack is empty</td></tr>
+        <tr><td><code>len(S)</code></td><td>Number of elements (<code>__len__</code>)</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="code-block">
+  <div class="def-box"><div class="box-label">Before you read the code</div><p>The lecture’s stack implementation uses a Python list as the internal storage. The point is to keep the stack interface separate from the list methods.</p></div>
+<div class="code-label">ArrayStack — Full Implementation (Adapter Pattern)</div>
+  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+<pre><span class="kw">class</span> <span class="cl">Empty</span>(<span class="de">Exception</span>):
+    <span class="kw">pass</span>
+
+
+<span class="kw">class</span> <span class="cl">ArrayStack</span>:
+    <span class="kw">def</span> <span class="fn">__init__</span>(self):
+        self._data <span class="op">=</span> []
+
+    <span class="kw">def</span> <span class="fn">__len__</span>(self):
+        <span class="kw">return</span> <span class="fn">len</span>(self._data)
+
+    <span class="kw">def</span> <span class="fn">is_empty</span>(self):
+        <span class="kw">return</span> <span class="fn">len</span>(self._data) <span class="op">==</span> <span class="nb">0</span>
+
+    <span class="kw">def</span> <span class="fn">push</span>(self, e):
+        self._data.<span class="fn">append</span>(e)
+
+    <span class="kw">def</span> <span class="fn">top</span>(self):
+        <span class="kw">if</span> self.<span class="fn">is_empty</span>():
+            <span class="kw">raise</span> <span class="cl">Empty</span>(<span class="st">"Stack is empty"</span>)
+        <span class="kw">return</span> self._data[<span class="op">-</span><span class="nb">1</span>]
+
+    <span class="kw">def</span> <span class="fn">pop</span>(self):
+        <span class="kw">if</span> self.<span class="fn">is_empty</span>():
+            <span class="kw">raise</span> <span class="cl">Empty</span>(<span class="st">"Stack is empty"</span>)
+        <span class="kw">return</span> self._data.<span class="fn">pop</span>()
+
+<span class="cm"># --- Usage ---</span>
+S <span class="op">=</span> <span class="cl">ArrayStack</span>()
+S.<span class="fn">push</span>(<span class="nb">10</span>)
+S.<span class="fn">push</span>(<span class="nb">20</span>)
+S.<span class="fn">push</span>(<span class="nb">30</span>)
+<span class="fn">print</span>(S.<span class="fn">top</span>())    <span class="cm"># → 30</span>
+S.<span class="fn">pop</span>()
+<span class="fn">print</span>(<span class="fn">len</span>(S))    <span class="cm"># → 2</span></pre>
+</div>
+
+<div class="code-block">
+  <div class="code-label">Matching Delimiters — Stack Application</div>
+  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+<pre><span class="kw">def</span> <span class="fn">is_matched</span>(expr):
+    lefty  <span class="op">=</span> <span class="st">'({['</span>
+    righty <span class="op">=</span> <span class="st">')]}'</span>
+    S <span class="op">=</span> <span class="cl">ArrayStack</span>()
+    <span class="kw">for</span> c <span class="kw">in</span> expr:
+        <span class="kw">if</span> c <span class="kw">in</span> lefty:
+            S.<span class="fn">push</span>(c)
+        <span class="kw">elif</span> c <span class="kw">in</span> righty:
+            <span class="kw">if</span> S.<span class="fn">is_empty</span>():
+                <span class="kw">return</span> <span class="kw">False</span>
+            <span class="kw">if</span> righty.<span class="fn">index</span>(c) <span class="op">!=</span> lefty.<span class="fn">index</span>(S.<span class="fn">pop</span>()):
+                <span class="kw">return</span> <span class="kw">False</span>
+    <span class="kw">return</span> S.<span class="fn">is_empty</span>()
+
+<span class="fn">print</span>(<span class="fn">is_matched</span>(<span class="st">"[(5+x)*(y+3)]"</span>))  <span class="cm"># → True</span>
+<span class="fn">print</span>(<span class="fn">is_matched</span>(<span class="st">"[(1+2)"</span>))          <span class="cm"># → False</span></pre>
+</div>
+
+<div class="code-block">
+  <div class="code-label">Reverse a String — Stack Application</div>
+  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+<pre><span class="kw">def</span> <span class="fn">reverse_string</span>(s):
+    S <span class="op">=</span> <span class="cl">ArrayStack</span>()
+    <span class="kw">for</span> ch <span class="kw">in</span> s:
+        S.<span class="fn">push</span>(ch)
+    result <span class="op">=</span> <span class="st">""</span>
+    <span class="kw">while</span> <span class="kw">not</span> S.<span class="fn">is_empty</span>():
+        result <span class="op">+=</span> S.<span class="fn">pop</span>()
+    <span class="kw">return</span> result
+
+<span class="fn">print</span>(<span class="fn">reverse_string</span>(<span class="st">"hello"</span>))  <span class="cm"># → "olleh"</span></pre>
+</div>
+
+<hr>
+<p class="label">Queues (Lecture 7)</p>
+
+<div class="def-box">
+  <div class="box-label">Queue — FIFO</div>
+  <p>A <strong>First-In, First-Out</strong> structure. The first element added is the first one removed. Think of a line of people — the person waiting longest is served first.</p>
+</div>
+
+<div class="code-block">
+  <div class="def-box"><div class="box-label">Before you read the code</div><p>The queue uses circular indexing so enqueue and dequeue do not need to shift all items each time. Watch how <code>_front</code> and <code>_size</code> move together.</p></div>
+<div class="code-label">ArrayQueue — Circular Implementation</div>
+  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+<pre><span class="kw">class</span> <span class="cl">ArrayQueue</span>:
+    DEFAULT_CAPACITY <span class="op">=</span> <span class="nb">10</span>
+
+    <span class="kw">def</span> <span class="fn">__init__</span>(self):
+        self._data  <span class="op">=</span> [<span class="kw">None</span>] <span class="op">*</span> <span class="cl">ArrayQueue</span>.DEFAULT_CAPACITY
+        self._size  <span class="op">=</span> <span class="nb">0</span>
+        self._front <span class="op">=</span> <span class="nb">0</span>
+
+    <span class="kw">def</span> <span class="fn">__len__</span>(self):
+        <span class="kw">return</span> self._size
+
+    <span class="kw">def</span> <span class="fn">is_empty</span>(self):
+        <span class="kw">return</span> self._size <span class="op">==</span> <span class="nb">0</span>
+
+    <span class="kw">def</span> <span class="fn">first</span>(self):
+        <span class="kw">if</span> self.<span class="fn">is_empty</span>():
+            <span class="kw">raise</span> <span class="cl">Empty</span>(<span class="st">"Queue is empty"</span>)
+        <span class="kw">return</span> self._data[self._front]
+
+    <span class="kw">def</span> <span class="fn">enqueue</span>(self, e):
+        avail <span class="op">=</span> (self._front <span class="op">+</span> self._size) <span class="op">%</span> <span class="fn">len</span>(self._data)
+        self._data[avail] <span class="op">=</span> e
+        self._size <span class="op">+=</span> <span class="nb">1</span>
+
+    <span class="kw">def</span> <span class="fn">dequeue</span>(self):
+        <span class="kw">if</span> self.<span class="fn">is_empty</span>():
+            <span class="kw">raise</span> <span class="cl">Empty</span>(<span class="st">"Queue is empty"</span>)
+        answer <span class="op">=</span> self._data[self._front]
+        self._data[self._front] <span class="op">=</span> <span class="kw">None</span>
+        self._front <span class="op">=</span> (self._front <span class="op">+</span> <span class="nb">1</span>) <span class="op">%</span> <span class="fn">len</span>(self._data)
+        self._size <span class="op">-=</span> <span class="nb">1</span>
+        <span class="kw">return</span> answer
+
+<span class="cm"># --- Usage ---</span>
+Q <span class="op">=</span> <span class="cl">ArrayQueue</span>()
+Q.<span class="fn">enqueue</span>(<span class="st">"Alice"</span>)
+Q.<span class="fn">enqueue</span>(<span class="st">"Bob"</span>)
+Q.<span class="fn">enqueue</span>(<span class="st">"Carol"</span>)
+<span class="fn">print</span>(Q.<span class="fn">dequeue</span>())  <span class="cm"># → Alice (FIFO)</span>
+<span class="fn">print</span>(Q.<span class="fn">first</span>())    <span class="cm"># → Bob</span></pre>
+</div>
+
+<div class="fix-box">
+  <div class="fix-label">⚠ Correction from Sonnet — ArrayQueue capacity</div>
+  <p>The lecture's circular queue implementation does not handle the case where the queue becomes <strong>full</strong> (i.e., <code>_size == len(_data)</code>). If you keep enqueuing beyond the initial capacity without a resize step, <code>enqueue()</code> silently overwrites existing data. In a production implementation you would double the internal array when full. For exam purposes, just be aware of this limitation.</p>
+</div>
+
+<hr>
+<p class="label">Stack vs Queue</p>
+<div class="table-wrap">
+  <table>
+    <thead><tr><th>Property</th><th>Stack</th><th>Queue</th></tr></thead>
+    <tbody>
+      <tr><td>Principle</td><td>LIFO — Last In, First Out</td><td>FIFO — First In, First Out</td></tr>
+      <tr><td>Add</td><td><code>push(e)</code> → top</td><td><code>enqueue(e)</code> → back</td></tr>
+      <tr><td>Remove</td><td><code>pop()</code> ← top</td><td><code>dequeue()</code> ← front</td></tr>
+      <tr><td>Peek</td><td><code>top()</code></td><td><code>first()</code></td></tr>
+      <tr><td>Real-life</td><td>Stack of plates, browser back, undo</td><td>Ticket line, print queue, scheduling</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<hr>
+<p class="label">Hash Tables (Lecture 8)</p>
+
+<div class="def-box">
+  <div class="box-label">What is Hashing?</div>
+  <p>Converting data of arbitrary size (like a string) into a fixed-size integer (the hash). A <strong>hash table</strong> uses this integer as an index for O(1) average lookup.</p>
+  <p>A Python <code>dict</code> is internally implemented using a hash table.</p>
+</div>
+
+<div class="def-box blue">
+  <div class="box-label">Hash Function Properties</div>
+  <ul>
+    <li><strong>Uniform</strong> — distributes keys evenly across buckets</li>
+    <li><strong>Fast</strong> — computed in O(1)</li>
+    <li><strong>Deterministic</strong> — same key always maps to same index</li>
+    <li><strong>Minimises collisions</strong></li>
+  </ul>
+</div>
+
+<div class="def-box orange">
+  <div class="box-label">Collision</div>
+  <p>When two different keys produce the same hash index. Collisions are unavoidable in practice. Resolution strategies:</p>
+  <ul>
+    <li><strong>Chaining</strong> — each slot holds a list of elements. Search ≈ O(1 + α) where α = n/m</li>
+    <li><strong>Open Addressing</strong> — probe for the next free slot: Linear, Quadratic, Double Hashing</li>
+  </ul>
+</div>
+
+<div class="def-box green">
+  <div class="box-label">Hash Methods at a Glance</div>
+  <div class="table-wrap" style="margin-top:.4rem;">
+    <table>
+      <thead><tr><th>Method</th><th>Formula</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td>Division</td><td>h(k) = k mod m</td><td>m should be prime</td></tr>
+        <tr><td>Multiplication</td><td>h(k) = ⌊m · ((kA) mod 1)⌋</td><td>A ≈ 0.618</td></tr>
+        <tr><td>Universal</td><td>h(k) = ((ak+b) mod p) mod m</td><td>Random a,b; p prime &gt; max(k)</td></tr>
+        <tr><td>Linear probing</td><td>h(k,i) = (h(k)+i) mod m</td><td>Simple, causes clustering</td></tr>
+        <tr><td>Quadratic probing</td><td>h(k,i) = (h(k)+c₁i+c₂i²) mod m</td><td>Reduces clustering</td></tr>
+        <tr><td>Double hashing</td><td>h(k,i) = (h₁(k)+i·h₂(k)) mod m</td><td>Best distribution</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<p class="label">Code Snippets — Hash Tables</p>
+
+<div class="code-block">
+  <div class="code-label">Python dict as hash table — Word Frequency Counter</div>
+  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+<pre>text <span class="op">=</span> <span class="st">"the cat sat on the mat the cat"</span>
+freq <span class="op">=</span> {}
+<span class="kw">for</span> word <span class="kw">in</span> text.<span class="fn">split</span>():
+    freq[word] <span class="op">=</span> freq.<span class="fn">get</span>(word, <span class="nb">0</span>) <span class="op">+</span> <span class="nb">1</span>
+
+<span class="fn">print</span>(freq)  <span class="cm"># → {'the': 3, 'cat': 2, 'sat': 1, 'on': 1, 'mat': 1}</span></pre>
+</div>
+
+<div class="code-block">
+  <div class="code-label">Removing duplicates using a dict / set</div>
+  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+<pre>items <span class="op">=</span> [<span class="nb">3</span>, <span class="nb">1</span>, <span class="nb">4</span>, <span class="nb">1</span>, <span class="nb">5</span>, <span class="nb">9</span>, <span class="nb">2</span>, <span class="nb">6</span>, <span class="nb">5</span>, <span class="nb">3</span>]
+unique <span class="op">=</span> <span class="fn">list</span>(<span class="fn">set</span>(items))
+<span class="fn">print</span>(unique)   <span class="cm"># order not guaranteed</span>
+
+<span class="cm"># Preserve insertion order (Python 3.7+)</span>
+seen <span class="op">=</span> {}
+unique_ordered <span class="op">=</span> [seen.<span class="fn">setdefault</span>(x, x) <span class="kw">for</span> x <span class="kw">in</span> items <span class="kw">if</span> x <span class="kw">not</span> <span class="kw">in</span> seen]
+<span class="fn">print</span>(unique_ordered)</pre>
+</div>
+
+<div class="code-block">
+  <div class="def-box"><div class="box-label">Before you read the code</div><p>The lecture builds hash tables by mapping a key to a bucket index. If two keys land in the same bucket, chaining stores both in a small list.</p></div>
+<div class="code-label">Simple Hash Table with Chaining</div>
+  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+<pre><span class="kw">class</span> <span class="cl">HashTable</span>:
+    <span class="kw">def</span> <span class="fn">__init__</span>(self, m<span class="op">=</span><span class="nb">11</span>):
+        self.m    <span class="op">=</span> m
+        self.data <span class="op">=</span> [[] <span class="kw">for</span> _ <span class="kw">in</span> <span class="fn">range</span>(m)]  <span class="cm"># list of chains</span>
+
+    <span class="kw">def</span> <span class="fn">_hash</span>(self, key):
+        <span class="kw">return</span> key <span class="op">%</span> self.m                    <span class="cm"># division method</span>
+
+    <span class="kw">def</span> <span class="fn">insert</span>(self, key, value):
+        idx <span class="op">=</span> self.<span class="fn">_hash</span>(key)
+        <span class="kw">for</span> i, (k, v) <span class="kw">in</span> <span class="fn">enumerate</span>(self.data[idx]):
+            <span class="kw">if</span> k <span class="op">==</span> key:
+                self.data[idx][i] <span class="op">=</span> (key, value)  <span class="cm"># update</span>
+                <span class="kw">return</span>
+        self.data[idx].<span class="fn">append</span>((key, value))       <span class="cm"># new entry</span>
+
+    <span class="kw">def</span> <span class="fn">search</span>(self, key):
+        idx <span class="op">=</span> self.<span class="fn">_hash</span>(key)
+        <span class="kw">for</span> k, v <span class="kw">in</span> self.data[idx]:
+            <span class="kw">if</span> k <span class="op">==</span> key:
+                <span class="kw">return</span> v
+        <span class="kw">return</span> <span class="kw">None</span>
+
+<span class="cm"># --- Usage ---</span>
+ht <span class="op">=</span> <span class="cl">HashTable</span>()
+ht.<span class="fn">insert</span>(<span class="nb">10</span>, <span class="st">"Alice"</span>)
+ht.<span class="fn">insert</span>(<span class="nb">21</span>, <span class="st">"Bob"</span>)    <span class="cm"># 21 % 11 = 10 → collision → chaining</span>
+<span class="fn">print</span>(ht.<span class="fn">search</span>(<span class="nb">10</span>))  <span class="cm"># → Alice</span>
+<span class="fn">print</span>(ht.<span class="fn">search</span>(<span class="nb">21</span>))  <span class="cm"># → Bob</span></pre>
+</div>
+
+<div class="fix-box">
+  <div class="fix-label">⚠ Correction from Sonnet — Load Factor α definition (Lecture 8, slide 23)</div>
+  <p>The lecture states the load factor example as α = 30/10 = 3 and says "On average, each chain contains 3 elements." This is technically correct for chaining, but the lecture also says "Search ≈ O(1)" when α is constant. This only holds when α is bounded by a small constant (e.g., α ≤ 1). When α = 3 the average chain length is 3 so search is O(3) = O(1) only in a constant sense — but for large α, performance degrades significantly. For Open Addressing, α must be kept strictly below 1 (table cannot be full).</p>
+</div>
+
+<hr>
+<p class="label">Practice Exercises — Lectures 7 &amp; 8</p>
+<div class="def-box orange">
+  <div class="box-label">Exercises</div>
+  <ol>
+    <li>Implement <code>ArrayStack</code> with <code>push</code>, <code>pop</code>, <code>top</code>, <code>is_empty</code>, <code>__len__</code>. Push 10, 20, 30 then print top, pop one, check size.</li>
+    <li>Reverse a string using a stack</li>
+    <li>Build a Stack Menu app: push / pop / top / exit loop</li>
+    <li>Simulate browser history with a stack: visit page, go back, show current</li>
+    <li>Implement <code>ArrayQueue</code> with <code>enqueue</code>, <code>dequeue</code>, <code>first</code>, <code>is_empty</code>, <code>__len__</code></li>
+    <li>Simulate a ticket-office queue: add 5 customers, serve one by one</li>
+    <li>Given h(k) = k mod 13, insert keys 26, 39, 52, 67, 81 and build the hash table</li>
+    <li>Given h(k) = ⌊m·((kA) mod 1)⌋ with m=10, A=0.618, find hash values for 12, 25, 37</li>
+  </ol>
+</div>
+</div><!-- /p4 -->
+
+</div><!-- /content -->
+
+<footer>
+  <p>Erald Hysenbelli &copy; — Data Structures Study Guide</p>
+  <p>Lectures 1–8 covered &nbsp;·&nbsp; Good luck on the exam! 🎯</p>
+</footer>
+
+<script>
+const tabs  = document.querySelectorAll('.tab');
+const pages = document.querySelectorAll('.page');
+tabs.forEach(tab => {
+  tab.addEventListener('click', () => {
+    tabs.forEach(t  => t.classList.remove('active'));
+    pages.forEach(p => p.classList.remove('active'));
+    tab.classList.add('active');
+    const t = document.getElementById(tab.dataset.target);
+    if (t) { t.classList.add('active'); window.scrollTo(0,0); }
+  });
+});
+
+const prog = document.getElementById('prog');
+window.addEventListener('scroll', () => {
+  const pct = window.scrollY / (document.body.scrollHeight - window.innerHeight) * 100;
+  prog.style.width = Math.min(pct,100) + '%';
+}, {passive:true});
+
+function copyCode(btn) {
+  const block = btn.closest('.code-block');
+  const pre   = block.querySelector('pre');
+  const text  = pre ? pre.textContent : [...block.childNodes]
+    .filter(n => n.nodeType===3 || (n.tagName?.toLowerCase()!=='button' && n.className!=='code-label'))
+    .map(n=>n.textContent).join('');
+  navigator.clipboard.writeText(text).then(() => {
+    btn.textContent='Copied!'; btn.classList.add('ok');
+    setTimeout(()=>{btn.textContent='Copy';btn.classList.remove('ok');},2000);
+  }).catch(()=>{
+    const ta=Object.assign(document.createElement('textarea'),{value:text,style:'position:fixed;opacity:0'});
+    document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);
+    btn.textContent='Copied!';btn.classList.add('ok');
+    setTimeout(()=>{btn.textContent='Copy';btn.classList.remove('ok');},2000);
+  });
+}
+</script>
+</body>
+</html>
